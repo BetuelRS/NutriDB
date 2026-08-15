@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SYNTHETIC FIXTURE — dados inventados apenas para testes (regra §17.7) -->
+<TABLE>
+   <SOURCES>
+      <source_code> 1 </source_code>
+      <ref_citation missing=" " />
+   </SOURCES>
+   <SOURCES>
+      <source_code> 444 </source_code>
+      <ref_citation> Fictive reference for fixtures only. </ref_citation>
+   </SOURCES>
+</TABLE>

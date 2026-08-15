@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SYNTHETIC FIXTURE — dados inventados apenas para testes (regra §17.7) -->
+<TABLE>
+   <ALIM_GRP>
+      <alim_grp_code> 06 </alim_grp_code>
+      <alim_grp_nom_fr> boissons </alim_grp_nom_fr>
+      <alim_grp_nom_eng> beverages </alim_grp_nom_eng>
+      <alim_ssgrp_code> 000000 </alim_ssgrp_code>
+      <alim_ssgrp_nom_fr> - </alim_ssgrp_nom_fr>
+      <alim_ssgrp_nom_eng> - </alim_ssgrp_nom_eng>
+      <alim_ssssgrp_code> 000000 </alim_ssssgrp_code>
+      <alim_ssssgrp_nom_fr> - </alim_ssssgrp_nom_fr>
+      <alim_ssssgrp_nom_eng> - </alim_ssssgrp_nom_eng>
+   </ALIM_GRP>
+   <ALIM_GRP>
+      <alim_grp_code> 06 </alim_grp_code>
+      <alim_grp_nom_fr> boissons </alim_grp_nom_fr>
+      <alim_grp_nom_eng> beverages </alim_grp_nom_eng>
+      <alim_ssgrp_code> 000000 </alim_ssgrp_code>
+      <alim_ssgrp_nom_fr> - </alim_ssgrp_nom_fr>
+      <alim_ssgrp_nom_eng> - </alim_ssgrp_nom_eng>
+      <alim_ssssgrp_code> 000000 </alim_ssssgrp_code>
+      <alim_ssssgrp_nom_fr> - </alim_ssssgrp_nom_fr>
+      <alim_ssssgrp_nom_eng> - </alim_ssssgrp_nom_eng>
+   </ALIM_GRP>
+   <ALIM_GRP>
+      <alim_grp_code> 06 </alim_grp_code>
+      <alim_grp_nom_fr> boissons </alim_grp_nom_fr>
+      <alim_grp_nom_eng> beverages </alim_grp_nom_eng>
+      <alim_ssgrp_code> 0603 </alim_ssgrp_code>
+      <alim_ssgrp_nom_fr> boissons alcoolisees </alim_ssgrp_nom_fr>
+      <alim_ssgrp_nom_eng> alcoholic beverages </alim_ssgrp_nom_eng>
+      <alim_ssssgrp_code> 000000 </alim_ssssgrp_code>
+      <alim_ssssgrp_nom_fr> - </alim_ssssgrp_nom_fr>
+      <alim_ssssgrp_nom_eng> - </alim_ssssgrp_nom_eng>
+   </ALIM_GRP>
+   <ALIM_GRP>
+      <alim_grp_code> 06 </alim_grp_code>
+      <alim_grp_nom_fr> boissons </alim_grp_nom_fr>
+      <alim_grp_nom_eng> beverages </alim_grp_nom_eng>
+      <alim_ssgrp_code> 0603 </alim_ssgrp_code>
+      <alim_ssgrp_nom_fr> boissons alcoolisees </alim_ssgrp_nom_fr>
+      <alim_ssgrp_nom_eng> alcoholic beverages </alim_ssgrp_nom_eng>
+      <alim_ssssgrp_code> 060303 </alim_ssssgrp_code>
+      <alim_ssssgrp_nom_fr> spiritueux </alim_ssssgrp_nom_fr>
+      <alim_ssssgrp_nom_eng> spirits </alim_ssssgrp_nom_eng>
+   </ALIM_GRP>
+</TABLE>

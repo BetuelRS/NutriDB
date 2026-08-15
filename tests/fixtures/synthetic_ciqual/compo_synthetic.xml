@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SYNTHETIC FIXTURE — dados inventados apenas para testes (regra §17.7) -->
+<TABLE>
+   <COMPO>
+      <alim_code> 1000 </alim_code>
+      <const_code> 327 </const_code>
+      <teneur> 1140 </teneur>
+      <min missing=" " />
+      <max missing=" " />
+      <code_confiance> D </code_confiance>
+      <source_code> 444 </source_code>
+   </COMPO>
+   <COMPO>
+      <alim_code> 1000 </alim_code>
+      <const_code> 400 </const_code>
+      <teneur> 59,7 </teneur>
+      <min> 58,7 </min>
+      <max> 60,4 </max>
+      <code_confiance> D </code_confiance>
+      <source_code> 444 </source_code>
+   </COMPO>
+   <COMPO>
+      <alim_code> 1000 </alim_code>
+      <const_code> 34100 </const_code>
+      <teneur> traces </teneur>
+      <min missing=" " />
+      <max missing=" " />
+      <code_confiance> C </code_confiance>
+      <source_code> 444 </source_code>
+   </COMPO>
+<COMPO>
+      <alim_code> 1001 </alim_code>
+      <const_code> 400 </const_code>
+      <teneur> - </teneur>
+      <min missing=" " />
+      <max missing=" " />
+   </COMPO>
+   <COMPO>
+      <alim_code> 1001 </alim_code>
+      <const_code> 34100 </const_code>
+      <teneur> 0 </teneur>
+      <min missing=" " />
+      <max missing=" " />
+      <code_confiance> A </code_confiance>
+      <source_code> 444 </source_code>
+   </COMPO>
+   <COMPO>
+      <alim_code> 1002 </alim_code>
+      <const_code> 400 </const_code>
+      <teneur> 0,0009 </teneur>
+      <min> 1E-6 </min>
+      <max> 10,2 </max>
+      <code_confiance> A </code_confiance>
+      <source_code> 1 </source_code>
+   </COMPO>
+   <COMPO>
+      <alim_code> 1002 </alim_code>
+      <const_code> 34100 </const_code>
+      <teneur> &lt; 1,5 </teneur>
+      <min missing=" " />
+      <max missing=" " />
+      <code_confiance> A </code_confiance>
+      <source_code> 1 </source_code>
+   </COMPO>
+</TABLE>

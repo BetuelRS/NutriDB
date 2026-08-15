@@ -89,9 +89,9 @@ licença na fonte oficial — não confies em memória").
 | Pares (alim × const) | 257 816 (= 3 484 × 74, matriz completa) |
 | `-` (não medido) | 83 246 |
 | `traces` | 2 514 |
-| `<N` | 0 (em `teneur`; permitido pelo schema) |
-| Pares com `min`/`max` numéricos | 31 357 |
-| Confiança A / B / C / D | 76 984 / 20 228 / 21 448 / 55 910 |
+| `< N` (abaixo do limiar) | 20 075 |
+| Pares com `min`/`max` numéricos | 65 072 |
+| Confiança A / B / C / D | 76 984 / 20 228 / 21 448 / 55 910 (só em teores medidos) |
 | Fontes citadas | 1 978 |
 
 ## 5. Consequências
@@ -124,7 +124,7 @@ Aprovação humana (revisão de fase F1.0):
 | Item | Decisão |
 |---|---|
 | Formato primário | JSON **XML** (emenda à A6 do ADR-0001 §7) — proveniência por valor só existe no XML |
-| Semântica §4.1 | Confirmada: `-` → `not_measured`, `traces` → `trace`, `<N` → `below_loq` (sem ocorrências em 2025), confiança A–D preservada em bruto, decimal vírgula francesa |
-| Volume §4.2 | Confirmado (3 484 × 74; matriz completa; 83 246 ausentes; 2 514 traces; 1 978 fontes) |
+| Semântica §4.1 | Confirmada na extração real: `-` → `not_measured`, `traces` → `trace`, `< N` → `below_loq` (20 075; formato `< 0,0003` com espaço — a contagem "0" do §4.2 original estava errada e foi corrigida), confiança A–D preservada em bruto, decimal vírgula francesa; notação científica `1E-6` observada uma vez em `min` |
+| Volume §4.2 | Confirmado na extração real (3 484 × 74; matriz completa; 83 246 ausentes; 2 514 traces; 20 075 below_loq; 1 978 fontes); `code_confiance`/`source_code` ausentes **sempre e só** nas 83 246 células `-` |
 | Artefacto | `core` (etalab-2.0 permissiva, sem restrições) |
 | Registry | 8 ficheiros fixados por SHA-256; XLS/XLSX fora do pipeline (evidência) |

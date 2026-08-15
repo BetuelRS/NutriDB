@@ -69,7 +69,7 @@ def test_sources_audit_reports_ciqual() -> None:
 
 
 def test_unimplemented_commands_fail_high() -> None:
-    for command in (("extract",), ("merge",), ("build",), ("qa",)):
+    for command in (("merge",), ("build",), ("qa",)):
         result = runner.invoke(app, [*command])
         assert result.exit_code == 2
         assert "not implemented" in result.output

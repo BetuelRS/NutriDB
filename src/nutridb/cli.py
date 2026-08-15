@@ -123,7 +123,20 @@ def extract(
     source: str | None = typer.Option(None, "--source", "-s", help="Only extract this source id."),
 ) -> None:
     """Extract raw source dumps into canonical intermediates."""
-    _not_implemented("F1.2", f"extract raw dump for {source or 'all sources'}")
+    if source is not None and source != "ciqual":
+        _not_implemented("F2+", f"extractor for source {source!r}")
+    from nutridb.paths import paths
+    from nutridb.sources.ciqual import extract as extract_ciqual
+
+    base = paths()
+    report = extract_ciqual(base["cache"] / "ciqual", base["build"] / "intermediates" / "ciqual")
+    table = rich.table.Table(title="CIQUAL 2025 extraction", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    for name, count in report.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("extract OK")
 
 
 vocab_app = typer.Typer(name="vocab", help="Validate the canonical vocabulary (SPEC §5).")
