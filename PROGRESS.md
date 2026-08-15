@@ -26,9 +26,8 @@
 
 ## Bloqueios / pendências
 
-- **Push do branch `f0/fundacoes`**: tentar `git push -u origin f0/fundacoes`; se as credenciais/lógica de auth falharem, informar.
+- **CI no GitHub**: o push de `f0/fundacoes` foi feito (2026-08-15); confirmar o run `checks` no Actions.
 - **F1.0 / ADR-0003**: resolver URL exata do ficheiro CIQUAL 2025 (Excel) no entrepot recherche.data.gouv, fixar `sha256` e `filename` no registry (download + revisão antes de fixar — P6/P8).
-- Rede necessária para `nutridb sources sync` (cache local gitignored).
 
 ## Histórico de sessões
 
