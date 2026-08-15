@@ -1,0 +1,46 @@
+[project]
+name = "nutridb"
+version = "0.1.0"
+description = "Base de dados aberta de composicao alimentar, rastreavel e traduzida"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.12"
+authors = [
+    { name = "BetuelRS", email = "betuel801@gmail.com" }
+]
+dependencies = [
+    "duckdb>=1.5.5",
+    "polars>=1.43.2",
+    "pydantic>=2.13.4",
+    "rich>=15.0.0",
+    "structlog>=26.1.0",
+    "typer>=0.27.1",
+]
+
+[project.scripts]
+nutridb = "nutridb.cli:app"
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "TCH", "RUF"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+mypy_path = "src"
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --basetemp=.pytest-tmp"

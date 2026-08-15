@@ -1,0 +1,19 @@
+# NUTRIDB source registry — fonte de verdade de licenças e hashes (SPEC §14).
+# Mantido à mão, revisível em diff (P8). O tooling nunca o edita.
+
+schema_version = 1
+
+[sources.ciqual]
+name = "CIQUAL 2025 — Table de composition nutritionnelle des aliments (ANSES)"
+url = "https://entrepot.recherche.data.gouv.fr/dataset.xhtml?persistentId=doi:10.57745/RDMHWY"
+license_id = "etalab-2.0"
+license_url = "https://github.com/etalab/licence-ouverte/blob/master/LO.md"
+version = "2025"
+# sha256 = ""   # fixado em F1.0 (ADR-0003): download + revisão antes de fixar
+# filename = "" # basename oficial, resolvido em F1.0
+attribution_required = true
+attribution = "Anses. 2025. Ciqual French food composition table. Retrieved <date>. https://ciqual.anses.fr/"
+share_alike = false
+commercial_use = true
+artifacts = ["core", "extended", "lite"]
+notes = "Versao 2025 (nov/2025): 3484 alimentos, 74 constituintes, Excel e XML; licenca etalab 2.0; artefacto core. URL exata do ficheiro resolvida no ADR-0003 (F1.0)."
