@@ -100,9 +100,7 @@ def test_missing_canonical_fails_high(tmp_path: Path) -> None:
         build(tmp_path / "c", ROOT)
 
 
-def test_empty_curated_label_fails_high(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_empty_curated_label_fails_high(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     from nutridb import i18n as i18n_module
 
     canonical = _canonical(tmp_path)

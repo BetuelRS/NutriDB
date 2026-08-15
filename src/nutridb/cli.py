@@ -257,8 +257,34 @@ def qa() -> None:
 def package(
     profile: str = typer.Option("core", "--profile", help="core | extended | lite"),
 ) -> None:
-    """Package the database into release artefacts (F7)."""
-    _not_implemented("F7", f"package profile {profile}")
+    """Package the canonical dataset into release artefacts (F7, §8)."""
+    if profile != "core":
+        _not_implemented("F7", f"package profile {profile}")
+    from nutridb.package import PackageError
+    from nutridb.package import package as run_package
+    from nutridb.paths import paths
+
+    base = paths()
+    try:
+        info = run_package(
+            base["build"] / "canonical" / "ciqual",
+            base["vocab"],
+            base["build"] / "artifacts",
+        )
+    except PackageError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title=f"package {info['artifact']}", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    table.add_row("artifact", info["path"])
+    table.add_row("size_bytes", f"{info['size_bytes']:,}")
+    table.add_row("page_size", str(info["page_size"]))
+    table.add_row("integrity", info["integrity"])
+    for name, count in info["tables"].items():
+        table.add_row(name, f"{count:,}")
+    rich.console.Console().print(table)
+    typer.echo("package OK")
 
 
 @app.command("build")

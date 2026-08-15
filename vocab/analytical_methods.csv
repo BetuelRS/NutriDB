@@ -16,7 +16,7 @@ icp_oes,ICP optical emission spectrometry,Oligoelementos por ICP-OES
 icp_ms,ICP mass spectrometry,Oligoelementos por ICP-MS
 aas_flame,Flame atomic absorption,Metais por espectrometria de absorção atómica de chama
 aas_furnace,Graphite furnace atomic absorption,Metais vestigiais por AAS de forno de grafite
-enzymatic,Enzymatic assay,Análise enzimática (ex.: açúcares, ácidos orgânicos)
+enzymatic,Enzymatic assay,"Análise enzimática (ex.: açúcares, ácidos orgânicos)"
 colorimetric,Colorimetric method,Dosagem colorimétrica
 titrimetric,Titrimetric method,Dosagem por titulação
 microbiological,Microbiological assay,Dosagem microbiológica (vitaminas)

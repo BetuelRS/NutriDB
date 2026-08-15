@@ -6,4 +6,4 @@ D,Derived,Valor derivado de valores da mesma fonte (ex.: por diferença)
 E,Estimated,Valor estimado por especialistas
 I,Imputed,Valor imputado de alimento análogo ou outra entrada
 M,Missing,Ausência de valor
-R,Reported,Valor comunicado por terceiro (ex.: produtor, literatura)
+R,Reported,"Valor comunicado por terceiro (ex.: produtor, literatura)"

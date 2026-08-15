@@ -81,6 +81,11 @@ def _load_csv_handle(handle: IO[str], path: Path, columns: tuple[str, ...]) -> l
         )
     rows = [dict(row) for row in reader]
     for row in rows:
+        if len(row) != len(columns):
+            raise ValueError(
+                f"{path}: row has {len(row)} fields, expected {len(columns)} "
+                f"(unescaped comma in a cell?)"
+            )
         if any(not row.get(col, "").strip() for col in columns):
             raise ValueError(f"{path}: empty cell in row {row!r}")
     return rows
