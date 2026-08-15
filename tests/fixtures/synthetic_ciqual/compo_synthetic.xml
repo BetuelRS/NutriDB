@@ -54,6 +54,15 @@
       <source_code> 1 </source_code>
    </COMPO>
    <COMPO>
+      <alim_code> 1000 </alim_code>
+      <const_code> 40302 </const_code>
+      <teneur> 0,5 </teneur>
+      <min> 0,4 </min>
+      <max> 0,6 </max>
+      <code_confiance> A </code_confiance>
+      <source_code> 444 </source_code>
+   </COMPO>
+   <COMPO>
       <alim_code> 1002 </alim_code>
       <const_code> 34100 </const_code>
       <teneur> &lt; 1,5 </teneur>

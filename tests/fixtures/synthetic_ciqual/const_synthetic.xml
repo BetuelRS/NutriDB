@@ -19,4 +19,10 @@
       <const_nom_eng> Dietary fibre (g/100 g) </const_nom_eng>
       <code_INFOODS> FIB- </code_INFOODS>
    </CONST>
+   <CONST>
+      <const_code> 40302 </const_code>
+      <const_nom_fr> Acides gras saturés (g/100 g) </const_nom_fr>
+      <const_nom_eng> Saturated fatty acids (g/100 g) </const_nom_eng>
+      <code_INFOODS> FASAT </code_INFOODS>
+   </CONST>
 </TABLE>

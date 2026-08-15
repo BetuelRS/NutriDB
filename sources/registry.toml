@@ -14,7 +14,7 @@ attribution = "Anses. 2025. Table de composition nutritionnelle des aliments Ciq
 share_alike = false
 commercial_use = true
 artifacts = ["core", "extended", "lite"]
-notes = "Versao 2025 (2025-11-19; doc oficial: 3484 alimentos, 74 constituintes, matriz 257816 pares; 83246 nao medidos '-', 2514 'traces', 0 '<N'; confianca A-D; 1978 fontes). XML e o formato primario (proveniencia por valor; ADR-0003 emenda A6). Cross-check: MD5 locais = MD5 oficiais do Dataverse."
+notes = "Versao 2025 (2025-11-19; doc oficial: 3484 alimentos, 74 constituintes, matriz 257816 pares; 83246 nao medidos '-' (sem code_confiance/source_code), 2514 'traces' (kind trace), 20075 '< N' com espaco (kind below_loq; ADR-0003 §4.2 corrigido); confianca A-D so nos medidos; 1978 fontes). XML e o formato primario (proveniencia por valor; ADR-0003 emenda A6). Cross-check: MD5 locais = MD5 oficiais do Dataverse."
 
 [[sources.ciqual.files]]
 name = "alim_2025_11_03.xml"

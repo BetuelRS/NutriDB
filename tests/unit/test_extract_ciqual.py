@@ -50,10 +50,10 @@ def test_extract_counts_and_reports(tmp_path: Path) -> None:
     report = _run(tmp_path)
     assert report == {
         "aliments": 3,
-        "constituents": 3,
+        "constituents": 4,
         "groups": 3,
         "sources": 2,
-        "values": 7,
+        "values": 8,
     }
     for name in ("foods", "food_groups", "constituents", "sources", "values"):
         assert (tmp_path / "i" / f"{name}.parquet").is_file()
@@ -86,6 +86,10 @@ def test_extract_values_typed(tmp_path: Path) -> None:
     assert by_pair[(1002, 400)]["teneur_value"] == 0.0009
     assert by_pair[(1002, 400)]["min_value"] == 1e-6
     assert by_pair[(1002, 400)]["max_value"] == 10.2
+    assert by_pair[(1000, 40302)]["teneur_raw"] == "0,5"
+    assert by_pair[(1000, 40302)]["teneur_value"] == 0.5
+    assert by_pair[(1000, 40302)]["min_value"] == 0.4
+    assert by_pair[(1000, 40302)]["max_value"] == 0.6
 
 
 def test_extract_keeps_provenance_in_json(tmp_path: Path) -> None:

@@ -139,6 +139,38 @@ def extract(
     typer.echo("extract OK")
 
 
+@app.command("transform")
+def transform(
+    source: str | None = typer.Option(
+        None, "--source", "-s", help="Only transform this source id."
+    ),
+) -> None:
+    """Transform typed intermediates into the canonical dataset (SPEC §8)."""
+    if source is not None and source != "ciqual":
+        _not_implemented("F2+", f"transform for source {source!r}")
+    from nutridb.paths import paths
+    from nutridb.transform import TransformError
+    from nutridb.transform import transform as run_transform
+
+    base = paths()
+    try:
+        report = run_transform(
+            base["build"] / "intermediates" / "ciqual",
+            base["build"] / "canonical" / "ciqual",
+            base["root"],
+        )
+    except TransformError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="CIQUAL 2025 canonical transform", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    for name, count in report.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("transform OK")
+
+
 vocab_app = typer.Typer(name="vocab", help="Validate the canonical vocabulary (SPEC §5).")
 app.add_typer(vocab_app, name="vocab")
 
