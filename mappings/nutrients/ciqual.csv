@@ -1,0 +1,79 @@
+const_code,tagname,factor,energy_method,value_type_missing,value_type_trace,value_type_below_loq,unit
+# F1.3 — CIQUAL 2025 -> vocabulário canónico (SPEC §5). Fonte: const_2025_11_03.xml (74 códigos).
+# factor = multiplicador aplicado ao valor da fonte (g->mg nos AG: x10); 1 caso contrário.
+# energy_method só para códigos ENERC; '-' = não energia. value_type_* são as regras das células
+# '-', 'traces' e '< N' (ADR-0003 §4.1).
+327,ENERC_KJ,1,Reg. UE 1169/2011 (Atwater),not_measured,trace,below_loq,kj
+328,ENERC_KCAL,1,Reg. UE 1169/2011 (Atwater),not_measured,trace,below_loq,kcal
+332,ENERC_KJ,1,"N x factor de Jones, com fibras",not_measured,trace,below_loq,kj
+333,ENERC_KCAL,1,"N x factor de Jones, com fibras",not_measured,trace,below_loq,kcal
+400,WATER,1,-,not_measured,trace,below_loq,g
+10000,ASH,1,-,not_measured,trace,below_loq,g
+10004,NACL,1,-,not_measured,trace,below_loq,g
+10110,NA,1,-,not_measured,trace,below_loq,mg
+10120,MG,1,-,not_measured,trace,below_loq,mg
+10150,P,1,-,not_measured,trace,below_loq,mg
+10170,CL,1,-,not_measured,trace,below_loq,mg
+10190,K,1,-,not_measured,trace,below_loq,mg
+10200,CA,1,-,not_measured,trace,below_loq,mg
+10251,MN,1,-,not_measured,trace,below_loq,mg
+10260,FE,1,-,not_measured,trace,below_loq,mg
+10290,CU,1,-,not_measured,trace,below_loq,mg
+10300,ZN,1,-,not_measured,trace,below_loq,mg
+10340,SE,1,-,not_measured,trace,below_loq,ug
+10530,ID,1,-,not_measured,trace,below_loq,ug
+25000,PROCNT,1,-,not_measured,trace,below_loq,g
+25003,PROCNT,1,-,not_measured,trace,below_loq,g
+31000,CHOAVL,1,-,not_measured,trace,below_loq,g
+32000,SUGAR,1,-,not_measured,trace,below_loq,g
+32210,FRUS,1,-,not_measured,trace,below_loq,g
+32220,GALS,1,-,not_measured,trace,below_loq,g
+32250,GLUS,1,-,not_measured,trace,below_loq,g
+32410,LACS,1,-,not_measured,trace,below_loq,g
+32430,MALS,1,-,not_measured,trace,below_loq,g
+32480,SUCS,1,-,not_measured,trace,below_loq,g
+33110,STARCH,1,-,not_measured,trace,below_loq,g
+34000,POLYL,1,-,not_measured,trace,below_loq,g
+34100,FIBTG,1,-,not_measured,trace,below_loq,g
+40000,FAT,1,-,not_measured,trace,below_loq,g
+40302,FASAT,10,-,not_measured,trace,below_loq,mg
+40303,FAMS,10,-,not_measured,trace,below_loq,mg
+40304,FAPU,10,-,not_measured,trace,below_loq,mg
+40400,F4D0,10,-,not_measured,trace,below_loq,mg
+40600,F6D0,10,-,not_measured,trace,below_loq,mg
+40800,F8D0,10,-,not_measured,trace,below_loq,mg
+41000,F10D0,10,-,not_measured,trace,below_loq,mg
+41200,F12D0,10,-,not_measured,trace,below_loq,mg
+41400,F14D0,10,-,not_measured,trace,below_loq,mg
+41600,F16D0,10,-,not_measured,trace,below_loq,mg
+41800,F18D0,10,-,not_measured,trace,below_loq,mg
+41819,F18D1CN9,10,-,not_measured,trace,below_loq,mg
+41826,F18D2CN6,10,-,not_measured,trace,below_loq,mg
+41833,F18D3N3,10,-,not_measured,trace,below_loq,mg
+42046,F20D4N6,10,-,not_measured,trace,below_loq,mg
+42053,F20D5N3,10,-,not_measured,trace,below_loq,mg
+42263,F22D6N3,10,-,not_measured,trace,below_loq,mg
+51104,VITA_RAE,1,-,not_measured,trace,below_loq,ug
+51200,RETOL,1,-,not_measured,trace,below_loq,ug
+51330,CARTB,1,-,not_measured,trace,below_loq,ug
+52100,VITD,1,-,not_measured,trace,below_loq,ug
+52200,ERGCAL,1,-,not_measured,trace,below_loq,ug
+52300,CHOCAL,1,-,not_measured,trace,below_loq,ug
+53100,VITE,1,-,not_measured,trace,below_loq,mg
+54101,VITK1,1,-,not_measured,trace,below_loq,ug
+54104,VITK2,1,-,not_measured,trace,below_loq,ug
+55100,VITC,1,-,not_measured,trace,below_loq,mg
+56100,THIA,1,-,not_measured,trace,below_loq,mg
+56200,RIBF,1,-,not_measured,trace,below_loq,mg
+56310,NIA,1,-,not_measured,trace,below_loq,mg
+56400,PANTAC,1,-,not_measured,trace,below_loq,mg
+56500,VITB6A,1,-,not_measured,trace,below_loq,mg
+56600,VITB12,1,-,not_measured,trace,below_loq,ug
+56700,FOL,1,-,not_measured,trace,below_loq,ug
+56702,FOLDFE,1,-,not_measured,trace,below_loq,ug
+56704,FOLFD,1,-,not_measured,trace,below_loq,ug
+56708,FOLAC,1,-,not_measured,trace,below_loq,ug
+60000,ALC,1,-,not_measured,trace,below_loq,g
+65000,OA,1,-,not_measured,trace,below_loq,g
+71010,TOCPHA,1,-,not_measured,trace,below_loq,mg
+75100,CHOLE,1,-,not_measured,trace,below_loq,mg
