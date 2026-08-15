@@ -1,7 +1,7 @@
 # ADR-0003 — Fonte CIQUAL 2025: formato, licença e volume
 
-- **Estado**: Aprovado (revisão em F1.0)
-- **Data**: 2026-08-15
+- **Estado**: Aprovado
+- **Data**: 2026-08-15 (proposta F1.0; aprovação humana em revisão de PR)
 - **Fase**: F1.0 (`f1/ciqual-ponta-a-ponta`)
 
 ---
@@ -114,3 +114,17 @@ licença na fonte oficial — não confies em memória").
 2. `uv run nutridb sources sync` re-descarrega do zero e valida os 8 (P5).
 3. `uv run nutridb sources audit` reporta etalab-2.0 sem restrições de core.
 4. Leitura humana deste ADR confirma a semântica §4.1 e o volume §4.2.
+
+---
+
+## 7. Registo de aprovação (2026-08-15)
+
+Aprovação humana (revisão de fase F1.0):
+
+| Item | Decisão |
+|---|---|
+| Formato primário | JSON **XML** (emenda à A6 do ADR-0001 §7) — proveniência por valor só existe no XML |
+| Semântica §4.1 | Confirmada: `-` → `not_measured`, `traces` → `trace`, `<N` → `below_loq` (sem ocorrências em 2025), confiança A–D preservada em bruto, decimal vírgula francesa |
+| Volume §4.2 | Confirmado (3 484 × 74; matriz completa; 83 246 ausentes; 2 514 traces; 1 978 fontes) |
+| Artefacto | `core` (etalab-2.0 permissiva, sem restrições) |
+| Registry | 8 ficheiros fixados por SHA-256; XLS/XLSX fora do pipeline (evidência) |

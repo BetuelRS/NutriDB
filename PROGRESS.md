@@ -9,7 +9,7 @@
 
 | Tarefa | Estado | Nota |
 |---|---|---|
-| F1.0 ADR-0003 (licença/formato CIQUAL) | 🔧 proposto | Evidência completa; **aguarda revisão humana** (questionário/PR). Registado em `docs/adr/0003-fonte-ciqual-2025.md` |
+| F1.0 ADR-0003 (licença/formato CIQUAL) | ✅ | Aprovado por revisão humana (2026-08-15) — registo no ADR §7; XML primário (emenda A6) |
 | F1.0b pin SHA-256 no registry | ✅ | Modelo `files` (multi-ficheiro) novo no registry; 8 ficheiros fixados (5 XML + PDF + XLS + XLSX); `sources sync` re-descarcou 1 ficheiro do zero e validou por hash; audit `pinned=yes` |
 | F1.1–F1.10 | ☐ | próximas |
 
@@ -17,13 +17,11 @@
 
 ## Decisões em aberto
 
-- **ADR-0003** (momentaneamente em `Proposto`): a leitura humana deve confirmar (1) XML como formato primário — emenda à A6, (2) semântica `-`/`traces`/`<N`/confiança A–D (§4.1), (3) volume §4.2 (3484×74; 83 246 ausentes; 1 978 fontes), (4) artefacto `core` com etalab-2.0.
-- A1–A20 resolvidas (ADR-0001 §7).
+- Nenhuma (A1–A20 resolvidas; ADR-0001 §7; ADR-0003 aprovado em F1.0).
 
 ## Bloqueios / pendências
 
-- **Aprovação humana do ADR-0003** (gate da F1.0) — pode ser feita por PR ou questionário.
-- **CI no GitHub**: confirmar o run `checks` de `f0/fundacoes` no Actions (o CI de `f1/...` só corre após push).
+- **CI no GitHub**: confirmar os runs `checks` de `f0/fundacoes` e `f1/ciqual-ponta-a-ponta` no Actions após push.
 
 ## Histórico de sessões
 
