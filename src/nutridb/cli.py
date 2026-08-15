@@ -71,8 +71,10 @@ def sources_fetch(
     except KeyError as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=2) from exc
-    if entry.sha256 is not None:
-        typer.echo(f"{source}: already pinned as sha256 = {entry.sha256!r}")
+    if entry.sha256 is not None or entry.files:
+        typer.echo(
+            f"{source}: already pinned (sha256 = {entry.sha256!r}, files = {len(entry.files)})"
+        )
         raise typer.Exit()
     digest = fetch_unpinned(entry)
     typer.echo("Downloaded. Review before pinning:")
@@ -97,7 +99,7 @@ def sources_audit() -> None:
             "yes" if entry.share_alike else "no",
             "yes" if entry.commercial_use else ("no" if entry.commercial_use is False else "?"),
             ",".join(entry.artifacts),
-            "yes" if entry.sha256 else "NO",
+            "yes" if (entry.sha256 or entry.files) else "NO",
         )
     console = rich.console.Console()
     console.print(table)
