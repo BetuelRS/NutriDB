@@ -1,0 +1,6 @@
+concept_id,source,source_code,status
+# Adjudicação de links concept <-> fonte (SPEC §9, ADR-0001 D6).
+# Em F1 o vínculo concept<->registo da fonte vive na camada canónica
+# (concept_link, estatuto 'automatic', 1 fonte). Este ficheiro regista
+# fusões/adjudicações manuais — vazio até existirem (gate: P8: se a
+# decisão não está no git, não aconteceu).
