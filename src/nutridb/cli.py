@@ -132,8 +132,23 @@ app.add_typer(vocab_app, name="vocab")
 
 @vocab_app.command("check")
 def vocab_check() -> None:
-    """Validate vocabulary and mapping files; report unmapped codes."""
-    _not_implemented("F1.1/F1.3", "vocabulary invariants and mapping gates")
+    """Validate vocabulary invariant checks and report counts (fail high)."""
+    from nutridb.paths import project_root
+    from nutridb.vocab import check_vocabulary
+
+    report = check_vocabulary(project_root())
+    if report.errors:
+        console = rich.console.Console()
+        for error in report.errors:
+            console.print(rich.text.Text(error, style="red"))
+        raise typer.Exit(code=1)
+    table = rich.table.Table(title="Vocabulary check", title_justify="left")
+    table.add_column("file")
+    table.add_column("rows", justify="right")
+    for name, count in report.counts.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("vocabulary OK")
 
 
 @app.command("link")

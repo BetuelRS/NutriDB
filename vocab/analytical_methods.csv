@@ -1,0 +1,23 @@
+id,name_en,description
+kjeldahl,Kjeldahl digestion,Nitrogénio total por digestão sulfúrica; proteína = N × fator
+dumas,Dumas combustion,Nitrogénio por combustão a alta temperatura
+oven_drying,Oven drying,Água por secagem em estufa
+vacuum_drying,Vacuum drying,Água por secagem a vácuo
+freeze_drying,Freeze drying,Água por liofilização
+dry_ashing,Dry ashing,Cinzas por incineração a seco
+wet_digestion,Wet digestion,Mineralização por digestão ácida húmida
+soxhlet,Soxhlet extraction,Lipídos por extração com solvente (Soxhlet)
+acid_hydrolysis,Acid hydrolysis,Gordura total por hidrólise ácida
+gerber,Gerber method,Gordura em lacticínios (método de Gerber)
+hplc,High-performance liquid chromatography,Cromatografia líquida de alta eficiência
+gc_fid,Gas chromatography with flame ionization,Perfil de ácidos gordos por GC-FID
+gc_ms,GC coupled to mass spectrometry,Perfil de ácidos gordos por GC-MS
+icp_oes,ICP optical emission spectrometry,Oligoelementos por ICP-OES
+icp_ms,ICP mass spectrometry,Oligoelementos por ICP-MS
+aas_flame,Flame atomic absorption,Metais por espectrometria de absorção atómica de chama
+aas_furnace,Graphite furnace atomic absorption,Metais vestigiais por AAS de forno de grafite
+enzymatic,Enzymatic assay,Análise enzimática (ex.: açúcares, ácidos orgânicos)
+colorimetric,Colorimetric method,Dosagem colorimétrica
+titrimetric,Titrimetric method,Dosagem por titulação
+microbiological,Microbiological assay,Dosagem microbiológica (vitaminas)
+radiochemical,Radiochemical method,Dosagem radioquímica (vitamina B12)

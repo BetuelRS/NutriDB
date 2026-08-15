@@ -1,0 +1,19 @@
+id,name_en,name_pt
+raw,Raw,Cru
+cooked,Cooked,Cozinhado
+frozen,Frozen,Congelado
+dried,Dried,Seco/desidratado
+canned,Canned (in can),Enlatado
+fresh,Fresh,Fresco
+peeled,Peeled,Descascado
+shelled,Shelled,Descascado/descasqueirado
+boneless,Boneless,Sem osso
+whole,Whole,Inteiro
+diced,Diced,Em cubos
+sliced,Sliced,Em fatias
+ground,Ground,Moido
+liquid,Liquid,Líquido
+solid,Solid,Sólido
+rehydrated,Rehydrated,Reidratado
+blanched,Blanched,Escaldado
+parboiled,Parboiled,Pré-cozido
