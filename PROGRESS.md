@@ -5,30 +5,27 @@
 ## Estado atual (2026-08-15)
 
 **Fase 0 — Fundações: concluída** (branch `f0/fundacoes`).
+**Fase 1 — Vocabulário e primeira fonte:** em curso (branch `f1/ciqual-ponta-a-ponta`).
 
 | Tarefa | Estado | Nota |
 |---|---|---|
-| F0.1 repositório (SPEC.md, git, remote, ignore/attributes, README/LICENSE/NOTICE) | ✅ | remote `origin` → `github.com/BetuelRS/NutriDB.git` (push pendente de credenciais) |
-| F0.2 scaffold de diretórios | ✅ | espelha SPEC §3; dirs de dados com README |
-| F0.3 projeto uv (py 3.12, deps, ruff, mypy strict) | ✅ | `uv.lock` gerado |
-| F0.4 CLI esqueleto (16 comandos + `--version`) | ✅ | stubs falham alto com mensagem e exit 2 |
-| F0.5 registry.toml + modelo pydantic + validação | ✅ | `[sources.ciqual]` com condições de ODbL/sha256/artefactos |
-| F0.6 `sources audit` | ✅ | relatório rich + contagem por perfil |
-| F0.7 `sources sync` / `fetch` | ✅ | gate de hash fixado: unpinned → falha alta; `fetch` imprime hash para pin manual (P8) |
-| F0.8 CI (GitHub Actions) | ✅ | runs on push/PR; requer remote para executar |
-| F0.9 ADR-0001/0002 + PROGRESS.md | ✅ | ADR-0003 agenda na F1.0 |
+| F1.0 ADR-0003 (licença/formato CIQUAL) | 🔧 proposto | Evidência completa; **aguarda revisão humana** (questionário/PR). Registado em `docs/adr/0003-fonte-ciqual-2025.md` |
+| F1.0b pin SHA-256 no registry | ✅ | Modelo `files` (multi-ficheiro) novo no registry; 8 ficheiros fixados (5 XML + PDF + XLS + XLSX); `sources sync` re-descarcou 1 ficheiro do zero e validou por hash; audit `pinned=yes` |
+| F1.1–F1.10 | ☐ | próximas |
 
-**Gate de aceitação F0 (SPEC §16)**: `nutridb --help` exit 0 ✅ · CI verde (verificado localmente: ruff/mypy/pytest) ✅ · ADR aprovado ✅.
+**Fallbacks de F0**: push `f0/fundacoes` feito; confirmar run do CI no GitHub (pendente de credenciais/remote).
 
 ## Decisões em aberto
 
-- Nenhuma para F1 (A1–A20 resolvidas em 2026-08-15; ADR-0001 §7).
+- **ADR-0003** (momentaneamente em `Proposto`): a leitura humana deve confirmar (1) XML como formato primário — emenda à A6, (2) semântica `-`/`traces`/`<N`/confiança A–D (§4.1), (3) volume §4.2 (3484×74; 83 246 ausentes; 1 978 fontes), (4) artefacto `core` com etalab-2.0.
+- A1–A20 resolvidas (ADR-0001 §7).
 
 ## Bloqueios / pendências
 
-- **CI no GitHub**: o push de `f0/fundacoes` foi feito (2026-08-15); confirmar o run `checks` no Actions.
-- **F1.0 / ADR-0003**: resolver URL exata do ficheiro CIQUAL 2025 (Excel) no entrepot recherche.data.gouv, fixar `sha256` e `filename` no registry (download + revisão antes de fixar — P6/P8).
+- **Aprovação humana do ADR-0003** (gate da F1.0) — pode ser feita por PR ou questionário.
+- **CI no GitHub**: confirmar o run `checks` de `f0/fundacoes` no Actions (o CI de `f1/...` só corre após push).
 
 ## Histórico de sessões
 
 - **2026-08-15**: arranque. SPEC lida, ADR-0001/0002, PLAN, ambiguidades resolvidas por aprovação humana; Fase 0 implementada e verificada (19 testes, lint e mypy verdes).
+- **2026-08-15 (continuação)**: F1.0/F1.0b. Descarregados os 8 ficheiros CIQUAL 2025 do Dataverse (interface `/api/access/datafile`); estrutura dos 5 XML inspecionada (74 const com `code_INFOODS` oficial, matriz completa 257 816 pares, `source_code`/`code_confiance`/`min`/`max` por par); PDF oficial extraído por **OCR** (pypdf não extrai texto — fontes sem mapeamento Unicode) para `sources/cache/ciqual/doc_2025_11_19_ocr.txt`; licença etalab-2.0 confirmada na página oficial (SPDX) e no doc (Licence Ouverte, p.4); MD5 locais batem com os MD5 oficiais do Dataverse (8/8); **XML escolhido como formato primário** (ADR-0003; emenda A6); registry extendido (`files`), 22 testes verdes, `sources sync`/`audit` como gate validado.

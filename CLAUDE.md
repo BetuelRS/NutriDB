@@ -38,6 +38,11 @@ Condensado das regras de trabalho (SPEC §17) e das decisões aprovadas (docs/ad
 - Docs em pt-PT; identificadores/mensagens de código em EN.
 - `_unmapped/` esvaziado é gate; `mappings/links.csv` 1:1 automático em F1; semver `0.1.0`.
 
+## Perfil operacional
+
+- **Carta branca de ferramentas**: o agente pode instalar/descarregar qualquer ferramenta ou dependência técnica (pip/uv temporários, utilidades CLI) e usar internet ilimitada quando necessário ao trabalho — desde que não altere a stack do projeto nem o `pyproject.toml` sem ADR.
+- Preferir `uv run --with <pkg>` (ambientes efémeros) a instalar no projeto.
+
 ## Comandos
 
 ```sh

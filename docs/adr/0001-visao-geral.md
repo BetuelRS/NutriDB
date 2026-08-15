@@ -187,7 +187,7 @@ Revisão humana concluída via questionário. Decisões registadas:
 | A2 | Licença do código | **Apache-2.0** (ADR-0002) |
 | A3 | Língua | Docs em pt-PT; identificadores e mensagens de código em EN |
 | A4/A5 | CIQUAL | **Versão 2025**, entra em `core` (etalab 2.0 permissiva); confirmar na fonte no ADR-0003 |
-| A6 | Extractor | XLS via engine (pandas/duckdb) como primário; XML como fallback |
+| A6 | Extractor | XLS via engine (pandas/duckdb) como primário; XML como fallback — **EMENDADA em F1.0 pelo ADR-0003**: o XLS não contém as fontes (sem proveniência por valor, P1/D4); o conjunto XML passa a primário (teneur/min/max/confiance/source_code por par) |
 | A7 | Pesquisa em F1 | **Emenda ao DELTA-0001**: além do motor FTS5, a F1 inclui uma **página mínima de pesquisa** (bootstrap do `explorer/` com Vite+React+TS, carregamento do SQLite via sql.js/WASM, sem HTTP-range — otimização dessa parte é F8) |
 | A8/A9 | Ausência e energia | Materialização por cobertura + flags explícitas; energia com método registado |
 | A10/A11 | Vocabulário e i18n | INFOODS como autoridade primária; i18n da F1 mínimo (nomes fr nativos + rótulos en/pt-PT do vocabulário) |
