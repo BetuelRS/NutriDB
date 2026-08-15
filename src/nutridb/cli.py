@@ -208,8 +208,25 @@ app.add_typer(i18n_app, name="i18n")
 
 @i18n_app.command("build")
 def i18n_build() -> None:
-    """Compose labels per locale with status and fallback chains (F4)."""
-    _not_implemented("F4", "label composition")
+    """Compose labels per locale with status (SPEC §7, D7; F1-lite)."""
+    from nutridb.i18n import I18nError
+    from nutridb.i18n import build as run_build
+    from nutridb.paths import paths
+
+    base = paths()
+    canonical = base["build"] / "canonical" / "ciqual"
+    try:
+        report = run_build(canonical, base["root"])
+    except I18nError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="i18n labels (F1-lite)", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    for name, count in report.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("i18n OK")
 
 
 @i18n_app.command("review")
