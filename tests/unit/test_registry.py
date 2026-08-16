@@ -8,7 +8,13 @@ from typing import TYPE_CHECKING
 import pytest
 
 from nutridb.paths import project_root
-from nutridb.sources.registry import Registry, SourceEntry, load_registry, sha256_of
+from nutridb.sources.registry import (
+    Registry,
+    SourceEntry,
+    SourceFile,
+    load_registry,
+    sha256_of,
+)
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -31,9 +37,64 @@ def test_registry_toml_is_parseable_and_schema_versioned() -> None:
     assert "ciqual" in raw["sources"]
 
 
-def test_unpinned_source_is_flagged() -> None:
+def test_ciqual_is_pinned_per_file() -> None:
     registry = load_registry()
-    assert registry.by_id("ciqual").sha256 is None  # pinned during F1.0/ADR-0003
+    ciqual = registry.by_id("ciqual")
+    assert ciqual.sha256 is None  # multi-file source pins under `files`
+    assert ciqual.filename is None
+    assert len(ciqual.files) == 8
+    names = {f.name for f in ciqual.files}
+    assert "compo_2025_11_03.xml" in names
+    assert "const_2025_11_03.xml" in names
+    for file in ciqual.files:
+        assert len(file.sha256) == 64
+        assert file.url
+
+
+def test_legacy_single_file_still_supported() -> None:
+    entry = SourceEntry(
+        id="single",
+        name="s",
+        url="https://example.com/blob.xls",
+        license_id="etalab-2.0",
+        license_url="https://spdx.org/licenses/etalab-2.0.html",
+        version="1",
+        sha256="a" * 64,
+        filename="blob.xls",
+        artifacts=["core"],
+    )
+    assert entry.files == []
+    assert entry.sha256 == "a" * 64
+
+
+def test_files_and_legacy_fields_mutually_exclusive() -> None:
+    with pytest.raises(ValueError, match="mutually exclusive"):
+        SourceEntry(
+            id="x",
+            name="x",
+            url="u",
+            license_id="etalab-2.0",
+            license_url="lu",
+            version="1",
+            sha256="b" * 64,
+            filename="f",
+            files=[SourceFile(name="g", sha256="a" * 64)],
+            artifacts=["core"],
+        )
+
+
+def test_bad_file_sha256_rejected() -> None:
+    with pytest.raises(ValueError, match="sha256"):
+        SourceEntry(
+            id="x",
+            name="x",
+            url="u",
+            license_id="etalab-2.0",
+            license_url="lu",
+            version="1",
+            files=[SourceFile(name="f", sha256="short")],
+            artifacts=["core"],
+        )
 
 
 def test_bad_sha256_rejected() -> None:

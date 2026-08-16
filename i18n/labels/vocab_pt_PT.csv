@@ -1,0 +1,15 @@
+tagname,label
+# Rótulos do vocabulário em pt-PT (F1 mínimo, estatuto curated — ADR-0001 D7).
+# A cadeia de fallback resolve o resto (pt-PT -> pt -> en). Rótulo vazio falha
+# o build (P7). Fonte: vocabulário INFOODS, tradução manual mínima.
+ENERC_KCAL,Energia
+ENERC_KJ,Energia
+WATER,Água
+PROCNT,Proteínas
+FAT,Matéria gorda
+FASAT,Ácidos gordos saturados
+FAMS,Ácidos gordos monoinsaturados
+FAPU,Ácidos gordos polinsaturados
+FIBTG,Fibra alimentar
+SUGAR,Açúcares
+CHOAVL,Hidratos de carbono disponíveis

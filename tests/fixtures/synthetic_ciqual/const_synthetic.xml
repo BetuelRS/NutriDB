@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SYNTHETIC FIXTURE — dados inventados apenas para testes (regra §17.7) -->
+<TABLE>
+<CONST>
+       <const_code> 327 </const_code>
+       <const_nom_fr> Energie, Reglement UE N° 1169/2011 (kJ/100 g) </const_nom_fr>
+       <const_nom_eng> Energy, Regulation EU N° 1169/2011 (kJ/100 g) </const_nom_eng>
+       <code_INFOODS> ENERC </code_INFOODS>
+    </CONST>
+    <CONST>
+       <const_code> 333 </const_code>
+       <const_nom_fr> Energie, N x facteur de Jones, avec fibres (kcal/100 g) </const_nom_fr>
+       <const_nom_eng> Energy, N x Jones factor, with fibre (kcal/100 g) </const_nom_eng>
+       <code_INFOODS> ENERC </code_INFOODS>
+    </CONST>
+   <CONST>
+      <const_code> 400 </const_code>
+      <const_nom_fr> Eau (g/100 g) </const_nom_fr>
+      <const_nom_eng> Water (g/100 g) </const_nom_eng>
+      <code_INFOODS> WATER </code_INFOODS>
+   </CONST>
+   <CONST>
+      <const_code> 34100 </const_code>
+      <const_nom_fr> Fibres alimentaires (g/100 g) </const_nom_fr>
+      <const_nom_eng> Dietary fibre (g/100 g) </const_nom_eng>
+      <code_INFOODS> FIB- </code_INFOODS>
+   </CONST>
+   <CONST>
+      <const_code> 40302 </const_code>
+      <const_nom_fr> Acides gras saturés (g/100 g) </const_nom_fr>
+      <const_nom_eng> Saturated fatty acids (g/100 g) </const_nom_eng>
+      <code_INFOODS> FASAT </code_INFOODS>
+   </CONST>
+</TABLE>

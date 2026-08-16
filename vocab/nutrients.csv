@@ -1,0 +1,168 @@
+# Energia (SPEC §5): guardar o método (mappings/ + derivations/), nunca fundir
+# Proximados
+# Hidratos discriminados
+# Lípidos totais
+# Ácidos gordos individuais (INFOODS FnnDnnNn)
+# Minerais
+# Vitaminas lipossolúveis
+# Vitaminas hidrossolúveis
+# Aminoácidos (20 + pares e extra)
+# Outros
+tagname,group,name_en,unit
+ENERC_KCAL,energy,Energy (kcal; method registered per source),kcal
+ENERC_KJ,energy,Energy (kJ; method registered per source),kj
+WATER,proximates,Water (by difference is not allowed),g
+PROCNT,proximates,Protein (total nitrogen × factor; factor registered),g
+NT,proximates,Total nitrogen,g
+FAT,proximates,Total lipid (fat),g
+FATCE,proximates,Total lipid (fat) by difference,g
+CHOAVL,proximates,Carbohydrate available (by difference),g
+CHOAVLDF,proximates,Carbohydrate available with dietary fibre (by difference),g
+CHOCDF,proximates,Carbohydrate total (by difference with dietary fibre),g
+FIBTG,proximates,Total dietary fibre,g
+FIBC,proximates,Crude fibre,g
+ASH,proximates,Ash,g
+ALC,proximates,Alcohol (ethanol),g
+SUGAR,carbohydrates,Total sugars (sum of individual sugars),g
+FRUS,carbohydrates,Fructose,g
+GLUS,carbohydrates,Glucose (dextrose),g
+SUCS,carbohydrates,Sucrose,g
+LACS,carbohydrates,Lactose,g
+MALS,carbohydrates,Maltose,g
+GALS,carbohydrates,Galactose,g
+STARCH,carbohydrates,Starch,g
+POLYL,carbohydrates,Total polyols (sugar alcohols),g
+FIBS,carbohydrates,Dietary fibre soluble,g
+FIBINS,carbohydrates,Dietary fibre insoluble,g
+FASAT,lipids,Fatty acids total saturated,g
+FAMS,lipids,Fatty acids total monounsaturated,g
+FAPU,lipids,Fatty acids total polyunsaturated,g
+FATRN,lipids,Fatty acids total trans,mg
+CHOLE,lipids,Cholesterol,mg
+F4D0,lipids,Fatty acid 4:0 (butyric),g
+F6D0,lipids,Fatty acid 6:0 (caproic),g
+F8D0,lipids,Fatty acid 8:0 (caprylic),g
+F10D0,lipids,Fatty acid 10:0 (capric),g
+F12D0,lipids,Fatty acid 12:0 (lauric),g
+F14D0,lipids,Fatty acid 14:0 (myristic),g
+F14D1,lipids,Fatty acid 14:1 (myristoleic),g
+F15D0,lipids,Fatty acid 15:0 (pentadecanoic),g
+F16D0,lipids,Fatty acid 16:0 (palmitic),g
+F16D1,lipids,Fatty acid 16:1 (palmitoleic),g
+F17D0,lipids,Fatty acid 17:0 (margaric),g
+F18D0,lipids,Fatty acid 18:0 (stearic),g
+F18D1,lipids,Fatty acid 18:1 total,g
+F18D1CN9,lipids,Fatty acid 18:1 c9 (oleic),g
+F18D1CN7,lipids,Fatty acid 18:1 c11 (vaccenic),g
+F18D2CN6,lipids,"Fatty acid 18:2 c9,c12 (linoleic)",g
+F18D2CNN6,lipids,Fatty acid 18:2 n-6 conjugated,g
+F18D2CL,lipids,Fatty acid 18:2 conjugated linoleic (CLA),g
+F18D3CN3,lipids,"Fatty acid 18:3 c9,c12,c15 (alpha-linolenic)",g
+F18D3N3,lipids,Fatty acid 18:3 n-3 (alpha-linolenic),g
+F18D3CN6,lipids,"Fatty acid 18:3 c6,c9,c12 (gamma-linolenic)",g
+F18D4N3,lipids,Fatty acid 18:4 n-3 (stearidonic),g
+F20D0,lipids,Fatty acid 20:0 (arachidic),g
+F20D1,lipids,Fatty acid 20:1 (gadoleic),g
+F20D2,lipids,Fatty acid 20:2 n-6,g
+F20D3N3,lipids,Fatty acid 20:3 n-3,g
+F20D4N6,lipids,Fatty acid 20:4 n-6 (arachidonic),g
+F20D5N3,lipids,Fatty acid 20:5 n-3 (EPA),g
+F22D0,lipids,Fatty acid 22:0 (behenic),g
+F22D1,lipids,Fatty acid 22:1 (erucic),g
+F22D5N3,lipids,Fatty acid 22:5 n-3 (DPA),g
+F22D6N3,lipids,Fatty acid 22:6 n-3 (DHA),g
+F24D0,lipids,Fatty acid 24:0 (lignoceric),g
+F24D1,lipids,Fatty acid 24:1 c15 (nervonic),g
+F26D0,lipids,Fatty acid 26:0 (cerotic),g
+CA,minerals,Calcium,mg
+FE,minerals,Iron,mg
+MG,minerals,Magnesium,mg
+P,minerals,Phosphorus,mg
+K,minerals,Potassium,mg
+NA,minerals,Sodium,mg
+ZN,minerals,Zinc,mg
+CU,minerals,Copper,mg
+MN,minerals,Manganese,mg
+SE,minerals,Selenium,ug
+ID,minerals,Iodide (iodine),ug
+CL,minerals,Chloride,mg
+F,minerals,Fluoride,mg
+CR,minerals,Chromium,ug
+MO,minerals,Molybdenum,ug
+NACL,minerals,Salt (sodium chloride),g
+AS,minerals,Arsenic,ug
+CD,minerals,Cadmium,ug
+HG,minerals,Mercury,ug
+PB,minerals,Lead,ug
+NI,minerals,Nickel,ug
+V,minerals,Vanadium,ug
+VITA_RAE,vitamins_fat_soluble,Vitamin A (retinol activity equivalents),ug
+RETOL,vitamins_fat_soluble,Retinol,ug
+CARTB,vitamins_fat_soluble,Carotene beta,ug
+CARTA,vitamins_fat_soluble,Carotene alpha,ug
+CRYPXB,vitamins_fat_soluble,Cryptoxanthin beta,ug
+LUTN,vitamins_fat_soluble,Lutein,ug
+ZEA,vitamins_fat_soluble,Zeaxanthin,ug
+LYCPN,vitamins_fat_soluble,Lycopene,ug
+VITD,vitamins_fat_soluble,Vitamin D (total),ug
+CHOCAL,vitamins_fat_soluble,Cholecalciferol (vitamin D3),ug
+ERGCAL,vitamins_fat_soluble,Ergocalciferol (vitamin D2),ug
+VITE,vitamins_fat_soluble,Vitamin E (alpha-tocopherol equivalents),mg
+TOCPHA,vitamins_fat_soluble,Alpha-tocopherol,mg
+TOCPHB,vitamins_fat_soluble,Beta-tocopherol,mg
+TOCPHG,vitamins_fat_soluble,Gamma-tocopherol,mg
+TOCPHD,vitamins_fat_soluble,Delta-tocopherol,mg
+TOCTRA,vitamins_fat_soluble,Tocopherols total,mg
+VITK,vitamins_fat_soluble,Vitamin K (total),ug
+VITK1,vitamins_fat_soluble,Phylloquinone (vitamin K1),ug
+VITK2,vitamins_fat_soluble,Menaquinone (vitamin K2),ug
+THIA,vitamins_water_soluble,Thiamin (vitamin B1),mg
+RIBF,vitamins_water_soluble,Riboflavin (vitamin B2),mg
+NIA,vitamins_water_soluble,Niacin (nicotinic acid),mg
+NIAEQ,vitamins_water_soluble,Niacin equivalents (tryptophan + niacin),mg
+VITB6A,vitamins_water_soluble,Vitamin B6 (total),mg
+VITB6C,vitamins_water_soluble,Pyridoxine (vitamin B6),mg
+PANTAC,vitamins_water_soluble,Pantothenic acid (vitamin B5),mg
+BIOT,vitamins_water_soluble,Biotin,ug
+FOL,vitamins_water_soluble,Folate total,ug
+FOLDFE,vitamins_water_soluble,Folate dietary folate equivalents,ug
+FOLFD,vitamins_water_soluble,Folate food (intrinsic),ug
+FOLAC,vitamins_water_soluble,Folic acid (fortification),ug
+VITB12,vitamins_water_soluble,Vitamin B12 (cobalamin),ug
+VITC,vitamins_water_soluble,Vitamin C (ascorbic acid),mg
+CHOLN,vitamins_water_soluble,Choline,mg
+ALA,amino_acids,Alanine,g
+ARG,amino_acids,Arginine,g
+ASP,amino_acids,Aspartic acid,g
+ASN,amino_acids,Asparagine,g
+ASX,amino_acids,Asparagine + aspartic acid,g
+GLU,amino_acids,Glutamic acid,g
+GLN,amino_acids,Glutamine,g
+GLX,amino_acids,Glutamine + glutamic acid,g
+SER,amino_acids,Serine,g
+THR,amino_acids,Threonine,g
+TRP,amino_acids,Tryptophan,g
+TYR,amino_acids,Tyrosine,g
+VAL,amino_acids,Valine,g
+GLY,amino_acids,Glycine,g
+CYS,amino_acids,Cystine,g
+MET,amino_acids,Methionine,g
+LEU,amino_acids,Leucine,g
+ILE,amino_acids,Isoleucine,g
+LYS,amino_acids,Lysine,g
+PHE,amino_acids,Phenylalanine,g
+PRO,amino_acids,Proline,g
+HIS,amino_acids,Histidine,g
+HYP,amino_acids,Hydroxyproline,g
+ORN,amino_acids,Ornithine,g
+CITR,amino_acids,Citrulline,g
+CAFFN,other,Caffeine,mg
+THEBRN,other,Theobromine,mg
+THEOF,other,Theophylline,mg
+STEROL,other,Phytosterols total,mg
+BTN,other,Betaine,mg
+OA,other,Organic acids total,g
+PHYTAC,other,Phytate (phytic acid),mg
+NITR,other,Nitrate,mg
+OSMOL,other,Osmolality,mOsm
+TAURN,other,Taurine,mg

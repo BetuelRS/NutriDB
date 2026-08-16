@@ -1,0 +1,62 @@
+alim_code,food_fr,const_code,tagname,unit,expected,xls_raw,xls_ref,ref
+18066,Eau du robinet,328,ENERC_KCAL,kcal,0.0,0,"linha 2428, col K",compo_2025_11_03.xml alim 18066 const 328 (teneur '0')
+18066,Eau du robinet,10200,CA,g,7.13,"7,13","linha 2428, col AY","compo_2025_11_03.xml alim 18066 const 10200 (teneur '7,13')"
+18066,Eau du robinet,10110,NA,g,2.4,"2,4","linha 2428, col BI","compo_2025_11_03.xml alim 18066 const 10110 (teneur '2,4')"
+19041,"Lait demi-écrémé, UHT",328,ENERC_KCAL,kcal,47.7,"47,7","linha 2077, col K","compo_2025_11_03.xml alim 19041 const 328 (teneur '47,7')"
+19041,"Lait demi-écrémé, UHT",25000,PROCNT,g,3.48,"3,48","linha 2077, col O","compo_2025_11_03.xml alim 19041 const 25000 (teneur '3,48')"
+19041,"Lait demi-écrémé, UHT",40000,FAT,g,1.56,"1,56","linha 2077, col R","compo_2025_11_03.xml alim 19041 const 40000 (teneur '1,56')"
+19041,"Lait demi-écrémé, UHT",10200,CA,g,121.0,121,"linha 2077, col AY",compo_2025_11_03.xml alim 19041 const 10200 (teneur '121')
+9104,"Riz blanc, cuit, sans sel ajouté",328,ENERC_KCAL,kcal,155.0,155,"linha 1065, col K",compo_2025_11_03.xml alim 9104 const 328 (teneur '155')
+9104,"Riz blanc, cuit, sans sel ajouté",31000,CHOAVL,g,33.2,"33,2","linha 1065, col Q","compo_2025_11_03.xml alim 9104 const 31000 (teneur '33,2')"
+9104,"Riz blanc, cuit, sans sel ajouté",25000,PROCNT,g,3.15,"3,15","linha 1065, col O","compo_2025_11_03.xml alim 9104 const 25000 (teneur '3,15')"
+13039,"Pomme, chair et peau, crue",328,ENERC_KCAL,kcal,54.0,54,"linha 845, col K",compo_2025_11_03.xml alim 13039 const 328 (teneur '54')
+13039,"Pomme, chair et peau, crue",34100,FIBTG,g,1.4,"1,4","linha 845, col AA","compo_2025_11_03.xml alim 13039 const 34100 (teneur '1,4')"
+13039,"Pomme, chair et peau, crue",32000,SUGAR,g,10.6,"10,6","linha 845, col S","compo_2025_11_03.xml alim 13039 const 32000 (teneur '10,6')"
+13005,"Banane, chair sans peau, crue",328,ENERC_KCAL,kcal,87.6,"87,6","linha 821, col K","compo_2025_11_03.xml alim 13005 const 328 (teneur '87,6')"
+13005,"Banane, chair sans peau, crue",10190,K,g,320.0,320,"linha 821, col BG",compo_2025_11_03.xml alim 13005 const 10190 (teneur '320')
+13005,"Banane, chair sans peau, crue",32000,SUGAR,g,15.6,"15,6","linha 821, col S","compo_2025_11_03.xml alim 13005 const 32000 (teneur '15,6')"
+7110,Pain complet ou intégral (à la farine T150),328,ENERC_KCAL,kcal,234.0,234,"linha 1144, col K",compo_2025_11_03.xml alim 7110 const 328 (teneur '234')
+7110,Pain complet ou intégral (à la farine T150),34100,FIBTG,g,7.3,"7,3","linha 1144, col AA","compo_2025_11_03.xml alim 7110 const 34100 (teneur '7,3')"
+7110,Pain complet ou intégral (à la farine T150),10110,NA,g,470.0,470,"linha 1144, col BI",compo_2025_11_03.xml alim 7110 const 10110 (teneur '470')
+22000,Oeuf cru,328,ENERC_KCAL,kcal,140.0,140,"linha 2051, col K",compo_2025_11_03.xml alim 22000 const 328 (teneur '140')
+22000,Oeuf cru,25000,PROCNT,g,12.8,"12,8","linha 2051, col O","compo_2025_11_03.xml alim 22000 const 25000 (teneur '12,8')"
+22000,Oeuf cru,40000,FAT,g,9.83,"9,83","linha 2051, col R","compo_2025_11_03.xml alim 22000 const 40000 (teneur '9,83')"
+17270,Huile d'olive vierge extra,328,ENERC_KCAL,kcal,899.0,899,"linha 3174, col K",compo_2025_11_03.xml alim 17270 const 328 (teneur '899')
+17270,Huile d'olive vierge extra,40000,FAT,g,99.9,"99,9","linha 3174, col R","compo_2025_11_03.xml alim 17270 const 40000 (teneur '99,9')"
+17270,Huile d'olive vierge extra,40302,FASAT,mg,15.2,"15,2","linha 3174, col AF","compo_2025_11_03.xml alim 17270 const 40302 (teneur '15,2')"
+26036,"Saumon, élevage, cru",328,ENERC_KCAL,kcal,193.0,193,"linha 1812, col K",compo_2025_11_03.xml alim 26036 const 328 (teneur '193')
+26036,"Saumon, élevage, cru",25000,PROCNT,g,20.5,"20,5","linha 1812, col O","compo_2025_11_03.xml alim 26036 const 25000 (teneur '20,5')"
+26036,"Saumon, élevage, cru",40000,FAT,g,12.4,"12,4","linha 1812, col R","compo_2025_11_03.xml alim 26036 const 40000 (teneur '12,4')"
+12007,Camembert au lait pasteurisé,328,ENERC_KCAL,kcal,275.0,275,"linha 2259, col K",compo_2025_11_03.xml alim 12007 const 328 (teneur '275')
+12007,Camembert au lait pasteurisé,25000,PROCNT,g,19.2,"19,2","linha 2259, col O","compo_2025_11_03.xml alim 12007 const 25000 (teneur '19,2')"
+12007,Camembert au lait pasteurisé,10200,CA,g,476.0,476,"linha 2259, col AY",compo_2025_11_03.xml alim 12007 const 10200 (teneur '476')
+12007,Camembert au lait pasteurisé,10110,NA,g,570.0,570,"linha 2259, col BI",compo_2025_11_03.xml alim 12007 const 10110 (teneur '570')
+36005,"Poulet, viande et peau rôties/cuites au four",328,ENERC_KCAL,kcal,204.0,204,"linha 1334, col K",compo_2025_11_03.xml alim 36005 const 328 (teneur '204')
+36005,"Poulet, viande et peau rôties/cuites au four",25000,PROCNT,g,28.9,"28,9","linha 1334, col O","compo_2025_11_03.xml alim 36005 const 25000 (teneur '28,9')"
+15005,"Noix, cerneau, séchée",328,ENERC_KCAL,kcal,709.0,709,"linha 1014, col K",compo_2025_11_03.xml alim 15005 const 328 (teneur '709')
+15005,"Noix, cerneau, séchée",40000,FAT,g,67.3,"67,3","linha 1014, col R","compo_2025_11_03.xml alim 15005 const 40000 (teneur '67,3')"
+15005,"Noix, cerneau, séchée",34100,FIBTG,g,6.7,"6,7","linha 1014, col AA","compo_2025_11_03.xml alim 15005 const 34100 (teneur '6,7')"
+20119,"Tomate verte, crue",328,ENERC_KCAL,kcal,24.8,"24,8","linha 465, col K","compo_2025_11_03.xml alim 20119 const 328 (teneur '24,8')"
+20119,"Tomate verte, crue",34100,FIBTG,g,1.1,"1,1","linha 465, col AA","compo_2025_11_03.xml alim 20119 const 34100 (teneur '1,1')"
+20119,"Tomate verte, crue",55100,VITC,g,23.4,"23,4","linha 465, col BU","compo_2025_11_03.xml alim 20119 const 55100 (teneur '23,4')"
+20009,"Carotte, crue",328,ENERC_KCAL,kcal,30.2,"30,2","linha 415, col K","compo_2025_11_03.xml alim 20009 const 328 (teneur '30,2')"
+20009,"Carotte, crue",32000,SUGAR,g,4.85,"4,85","linha 415, col S","compo_2025_11_03.xml alim 20009 const 32000 (teneur '4,85')"
+20009,"Carotte, crue",34100,FIBTG,g,2.9,"2,9","linha 415, col AA","compo_2025_11_03.xml alim 20009 const 34100 (teneur '2,9')"
+6200,"Boeuf, steak ou bifteck grillé/poêlé",328,ENERC_KCAL,kcal,128.0,128,"linha 1293, col K",compo_2025_11_03.xml alim 6200 const 328 (teneur '128')
+6200,"Boeuf, steak ou bifteck grillé/poêlé",25000,PROCNT,g,27.6,"27,6","linha 1293, col O","compo_2025_11_03.xml alim 6200 const 25000 (teneur '27,6')"
+6200,"Boeuf, steak ou bifteck grillé/poêlé",10260,FE,g,2.21,"2,21","linha 1293, col BB","compo_2025_11_03.xml alim 6200 const 10260 (teneur '2,21')"
+20351,"Brocoli, cuit (aliment moyen)",328,ENERC_KCAL,kcal,30.0,30,"linha 667, col K",compo_2025_11_03.xml alim 20351 const 328 (teneur '30')
+20351,"Brocoli, cuit (aliment moyen)",34100,FIBTG,g,2.59,"2,59","linha 667, col AA","compo_2025_11_03.xml alim 20351 const 34100 (teneur '2,59')"
+20351,"Brocoli, cuit (aliment moyen)",10200,CA,g,39.4,"39,4","linha 667, col AY","compo_2025_11_03.xml alim 20351 const 10200 (teneur '39,4')"
+19550,"Yaourt à la grecque nature, au lait de brebis",328,ENERC_KCAL,kcal,124.0,124,"linha 2106, col K",compo_2025_11_03.xml alim 19550 const 328 (teneur '124')
+19550,"Yaourt à la grecque nature, au lait de brebis",25000,PROCNT,g,4.82,"4,82","linha 2106, col O","compo_2025_11_03.xml alim 19550 const 25000 (teneur '4,82')"
+19550,"Yaourt à la grecque nature, au lait de brebis",10200,CA,g,158.0,158,"linha 2106, col AY",compo_2025_11_03.xml alim 19550 const 10200 (teneur '158')
+31008,Miel,328,ENERC_KCAL,kcal,331.0,331,"linha 2752, col K",compo_2025_11_03.xml alim 31008 const 328 (teneur '331')
+31008,Miel,32000,SUGAR,g,81.1,"81,1","linha 2752, col S","compo_2025_11_03.xml alim 31008 const 32000 (teneur '81,1')"
+20030,"Haricot vert, cuit",328,ENERC_KCAL,kcal,29.4,"29,4","linha 559, col K","compo_2025_11_03.xml alim 20030 const 328 (teneur '29,4')"
+20030,"Haricot vert, cuit",34100,FIBTG,g,4.0,4,"linha 559, col AA",compo_2025_11_03.xml alim 20030 const 34100 (teneur '4')
+20030,"Haricot vert, cuit",25000,PROCNT,g,2.0,2,"linha 559, col O",compo_2025_11_03.xml alim 20030 const 25000 (teneur '2')
+15000,"Amande, avec peau, sans sel ajouté",328,ENERC_KCAL,kcal,615.0,615,"linha 1010, col K",compo_2025_11_03.xml alim 15000 const 328 (teneur '615')
+15000,"Amande, avec peau, sans sel ajouté",40000,FAT,g,51.3,"51,3","linha 1010, col R","compo_2025_11_03.xml alim 15000 const 40000 (teneur '51,3')"
+15000,"Amande, avec peau, sans sel ajouté",10200,CA,g,260.0,260,"linha 1010, col AY",compo_2025_11_03.xml alim 15000 const 10200 (teneur '260')
+15000,"Amande, avec peau, sans sel ajouté",34100,FIBTG,g,12.5,"12,5","linha 1010, col AA","compo_2025_11_03.xml alim 15000 const 34100 (teneur '12,5')"

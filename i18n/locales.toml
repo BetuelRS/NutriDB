@@ -1,0 +1,33 @@
+# NUTRIDB locales — fallback chains e locales ativas (SPEC §7, ADR-0001 D7).
+# Mantido à mão, revisível em diff (P8). Em F1 o âmbito é mínimo: nomes
+# nativos (fr/en, estatuto native) + rótulos do vocabulário (en, official;
+# pt-PT mínimo, curated). `mt_unreviewed` não existe em F1 (P7).
+
+schema_version = 1
+
+# Locales compostas no build (as restantes só definem cadeias para futuro).
+active = ["fr", "en", "pt-PT", "pt-BR"]
+
+[locale.en]
+fallback = []
+
+[locale.fr]
+fallback = []
+
+[locale.pt]
+fallback = ["en"]
+
+[locale.pt-PT]
+fallback = ["pt", "en"]
+
+[locale.pt-BR]
+fallback = ["pt", "en"]
+
+[locale.es]
+fallback = ["en"]
+
+[locale.de]
+fallback = ["en"]
+
+[locale.it]
+fallback = ["en"]

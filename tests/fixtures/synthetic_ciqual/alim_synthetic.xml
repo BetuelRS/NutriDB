@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SYNTHETIC FIXTURE — dados inventados apenas para testes (regra §17.7) -->
+<TABLE>
+   <ALIM>
+      <alim_code> 1000 </alim_code>
+      <alim_nom_fr> Pastis </alim_nom_fr>
+      <alim_nom_eng> Pastis (anise-flavoured spirit) </alim_nom_eng>
+      <alim_nom_sci missing=" " />
+      <alim_grp_code> 06 </alim_grp_code>
+      <alim_ssgrp_code> 0603 </alim_ssgrp_code>
+      <alim_ssssgrp_code> 060303 </alim_ssssgrp_code>
+      <facteur_Jones> 6.25 </facteur_Jones>
+   </ALIM>
+   <ALIM>
+      <alim_code> 1001 </alim_code>
+      <alim_nom_fr> Eau de vie de fruits </alim_nom_fr>
+      <alim_nom_eng> Fruit brandy or eau-de-vie </alim_nom_eng>
+      <alim_nom_sci missing=" " />
+      <alim_grp_code> 06 </alim_grp_code>
+      <alim_ssgrp_code> 0603 </alim_ssgrp_code>
+      <alim_ssssgrp_code> 060303 </alim_ssssgrp_code>
+      <facteur_Jones> 6.25 </facteur_Jones>
+   </ALIM>
+   <ALIM>
+      <alim_code> 1002 </alim_code>
+      <alim_nom_fr> Gin </alim_nom_fr>
+      <alim_nom_eng> Gin </alim_nom_eng>
+      <alim_nom_sci missing=" " />
+      <alim_grp_code> 06 </alim_grp_code>
+      <alim_ssgrp_code> 0603 </alim_ssgrp_code>
+      <alim_ssssgrp_code> 060303 </alim_ssssgrp_code>
+      <facteur_Jones> 6.25 </facteur_Jones>
+   </ALIM>
+</TABLE>

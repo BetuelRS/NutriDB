@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, f0/fundacoes, f1/**]
   pull_request:
 
 jobs:
@@ -32,3 +32,22 @@ jobs:
 
       - name: CLI smoke (SPEC §16 F0)
         run: uv run nutridb --help | grep -q "extract"
+
+  explorer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: explorer/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: explorer
+
+      - name: Build (tsc + vite)
+        run: npm run build
+        working-directory: explorer

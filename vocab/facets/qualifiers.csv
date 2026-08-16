@@ -1,0 +1,19 @@
+id,name_en,name_pt
+organic,Organic,Biológico
+conventional,Conventional,Convencional
+low_fat,Low fat,Magro (baixo teor de gordura)
+reduced_fat,Reduced fat,Teor reduzido de gordura
+whole_fat,Whole fat,Gordo (teor integral)
+skim,Skimmed,Magro/desnatado
+semi_skimmed,Semi-skimmed,Meio-gordo
+whole_grain,Whole grain,Integral (cereal)
+refined,Refined,Refinado
+light,Light,Ligeiro/light
+unsweetened,Unsweetened,Sem açúcar adicionado
+seasoned,Seasoned,Temperado
+gluten_free,Gluten free,Sem glúten
+lactose_free,Lactose free,Sem lactose
+iodized,Iodized,Com iodo adicionado
+plain,Plain,Simples/natural
+premium,Premium,Prémio
+standard,Standard,Padrão

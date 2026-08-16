@@ -1,0 +1,10 @@
+id,name_en,is_absence,description
+measured,Measured,false,Valor resultante de medição analítica direta
+calculated,Calculated,false,Valor produzido por cálculo com fórmula e inputs registados (P2)
+declared,Declared,false,Valor declarado pelo produtor (rótulo) ou pela fonte
+assumed_zero,Assumed zero,true,Ausência assumida como zero por convenção documentada
+not_measured,Not measured,true,Constituinte não medido na fonte para este alimento
+not_detected,Not detected,true,Dosagem executada mas abaixo do limiar de deteção do método
+below_loq,Below limit of quantification,true,Valor quantificado como inferior ao limite de quantificação (limiar guardado)
+trace,Trace,true,Detetado mas não quantificável; tratado como vestígio
+not_applicable,Not applicable,true,Constituinte sem sentido para este alimento (ex.: álcool em água)

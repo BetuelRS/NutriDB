@@ -1,0 +1,79 @@
+# F1.3 — CIQUAL 2025 -> vocabulário canónico (SPEC §5). Fonte: const_2025_11_03.xml (74 códigos).
+# factor = multiplicador aplicado ao valor da fonte (g->mg nos AG: x10); 1 caso contrário.
+# energy_method só para códigos ENERC; '-' = não energia. value_type_* são as regras das células
+# '-', 'traces' e '< N' (ADR-0003 §4.1).
+const_code,tagname,factor,energy_method,value_type_missing,value_type_trace,value_type_below_loq,unit,is_default
+327,ENERC_KJ,1,Reg. UE 1169/2011 (Atwater),not_measured,trace,below_loq,kj,true
+328,ENERC_KCAL,1,Reg. UE 1169/2011 (Atwater),not_measured,trace,below_loq,kcal,true
+332,ENERC_KJ,1,"N x factor de Jones, com fibras",not_measured,trace,below_loq,kj,false
+333,ENERC_KCAL,1,"N x factor de Jones, com fibras",not_measured,trace,below_loq,kcal,false
+400,WATER,1,-,not_measured,trace,below_loq,g,true
+10000,ASH,1,-,not_measured,trace,below_loq,g,true
+10004,NACL,1,-,not_measured,trace,below_loq,g,true
+10110,NA,1,-,not_measured,trace,below_loq,mg,true
+10120,MG,1,-,not_measured,trace,below_loq,mg,true
+10150,P,1,-,not_measured,trace,below_loq,mg,true
+10170,CL,1,-,not_measured,trace,below_loq,mg,true
+10190,K,1,-,not_measured,trace,below_loq,mg,true
+10200,CA,1,-,not_measured,trace,below_loq,mg,true
+10251,MN,1,-,not_measured,trace,below_loq,mg,true
+10260,FE,1,-,not_measured,trace,below_loq,mg,true
+10290,CU,1,-,not_measured,trace,below_loq,mg,true
+10300,ZN,1,-,not_measured,trace,below_loq,mg,true
+10340,SE,1,-,not_measured,trace,below_loq,ug,true
+10530,ID,1,-,not_measured,trace,below_loq,ug,true
+25000,PROCNT,1,-,not_measured,trace,below_loq,g,true
+25003,PROCNT,1,-,not_measured,trace,below_loq,g,false
+31000,CHOAVL,1,-,not_measured,trace,below_loq,g,true
+32000,SUGAR,1,-,not_measured,trace,below_loq,g,true
+32210,FRUS,1,-,not_measured,trace,below_loq,g,true
+32220,GALS,1,-,not_measured,trace,below_loq,g,true
+32250,GLUS,1,-,not_measured,trace,below_loq,g,true
+32410,LACS,1,-,not_measured,trace,below_loq,g,true
+32430,MALS,1,-,not_measured,trace,below_loq,g,true
+32480,SUCS,1,-,not_measured,trace,below_loq,g,true
+33110,STARCH,1,-,not_measured,trace,below_loq,g,true
+34000,POLYL,1,-,not_measured,trace,below_loq,g,true
+34100,FIBTG,1,-,not_measured,trace,below_loq,g,true
+40000,FAT,1,-,not_measured,trace,below_loq,g,true
+40302,FASAT,1,-,not_measured,trace,below_loq,g,true
+40303,FAMS,1,-,not_measured,trace,below_loq,g,true
+40304,FAPU,1,-,not_measured,trace,below_loq,g,true
+40400,F4D0,1,-,not_measured,trace,below_loq,g,true
+40600,F6D0,1,-,not_measured,trace,below_loq,g,true
+40800,F8D0,1,-,not_measured,trace,below_loq,g,true
+41000,F10D0,1,-,not_measured,trace,below_loq,g,true
+41200,F12D0,1,-,not_measured,trace,below_loq,g,true
+41400,F14D0,1,-,not_measured,trace,below_loq,g,true
+41600,F16D0,1,-,not_measured,trace,below_loq,g,true
+41800,F18D0,1,-,not_measured,trace,below_loq,g,true
+41819,F18D1CN9,1,-,not_measured,trace,below_loq,g,true
+41826,F18D2CN6,1,-,not_measured,trace,below_loq,g,true
+41833,F18D3N3,1,-,not_measured,trace,below_loq,g,true
+42046,F20D4N6,1,-,not_measured,trace,below_loq,g,true
+42053,F20D5N3,1,-,not_measured,trace,below_loq,g,true
+42263,F22D6N3,1,-,not_measured,trace,below_loq,g,true
+51104,VITA_RAE,1,-,not_measured,trace,below_loq,ug,true
+51200,RETOL,1,-,not_measured,trace,below_loq,ug,true
+51330,CARTB,1,-,not_measured,trace,below_loq,ug,true
+52100,VITD,1,-,not_measured,trace,below_loq,ug,true
+52200,ERGCAL,1,-,not_measured,trace,below_loq,ug,true
+52300,CHOCAL,1,-,not_measured,trace,below_loq,ug,true
+53100,VITE,1,-,not_measured,trace,below_loq,mg,true
+54101,VITK1,1,-,not_measured,trace,below_loq,ug,true
+54104,VITK2,1,-,not_measured,trace,below_loq,ug,true
+55100,VITC,1,-,not_measured,trace,below_loq,mg,true
+56100,THIA,1,-,not_measured,trace,below_loq,mg,true
+56200,RIBF,1,-,not_measured,trace,below_loq,mg,true
+56310,NIA,1,-,not_measured,trace,below_loq,mg,true
+56400,PANTAC,1,-,not_measured,trace,below_loq,mg,true
+56500,VITB6A,1,-,not_measured,trace,below_loq,mg,true
+56600,VITB12,1,-,not_measured,trace,below_loq,ug,true
+56700,FOL,1,-,not_measured,trace,below_loq,ug,true
+56702,FOLDFE,1,-,not_measured,trace,below_loq,ug,true
+56704,FOLFD,1,-,not_measured,trace,below_loq,ug,true
+56708,FOLAC,1,-,not_measured,trace,below_loq,ug,true
+60000,ALC,1,-,not_measured,trace,below_loq,g,true
+65000,OA,1,-,not_measured,trace,below_loq,g,true
+71010,TOCPHA,1,-,not_measured,trace,below_loq,mg,true
+75100,CHOLE,1,-,not_measured,trace,below_loq,mg,true

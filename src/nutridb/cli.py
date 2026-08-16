@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import os
+import shutil
+import subprocess
+
 import rich.table
 import rich.text
 import structlog
@@ -9,6 +13,7 @@ import typer
 
 from nutridb import __version__
 from nutridb.logging import configure_logging
+from nutridb.paths import project_root
 from nutridb.sources.download import fetch_unpinned, sync_sources
 from nutridb.sources.registry import ArtifactProfile, load_registry
 
@@ -71,8 +76,10 @@ def sources_fetch(
     except KeyError as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=2) from exc
-    if entry.sha256 is not None:
-        typer.echo(f"{source}: already pinned as sha256 = {entry.sha256!r}")
+    if entry.sha256 is not None or entry.files:
+        typer.echo(
+            f"{source}: already pinned (sha256 = {entry.sha256!r}, files = {len(entry.files)})"
+        )
         raise typer.Exit()
     digest = fetch_unpinned(entry)
     typer.echo("Downloaded. Review before pinning:")
@@ -97,7 +104,7 @@ def sources_audit() -> None:
             "yes" if entry.share_alike else "no",
             "yes" if entry.commercial_use else ("no" if entry.commercial_use is False else "?"),
             ",".join(entry.artifacts),
-            "yes" if entry.sha256 else "NO",
+            "yes" if (entry.sha256 or entry.files) else "NO",
         )
     console = rich.console.Console()
     console.print(table)
@@ -121,7 +128,52 @@ def extract(
     source: str | None = typer.Option(None, "--source", "-s", help="Only extract this source id."),
 ) -> None:
     """Extract raw source dumps into canonical intermediates."""
-    _not_implemented("F1.2", f"extract raw dump for {source or 'all sources'}")
+    if source is not None and source != "ciqual":
+        _not_implemented("F2+", f"extractor for source {source!r}")
+    from nutridb.paths import paths
+    from nutridb.sources.ciqual import extract as extract_ciqual
+
+    base = paths()
+    report = extract_ciqual(base["cache"] / "ciqual", base["build"] / "intermediates" / "ciqual")
+    table = rich.table.Table(title="CIQUAL 2025 extraction", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    for name, count in report.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("extract OK")
+
+
+@app.command("transform")
+def transform(
+    source: str | None = typer.Option(
+        None, "--source", "-s", help="Only transform this source id."
+    ),
+) -> None:
+    """Transform typed intermediates into the canonical dataset (SPEC §8)."""
+    if source is not None and source != "ciqual":
+        _not_implemented("F2+", f"transform for source {source!r}")
+    from nutridb.paths import paths
+    from nutridb.transform import TransformError
+    from nutridb.transform import transform as run_transform
+
+    base = paths()
+    try:
+        report = run_transform(
+            base["build"] / "intermediates" / "ciqual",
+            base["build"] / "canonical" / "ciqual",
+            base["root"],
+        )
+    except TransformError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="CIQUAL 2025 canonical transform", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    for name, count in report.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("transform OK")
 
 
 vocab_app = typer.Typer(name="vocab", help="Validate the canonical vocabulary (SPEC §5).")
@@ -130,8 +182,23 @@ app.add_typer(vocab_app, name="vocab")
 
 @vocab_app.command("check")
 def vocab_check() -> None:
-    """Validate vocabulary and mapping files; report unmapped codes."""
-    _not_implemented("F1.1/F1.3", "vocabulary invariants and mapping gates")
+    """Validate vocabulary invariant checks and report counts (fail high)."""
+    from nutridb.paths import project_root
+    from nutridb.vocab import check_vocabulary
+
+    report = check_vocabulary(project_root())
+    if report.errors:
+        console = rich.console.Console()
+        for error in report.errors:
+            console.print(rich.text.Text(error, style="red"))
+        raise typer.Exit(code=1)
+    table = rich.table.Table(title="Vocabulary check", title_justify="left")
+    table.add_column("file")
+    table.add_column("rows", justify="right")
+    for name, count in report.counts.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("vocabulary OK")
 
 
 @app.command("link")
@@ -146,8 +213,25 @@ app.add_typer(i18n_app, name="i18n")
 
 @i18n_app.command("build")
 def i18n_build() -> None:
-    """Compose labels per locale with status and fallback chains (F4)."""
-    _not_implemented("F4", "label composition")
+    """Compose labels per locale with status (SPEC §7, D7; F1-lite)."""
+    from nutridb.i18n import I18nError
+    from nutridb.i18n import build as run_build
+    from nutridb.paths import paths
+
+    base = paths()
+    canonical = base["build"] / "canonical" / "ciqual"
+    try:
+        report = run_build(canonical, base["root"])
+    except I18nError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="i18n labels (F1-lite)", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    for name, count in report.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("i18n OK")
 
 
 @i18n_app.command("review")
@@ -178,14 +262,87 @@ def qa() -> None:
 def package(
     profile: str = typer.Option("core", "--profile", help="core | extended | lite"),
 ) -> None:
-    """Package the database into release artefacts (F7)."""
-    _not_implemented("F7", f"package profile {profile}")
+    """Package the canonical dataset into release artefacts (F7, §8)."""
+    if profile != "core":
+        _not_implemented("F7", f"package profile {profile}")
+    from nutridb.package import PackageError
+    from nutridb.package import package as run_package
+    from nutridb.paths import paths
+
+    base = paths()
+    try:
+        info = run_package(
+            base["build"] / "canonical" / "ciqual",
+            base["vocab"],
+            base["build"] / "artifacts",
+            base["root"],
+        )
+    except PackageError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title=f"package {info['artifact']}", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    table.add_row("artifact", info["path"])
+    table.add_row("size_bytes", f"{info['size_bytes']:,}")
+    table.add_row("page_size", str(info["page_size"]))
+    table.add_row("integrity", info["integrity"])
+    for name, count in info["tables"].items():
+        table.add_row(name, f"{count:,}")
+    rich.console.Console().print(table)
+    typer.echo("package OK")
 
 
 @app.command("build")
 def build() -> None:
-    """Run the full deterministic pipeline (SPEC §16)."""
-    _not_implemented("F1.10", "full build orchestration")
+    """Run the full deterministic pipeline (SPEC §16, P10).
+
+    Chains extract -> transform -> i18n build -> package core; any stage
+    failure aborts the build (fail high, P9). Requires the source cache:
+    run `uv run nutridb sources sync` first.
+    """
+    from nutridb.i18n import I18nError
+    from nutridb.i18n import build as build_labels
+    from nutridb.package import PackageError
+    from nutridb.package import package as run_package
+    from nutridb.paths import paths
+    from nutridb.sources.ciqual import CiqualExtractError
+    from nutridb.sources.ciqual import extract as extract_ciqual
+    from nutridb.transform import TransformError
+    from nutridb.transform import transform as run_transform
+
+    base = paths()
+    try:
+        extract_report = extract_ciqual(
+            base["cache"] / "ciqual", base["build"] / "intermediates" / "ciqual"
+        )
+        transform_report = run_transform(
+            base["build"] / "intermediates" / "ciqual",
+            base["build"] / "canonical" / "ciqual",
+            base["root"],
+        )
+        build_labels(base["build"] / "canonical" / "ciqual", base["root"])
+        package_info = run_package(
+            base["build"] / "canonical" / "ciqual",
+            base["vocab"],
+            base["build"] / "artifacts",
+            base["root"],
+        )
+    except (CiqualExtractError, TransformError, I18nError, PackageError) as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="nutridb build (P10)", title_justify="left")
+    table.add_column("stage")
+    table.add_column("result", justify="right")
+    for name, count in extract_report.items():
+        table.add_row(f"extract {name}", str(count))
+    for name, count in transform_report.items():
+        table.add_row(f"transform {name}", str(count))
+    table.add_row("artifact", package_info["artifact"])
+    table.add_row("size_bytes", f"{package_info['size_bytes']:,}")
+    table.add_row("integrity", package_info["integrity"])
+    rich.console.Console().print(table)
+    typer.echo("build OK")
 
 
 @app.command("diff")
@@ -204,10 +361,31 @@ explorer_app = typer.Typer(name="explorer", help="NUTRIDB Explorer (SPEC §12)."
 app.add_typer(explorer_app, name="explorer")
 
 
+def _run_npm(*args: str) -> None:
+    """Run an npm script in explorer/ with the repo root exported (vite middleware)."""
+    explorer_dir = project_root() / "explorer"
+    if not (explorer_dir / "package.json").is_file():
+        raise typer.BadParameter(f"explorer app missing at {explorer_dir}")
+    npm = shutil.which("npm.cmd") or shutil.which("npm")
+    if npm is None:
+        raise typer.BadParameter("npm not found — explorer requires Node.js >= 20")
+    env = os.environ.copy()
+    env["NUTRIDB_ROOT"] = str(project_root())
+    result = subprocess.run([npm, *args], cwd=explorer_dir, env=env)
+    if result.returncode != 0:
+        raise typer.Exit(result.returncode)
+
+
 @explorer_app.command("dev")
 def explorer_dev() -> None:
-    """Dev server for the explorer web app."""
-    _not_implemented("F1.8b", "explorer dev server")
+    """Dev server for the explorer web app (F1.8b; serves /artifacts from the build)."""
+    _run_npm("run", "dev")
+
+
+@explorer_app.command("build")
+def explorer_build() -> None:
+    """Build the explorer static app (tsc + vite) into explorer/dist/ (F1.8b)."""
+    _run_npm("run", "build")
 
 
 if __name__ == "__main__":

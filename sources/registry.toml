@@ -7,13 +7,67 @@ schema_version = 1
 name = "CIQUAL 2025 — Table de composition nutritionnelle des aliments (ANSES)"
 url = "https://entrepot.recherche.data.gouv.fr/dataset.xhtml?persistentId=doi:10.57745/RDMHWY"
 license_id = "etalab-2.0"
-license_url = "https://github.com/etalab/licence-ouverte/blob/master/LO.md"
+license_url = "https://spdx.org/licenses/etalab-2.0.html"
 version = "2025"
-# sha256 = ""   # fixado em F1.0 (ADR-0003): download + revisão antes de fixar
-# filename = "" # basename oficial, resolvido em F1.0
 attribution_required = true
-attribution = "Anses. 2025. Ciqual French food composition table. Retrieved <date>. https://ciqual.anses.fr/"
+attribution = "Anses. 2025. Table de composition nutritionnelle des aliments Ciqual 2025. https://doi.org/10.57745/RDMHWY"
 share_alike = false
 commercial_use = true
 artifacts = ["core", "extended", "lite"]
-notes = "Versao 2025 (nov/2025): 3484 alimentos, 74 constituintes, Excel e XML; licenca etalab 2.0; artefacto core. URL exata do ficheiro resolvida no ADR-0003 (F1.0)."
+notes = "Versao 2025 (2025-11-19; doc oficial: 3484 alimentos, 74 constituintes, matriz 257816 pares; 83246 nao medidos '-' (sem code_confiance/source_code), 2514 'traces' (kind trace), 20075 '< N' com espaco (kind below_loq; ADR-0003 §4.2 corrigido); confianca A-D so nos medidos; 1978 fontes). XML e o formato primario (proveniencia por valor; ADR-0003 emenda A6). Cross-check: MD5 locais = MD5 oficiais do Dataverse."
+
+[[sources.ciqual.files]]
+name = "alim_2025_11_03.xml"
+sha256 = "e0b1de25b3039028205e9d54a96892e403e1b313c2efeb41180fabe132627478"
+url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/OH8KXC"
+size = 1581031
+notes = "Lista de 3484 alimentos (fr/en/sci, grupo 3 niveis, facteur_Jones)"
+
+[[sources.ciqual.files]]
+name = "alim_grp_2025_11_03.xml"
+sha256 = "e216928be1001aed15ba1b120405b70a98145da2a1a76026d6e33542bd5e39dc"
+url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/FMNIUZ"
+size = 80421
+notes = "Grupos/subgrupos/subs-subgrupos de alimentos (fr/en)"
+
+[[sources.ciqual.files]]
+name = "compo_2025_11_03.xml"
+sha256 = "8c46a9032ece4eab4ffccc9dfcb0c490ec2f416aa664cc1ee013b241c6bdd4af"
+url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/O73GDX"
+size = 69243149
+notes = "257816 pares alim x const: teneur/min/max/code_confiance/source_code (proveniencia por valor)"
+
+[[sources.ciqual.files]]
+name = "const_2025_11_03.xml"
+sha256 = "3a231ea3e9836e4ac0b6ff94511e010210b2523d1b8b486c6b29e211066ba3f3"
+url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/FWSPCX"
+size = 17955
+notes = "74 constituintes: const_code, nom fr/en (unidade no nome), code_INFOODS oficial"
+
+[[sources.ciqual.files]]
+name = "sources_2025_11_03.xml"
+sha256 = "73e6a0c573f88c23f23b4670a016c616edea806b3d92340942cdbdb9b4323137"
+url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/3MVEOJ"
+size = 871783
+notes = "1978 citacoes bibliograficas numeradas (a citacao 1 esta vazia na fonte)"
+
+[[sources.ciqual.files]]
+name = "Table Ciqual 2025 doc FR_2025_11_19.pdf"
+sha256 = "b95704eb6bb775e73e6f5824eca8bebed1634bb3b3d9631dae1987828e5a95d5"
+url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/PPVQO4"
+size = 4236848
+notes = "Documentacao oficial (licenca p.4; semântica teneur/min/max/confiance p.16-21); evidencia, fora do pipeline"
+
+[[sources.ciqual.files]]
+name = "Table Ciqual 2025_FR_2025_11_03.xls"
+sha256 = "a302935b26aef95cea3fdc1e12c17628fb6747a9f81bc7bec294fdcbbab0b685"
+url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/ZAN7XJ"
+size = 4489728
+notes = "Excel legado SEM fontes (ADR-0003); evidencia oficial, fora do pipeline"
+
+[[sources.ciqual.files]]
+name = "Table Ciqual 2025_FR_2025_11_03.xlsx"
+sha256 = "5555c572fa3735991298d832d0427788fa69a11b4fd20a5d580d58942369fbb0"
+url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/RPWYZD"
+size = 1541998
+notes = "Excel legado SEM fontes (ADR-0003); evidencia oficial, fora do pipeline"
