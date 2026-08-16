@@ -38,7 +38,7 @@ from nutridb.vocab import load_csv
 if TYPE_CHECKING:
     from pathlib import Path
 
-__all__ = ["I18nError", "build", "load_csv", "normalize_label"]
+__all__ = ["I18nError", "build", "load_csv", "load_locales", "normalize_label"]
 
 LABEL_COLUMNS = (
     "ref_kind",
@@ -68,7 +68,7 @@ def build(canonical_dir: Path, root: Path) -> dict[str, int]:
     if not required:
         raise I18nError("canonical dataset missing; run `uv run nutridb transform` first")
 
-    config = _load_locales(root / "i18n" / "locales.toml")
+    config = load_locales(root / "i18n" / "locales.toml")
 
     # -- native labels: foods, straight from immutable records ---------------
     links = pl.read_parquet(canonical_dir / "concept_link.parquet")
@@ -150,14 +150,11 @@ def _require_text(text: str, where: str) -> None:
         raise I18nError(f"empty label for {where}")
 
 
-def _load_locales(path: Path) -> dict[str, Any]:
+def load_locales(path: Path) -> dict[str, Any]:
+    """Read and validate i18n/locales.toml: active list + fallback chains."""
     with path.open("rb") as handle:
         config = tomllib.load(handle)
-    locales: dict[str, list[str]] = {
-        key.removeprefix("locale."): value["fallback"]
-        for key, value in config.items()
-        if key.startswith("locale.")
-    }
+    locales = {name: section["fallback"] for name, section in config.get("locale", {}).items()}
     for locale, chain in locales.items():
         for hop in chain:
             if hop not in locales:

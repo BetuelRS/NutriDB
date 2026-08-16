@@ -77,15 +77,12 @@ def _snapshot(
         if name.startswith("label_fts_"):
             try:
                 data[name] = [
-                    tuple(r)
-                    for r in conn.execute(f"SELECT * FROM {name} ORDER BY rowid")
+                    tuple(r) for r in conn.execute(f"SELECT * FROM {name} ORDER BY rowid")
                 ]
             except sqlite3.OperationalError:
                 data[name] = []
             continue
-        data[name] = [
-            tuple(r) for r in conn.execute(f"SELECT * FROM {name} ORDER BY rowid")
-        ]
+        data[name] = [tuple(r) for r in conn.execute(f"SELECT * FROM {name} ORDER BY rowid")]
     conn.close()
     return path, data, objects
 
