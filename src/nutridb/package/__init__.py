@@ -158,7 +158,7 @@ class PackageError(Exception):
     """Fatal input inconsistency while packaging (fail high, P9)."""
 
 
-def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path) -> dict[str, Any]:
+def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> dict[str, Any]:
     """Build ``nutridb-core-<version>.sqlite``; return artefact information."""
     tables: dict[str, pl.DataFrame] = {
         name: pl.read_parquet(canonical_dir / f"{name}.parquet")
@@ -177,6 +177,7 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path) -> dict[str, An
     if not label_path.is_file():
         raise PackageError("label.parquet missing; run `uv run nutridb i18n build` first")
     tables["label"] = pl.read_parquet(label_path)
+    default_codes = _default_nutrient_codes(root)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     artifact = out_dir / f"nutridb-core-{__version__}.sqlite"
@@ -192,7 +193,9 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path) -> dict[str, An
             conn.execute(ddl)
         _load(conn, tables)
         _load_vocabulary(conn, vocab_dir)
-        mv_rows = _build_mv_food_value(conn, tables["value"], tables["concept"], tables["label"])
+        mv_rows = _build_mv_food_value(
+            conn, tables["value"], tables["concept"], tables["label"], default_codes
+        )
         _build_fts(conn, tables["label"])
         for _name, ddl in _INDEXES.items():
             conn.execute(ddl)
@@ -276,13 +279,34 @@ def _load_vocabulary(conn: sqlite3.Connection, vocab_dir: Path) -> None:
     )
 
 
+def _default_nutrient_codes(root: Path) -> set[int]:
+    """Source const codes that are the read-table default for their tagname.
+
+    The canonical ``value`` table keeps every method with its registered
+    ``analytical_method`` (P1); the materialized read table presents one
+    value per (concept, nutrient), chosen by ``is_default`` in the mapping
+    (P8). 327/328 (Reg. UE 1169/2011) win over 332/333 (Jones); 25000
+    (N x facteur de Jones) wins over 25003 (N x 6.25).
+    """
+    from nutridb.mappings import load_nutrient_mapping
+
+    codes = {
+        int(row["const_code"]) for row in load_nutrient_mapping(root) if row["is_default"] == "true"
+    }
+    if not codes:
+        raise PackageError("no default nutrient codes in the mapping")
+    return codes
+
+
 def _build_mv_food_value(
     conn: sqlite3.Connection,
     values: pl.DataFrame,
     concepts: pl.DataFrame,
     labels: pl.DataFrame,
+    default_codes: set[int],
 ) -> int:
     """Pre-computed denormalised read table (SPEC §8) for the explorer."""
+    values = values.filter(pl.col("source_nutrient_code").is_in(list(default_codes)))
     food_labels = labels.filter(pl.col("ref_kind") == "food")
     left = (
         food_labels.filter(pl.col("locale") == "fr")

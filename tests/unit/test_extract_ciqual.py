@@ -50,10 +50,10 @@ def test_extract_counts_and_reports(tmp_path: Path) -> None:
     report = _run(tmp_path)
     assert report == {
         "aliments": 3,
-        "constituents": 4,
+        "constituents": 5,
         "groups": 3,
         "sources": 2,
-        "values": 8,
+        "values": 9,
     }
     for name in ("foods", "food_groups", "constituents", "sources", "values"):
         assert (tmp_path / "i" / f"{name}.parquet").is_file()

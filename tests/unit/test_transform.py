@@ -62,10 +62,10 @@ def test_transform_counts_and_tables(tmp_path: Path) -> None:
     report = _run(tmp_path)
     assert report["foods"] == 3
     assert report["concepts"] == 3
-    assert report["coverage"] == 4
-    assert report["values"] == 7
+    assert report["coverage"] == 5
+    assert report["values"] == 8
     assert report["not_measured"] == 1
-    assert report.setdefault("conversions_x10", 0) == 1
+    assert report.setdefault("conversions_x10", 0) == 0
     for name in (
         "source",
         "coverage",
@@ -85,11 +85,11 @@ def test_value_typing_and_unit_conversion(tmp_path: Path) -> None:
     nutrients = values["nutrient_id"].to_list()
 
     row = values.filter(pl.col("source_nutrient_code") == 40302).row(0)
-    assert row[values.columns.index("value")] == 5.0  # 0,5 g AG x10 -> 5.0 mg
-    assert row[values.columns.index("unit")] == "mg"
+    assert row[values.columns.index("value")] == 0.5  # AG stay in g (INFOODS unit)
+    assert row[values.columns.index("unit")] == "g"
     assert row[values.columns.index("value_type")] == "measured"
-    assert row[values.columns.index("min_value")] == 4.0
-    assert row[values.columns.index("max_value")] == 6.0
+    assert row[values.columns.index("min_value")] == 0.4
+    assert row[values.columns.index("max_value")] == 0.6
 
     energy = values.filter(pl.col("source_nutrient_code") == 327).row(0)
     assert energy[values.columns.index("value")] == 1140.0
@@ -116,9 +116,9 @@ def test_absence_via_coverage_never_cross_product(tmp_path: Path) -> None:
     values = _read(tmp_path, "value")
     coverage = _read(tmp_path, "coverage")
 
-    assert {"ENERC_KJ", "WATER", "FIBTG", "FASAT"} == set(coverage["nutrient_id"])
+    assert {"ENERC_KJ", "ENERC_KCAL", "WATER", "FIBTG", "FASAT"} == set(coverage["nutrient_id"])
     assert coverage["nutrient_id"].unique().len() == coverage.height
-    assert coverage["source_id"].to_list() == ["ciqual"] * 4
+    assert coverage["source_id"].to_list() == ["ciqual"] * 5
 
     pairs = values.select(pl.col("concept_id").alias("f"), "nutrient_id")
     expected = 3 * 4  # full Cartesian product that must NOT exist in `value`

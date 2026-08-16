@@ -47,8 +47,8 @@ def two_packages(tmp_path: Path) -> tuple[str, str]:
     canonical = tmp_path / "c"
     transform(tmp_path / "i", canonical, ROOT)
     build_labels(canonical, ROOT)
-    first = package(canonical, ROOT / "vocab", tmp_path / "a")
-    second = package(canonical, ROOT / "vocab", tmp_path / "b")
+    first = package(canonical, ROOT / "vocab", tmp_path / "a", ROOT)
+    second = package(canonical, ROOT / "vocab", tmp_path / "b", ROOT)
     return str(first["path"]), str(second["path"])
 
 

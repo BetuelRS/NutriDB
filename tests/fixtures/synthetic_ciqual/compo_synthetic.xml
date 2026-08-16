@@ -12,6 +12,15 @@
    </COMPO>
    <COMPO>
       <alim_code> 1000 </alim_code>
+      <const_code> 333 </const_code>
+      <teneur> 271 </teneur>
+      <min missing=" " />
+      <max missing=" " />
+      <code_confiance> D </code_confiance>
+      <source_code> 444 </source_code>
+   </COMPO>
+   <COMPO>
+      <alim_code> 1000 </alim_code>
       <const_code> 400 </const_code>
       <teneur> 59,7 </teneur>
       <min> 58,7 </min>

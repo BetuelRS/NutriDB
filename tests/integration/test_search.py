@@ -46,7 +46,7 @@ def db_path(tmp_path_factory: pytest.TempPathFactory) -> str:
     canonical = base / "c"
     transform(base / "i", canonical, ROOT)
     build_labels(canonical, ROOT)
-    info = package(canonical, ROOT / "vocab", base / "out")
+    info = package(canonical, ROOT / "vocab", base / "out", ROOT)
     return str(info["path"])
 
 

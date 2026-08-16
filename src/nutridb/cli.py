@@ -270,6 +270,7 @@ def package(
             base["build"] / "canonical" / "ciqual",
             base["vocab"],
             base["build"] / "artifacts",
+            base["root"],
         )
     except PackageError as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)

@@ -53,7 +53,7 @@ def _open(artifact: Path | str) -> sqlite3.Connection:
 
 def test_package_builds_artifact(tmp_path: Path) -> None:
     canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out")
+    info = package(canonical, vocab, tmp_path / "out", ROOT)
     assert info["artifact"] == "nutridb-core-0.1.0.sqlite"
     assert info["integrity"] == "ok"
     artifact = tmp_path / "out" / info["artifact"]
@@ -72,7 +72,7 @@ def test_package_builds_artifact(tmp_path: Path) -> None:
 
 def test_schema_has_all_central_tables(tmp_path: Path) -> None:
     canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out")
+    info = package(canonical, vocab, tmp_path / "out", ROOT)
     conn = _open(tmp_path / "out" / info["artifact"])
     try:
         names = {
@@ -114,15 +114,15 @@ def test_schema_has_all_central_tables(tmp_path: Path) -> None:
 
 def test_rows_loaded_and_provenance_walkable(tmp_path: Path) -> None:
     canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out")
+    info = package(canonical, vocab, tmp_path / "out", ROOT)
     conn = _open(tmp_path / "out" / info["artifact"])
     try:
         assert conn.execute("SELECT count(*) FROM concept").fetchone()[0] == 3
-        assert conn.execute("SELECT count(*) FROM value").fetchone()[0] == 7
+        assert conn.execute("SELECT count(*) FROM value").fetchone()[0] == 8
 
         row = conn.execute("SELECT * FROM mv_food_value WHERE nutrient_id = 'FASAT'").fetchone()
-        assert row["value"] == 5.0
-        assert row["unit"] == "mg"
+        assert row["value"] == 0.5  # AG stay in g (INFOODS unit, mapping factor 1)
+        assert row["unit"] == "g"
         assert row["label_fr"] == "Pastis"
         assert row["confidence_code"] == "A"
 
@@ -147,25 +147,57 @@ def test_rows_loaded_and_provenance_walkable(tmp_path: Path) -> None:
 
 def test_coverage_isolation_of_not_measured(tmp_path: Path) -> None:
     canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out")
+    info = package(canonical, vocab, tmp_path / "out", ROOT)
     conn = _open(tmp_path / "out" / info["artifact"])
     try:
         pairs = conn.execute(
             "SELECT count(*) FROM value v JOIN concept c ON c.concept_id = v.concept_id "
             "WHERE c.kind = 'food'"
         ).fetchone()[0]
-        assert pairs == 7, "absence is never materialized per cell (D5)"
-        assert conn.execute("SELECT count(*) FROM coverage").fetchone()[0] == 4
+        assert pairs == 8, "absence is never materialized per cell (D5)"
+        assert conn.execute("SELECT count(*) FROM coverage").fetchone()[0] == 5
+    finally:
+        conn.close()
+
+
+def test_mv_food_value_unique_per_food_nutrient(tmp_path: Path) -> None:
+    """Read table: exactly one row per (concept, nutrient) (is_default mapping).
+
+    The canonical `value` table keeps every method (P1); mv_food_value
+    presents the default one: 327/328 (Reg. UE 1169/2011) over 332/333
+    (Jones), 25000 (N x facteur de Jones) over 25003 (N x 6.25).
+    """
+    canonical, vocab = _prepare(tmp_path)
+    info = package(canonical, vocab, tmp_path / "out", ROOT)
+    conn = _open(tmp_path / "out" / info["artifact"])
+    try:
+        dup = conn.execute(
+            "SELECT concept_id, nutrient_id, count(*) FROM mv_food_value "
+            "GROUP BY concept_id, nutrient_id HAVING count(*) > 1"
+        ).fetchall()
+        assert dup == [], f"duplicate (concept, nutrient) in mv_food_value: {dup}"
+
+        codes = {
+            row["source_nutrient_code"]
+            for row in conn.execute("SELECT DISTINCT source_nutrient_code FROM value")
+        }
+        assert {327, 333} <= codes, "canonical value keeps every energy method (P1)"
+        mv_energy = {
+            row["nutrient_id"]
+            for row in conn.execute("SELECT DISTINCT nutrient_id FROM mv_food_value")
+        }
+        assert "ENERC_KCAL" not in mv_energy, "Jones kcal (333) is not the default read value"
+        assert "ENERC_KJ" in mv_energy
     finally:
         conn.close()
 
 
 def test_build_metadata_isolated(tmp_path: Path) -> None:
     canonical, vocab = _prepare(tmp_path)
-    first = Path(package(canonical, vocab, tmp_path / "a")["path"])
+    first = Path(package(canonical, vocab, tmp_path / "a", ROOT)["path"])
     second = tmp_path / "b" / "nutridb-core-0.1.0.sqlite"
     second.parent.mkdir()
-    package(canonical, vocab, second.parent)
+    package(canonical, vocab, second.parent, ROOT)
     conn = _open(first)
     try:
         meta_a = dict(conn.execute("SELECT key, value FROM build_metadata").fetchall())
@@ -188,4 +220,4 @@ def test_missing_label_fails_high(tmp_path: Path) -> None:
     canonical, vocab = _prepare(tmp_path)
     (canonical / "label.parquet").unlink()
     with pytest.raises(PackageError, match=r"label\.parquet missing"):
-        package(canonical, vocab, tmp_path / "out")
+        package(canonical, vocab, tmp_path / "out", ROOT)

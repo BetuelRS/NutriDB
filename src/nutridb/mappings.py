@@ -33,6 +33,7 @@ MAPPING_FILES = {
         "value_type_trace",
         "value_type_below_loq",
         "unit",
+        "is_default",
     ),
     "foodgroups/ciqual.csv": ("level", "code", "food_group"),
 }
