@@ -25,6 +25,7 @@ ALL_COMMANDS: tuple[tuple[str, ...], ...] = (
     ("diff",),
     ("serve",),
     ("explorer", "dev"),
+    ("explorer", "build"),
 )
 
 

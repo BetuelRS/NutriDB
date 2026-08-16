@@ -23,6 +23,7 @@ mappings/_unmapped/*.csv
 # Node (explorer)
 node_modules/
 explorer/dist/
+explorer/public/sqlite3.wasm
 
 # OS
 .DS_Store

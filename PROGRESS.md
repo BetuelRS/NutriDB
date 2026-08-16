@@ -5,7 +5,7 @@
 ## Estado atual (2026-08-16)
 
 **Fase 0 — Fundações: concluída** (branch `f0/fundacoes`).
-**Fase 1 — Vocabulário e primeira fonte:** em curso (branch `f1/ciqual-ponta-a-ponta`; F1.1–F1.9 concluídas).
+**Fase 1 — Vocabulário e primeira fonte:** **concluída** (branch `f1/ciqual-ponta-a-ponta`; F1.0–F1.10 + F1.8b; merge com CI verde).
 
 | Tarefa | Estado | Nota |
 |---|---|---|
@@ -20,9 +20,10 @@
 | F1.7 Empacotamento `core` | ✅ | `nutridb-core-0.1.0.sqlite` (~147 MB, integrity ok) — esquema §8 completo + FTS5 externo por locale + `mv_food_value` 164 433 (só `is_default`; canónico preserva os 174 570 com método, P1) + índices + page_size 8192 + VACUUM/ANALYZE + `build_metadata` isolado (P5); determinismo real re-verificado 2026-08-16 (2 runs, 23 tabelas idênticas) |
 | F1.8 Motor de pesquisa | ✅ | `src/nutridb/api/` — `search(db, query, locale, limit)` FTS5 acentos-insensível sobre `text_normalized`, fallback do `locales.toml` resolvido em runtime, `limit` 1..100, locale desconhecida → erro; 9 testes integração; smoke real (pastis, eau de vie, água…) |
 | F1.9 Conjunto dourado | ✅ | `tests/golden/ciqual_20.csv` (61 células: 20 alimentos × 2–4 constituintes) — `expected` = `teneur` verbatim do XML primário com referência alim/const; célula XLS legado + coordenadas como cross-evidence (XLS diverge em células perdidas, documentado); colunas XLS casadas por cabeçalho normalizado (a folha `codes INFOODS` não está na ordem das colunas do XLS); `tests/golden/test_golden.py` cruza com o artefacto real (tolerância 1e-9; skipif sem artefacto); 61/61 OK |
-| F1.10 Build orquestrado | ☐ | `uv run nutridb build` (extract→transform→i18n build→package) + push |
+| F1.8b Página mínima de pesquisa | ✅ | `explorer/` Vite+React+TS (F1.8b, emenda A7): fetch integral do artefacto + **WASM oficial do SQLite** `@sqlite.org/sqlite-wasm` 3.49.1-build3 (`sql.js` pré-compilado **não tem FTS5** — verificado; decisão documentada no README); `:memory:` + `sqlite3_deserialize` (147 MB); FTS5 acentos-insensível + cadeias de fallback (espelho de `api/`); vista de detalhe com `mv_food_value` + proveniência (`source_record` JSON cru); CLI `explorer dev`/`explorer build`; middleware `/artifacts/*` (traversal bloqueado); CI job `explorer` (Node 22, npm ci, build) |
+| F1.10 Build orquestrado | ✅ | `uv run nutridb build` (extract→transform→i18n build→package) provado do zero (P10); critérios §16 F1 verificados (incl. proveniência ponta a ponta `test_golden_provenance_walk_on_sqlite`); push + CI verde + merge |
 
-**Fallbacks de F0**: push `f0/fundacoes` feito; confirmar run do CI no GitHub (pendente de credenciais/remote).
+**Fallbacks de F0**: push `f0/fundacoes` feito; CI confirmado verde.
 
 ## Decisões em aberto
 
@@ -30,8 +31,7 @@
 
 ## Bloqueios / pendências
 
-- **CI no GitHub**: confirmar os runs `checks` de `f0/fundacoes` e `f1/ciqual-ponta-a-ponta` no Actions após push (F1.10).
-- Push dos commits F1.4–F1.9 (pendente de F1.10 para push único da fase).
+- Nenhuma para F1. F2 exige contacto humano para INSA (§17.6).
 
 ## Histórico de sessões
 
@@ -45,3 +45,4 @@
 - **2026-08-15 (continuação 7)**: F1.7 — empacotamento `core`. `src/nutridb/package/` (SQLite §8 completo: tabelas centrais + vocabulário referenciado + FTS5 externo por locale + `mv_food_value` 174 570 + índices; page_size 8192, journal OFF, VACUUM/ANALYZE, user_version 1, `build_metadata` único bloco temporal); CLI `package --profile core`; fix de dados: vírgulas não-escapadas em acquisition_types/analytical_methods + gate `load_csv` (coluna extra → P9). Real: ~150 MB, integrity ok, determinístico (só `built_at` difere); smoke watermelon kcal 35,4; 85 testes.
 - **2026-08-15 (continuação 8)**: F1.8 — motor de pesquisa. `src/nutridb/api/` (`search` público read-only; FTS5 em `text_normalized`; termos `"x"*` AND; fallback runtime; limit 1..100; locale desconhecida → ApiError; escape FTS5); fix `tomllib` (cadeias aninhadas). Real: pastis/eau de vie/pomme/milk/água OK; 'leite'/'gordura' vazios (sem rótulos pt-PT de alimentos em F1); 95 testes.
 - **2026-08-16**: F1.9 — conjunto dourado + **correção de dados com evidência**. Ao gerar os goldens contra o XLSX oficial descobri (1) as colunas do XLS **não seguem a ordem da folha `codes INFOODS`** (casadas por cabeçalho normalizado) e (2) **erro de fator F1.3**: AG com fator ×10→"mg" mas a fonte (XML, XLS e folha INFOODS) declara `(g/100 g)` e a lista oficial INFOODS/FAO usa `FASAT(g)` — 0,97 g ≠ 9,7 mg. Corrigido: mapping AG ×1 + unidade g; vocab 38 tagnames AG mg→g; coluna `is_default` no mapping (327/328 Reg. UE 1169 e 25000 Jones default; 332/333 Jones-fibras e 25003 N×6,25 ficam no canónico `value` com `analytical_method` — P1) → `mv_food_value` único por (conceito, nutriente): real 164 433; fixture alargado (const 333); report real: conversions 0; determinismo real re-verificado (2 runs, 23 tabelas idênticas). Golden: `tests/golden/ciqual_20.csv` (61 células, expected = teneur verbatim do XML + célula XLS e coordenadas como cross-evidence) + `tests/golden/test_golden.py` (3 testes, tolerância 1e-9, skipif sem artefacto); 61/61 batem o artefacto; **98 testes verdes**; lint/mypy limpos (31 ficheiros).
+- **2026-08-16 (continuação 9)**: F1.8b + fecho da fase. `explorer/` (Vite+React+TS) — página mínima de pesquisa (emenda A7) com **decisão com evidência**: o build pré-compilado do `sql.js` **não inclui FTS5** (`no such module: fts5`, verificado em node), trocado pelo **WASM oficial do SQLite** (`@sqlite.org/sqlite-wasm` 3.49.1-build3, pinado); `:memory:` + `sqlite3_deserialize` abre o artefacto de 147 MB (o construtor `oo1.DB` falha com bytes grandes — `RangeError: Too many properties to enumerate`; caminho capi); `sqlite3_bind_text` com string pura rebenta na wrapper (`pMem` undefined) — bind com `TextEncoder().encode(v).buffer`; pesquisa FTS5 real verificada (pomme/água em node); `npm run build` verde (tsc strict); dev server verificado: página 200, artefacto 200 (147 562 496 B), wasm 200, traversal `/artifacts/../` → 400; CLI `explorer dev`/`explorer build`; CI alargado (branches `f1/**` + job `explorer`); **proveniência ponta a ponta** no artefacto real (`test_golden_provenance_walk_on_sqlite`: label → `mv_food_value` → `source_record` com `teneur` verbatim, vírgula decimal, 61/61); critérios §16 F1 verificados; **99 testes verdes**; lint/mypy limpos; commits + push; CI verde; merge `f1/ciqual-ponta-a-ponta` → `f0/fundacoes`.

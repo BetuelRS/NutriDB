@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import os
+import shutil
+import subprocess
+
 import rich.table
 import rich.text
 import structlog
@@ -9,6 +13,7 @@ import typer
 
 from nutridb import __version__
 from nutridb.logging import configure_logging
+from nutridb.paths import project_root
 from nutridb.sources.download import fetch_unpinned, sync_sources
 from nutridb.sources.registry import ArtifactProfile, load_registry
 
@@ -356,10 +361,31 @@ explorer_app = typer.Typer(name="explorer", help="NUTRIDB Explorer (SPEC §12)."
 app.add_typer(explorer_app, name="explorer")
 
 
+def _run_npm(*args: str) -> None:
+    """Run an npm script in explorer/ with the repo root exported (vite middleware)."""
+    explorer_dir = project_root() / "explorer"
+    if not (explorer_dir / "package.json").is_file():
+        raise typer.BadParameter(f"explorer app missing at {explorer_dir}")
+    npm = shutil.which("npm.cmd") or shutil.which("npm")
+    if npm is None:
+        raise typer.BadParameter("npm not found — explorer requires Node.js >= 20")
+    env = os.environ.copy()
+    env["NUTRIDB_ROOT"] = str(project_root())
+    result = subprocess.run([npm, *args], cwd=explorer_dir, env=env)
+    if result.returncode != 0:
+        raise typer.Exit(result.returncode)
+
+
 @explorer_app.command("dev")
 def explorer_dev() -> None:
-    """Dev server for the explorer web app."""
-    _not_implemented("F1.8b", "explorer dev server")
+    """Dev server for the explorer web app (F1.8b; serves /artifacts from the build)."""
+    _run_npm("run", "dev")
+
+
+@explorer_app.command("build")
+def explorer_build() -> None:
+    """Build the explorer static app (tsc + vite) into explorer/dist/ (F1.8b)."""
+    _run_npm("run", "build")
 
 
 if __name__ == "__main__":

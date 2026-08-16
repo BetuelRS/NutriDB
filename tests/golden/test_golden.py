@@ -116,3 +116,60 @@ def test_golden_foods_exist_in_the_artefact() -> None:
         not in concepts
     ]
     assert not missing, f"golden foods missing from the artefact: {missing}"
+
+
+def test_golden_provenance_walk_on_sqlite() -> None:
+    """SPEC §16 F1: values carry provenance — concept -> mv -> source_record.
+
+    Every golden (food, nutrient) cell must be reachable from the label
+    through mv_food_value and its source_record raw JSON must contain the
+    verbatim `teneur` of the official XML (P1, nothing invented).
+    """
+    if not SQLITE.is_file():
+        pytest.skip("SQLite artefact not built; run `uv run nutridb build`")
+    import json
+    import sqlite3
+
+    conn = sqlite3.connect(SQLITE)
+    try:
+        id_by_name = {
+            row[1]: row[0]
+            for row in conn.execute(
+                "SELECT text, ref FROM label WHERE ref_kind='food' AND locale='fr'"
+            )
+        }
+        rows = conn.execute(
+            "SELECT concept_id, nutrient_id, source_record_id, value "
+            "FROM mv_food_value WHERE value IS NOT NULL"
+        ).fetchall()
+        by_food = {(id_by_name[r[0]], r[1]): (r[2], r[3]) for r in rows if r[0] in id_by_name}
+        records = {
+            r[0]: r[1] for r in conn.execute("SELECT source_record_id, record FROM source_record")
+        }
+    finally:
+        conn.close()
+
+    missing = []
+    for row in _rows():
+        hit = by_food.get((row["food_fr"], row["tagname"]))
+        if hit is None:
+            missing.append(f"{row['food_fr']} | {row['tagname']}: no mv row")
+            continue
+        record_id, value = hit
+        raw = records.get(record_id)
+        if raw is None:
+            missing.append(f"{row['food_fr']} | {row['tagname']}: record {record_id} missing")
+            continue
+        cell = json.loads(raw)
+        expected = float(str(row["expected"]))
+        if not math.isclose(value, expected, rel_tol=0.0, abs_tol=1e-9 * max(1.0, abs(expected))):
+            missing.append(f"{row['food_fr']} | {row['tagname']}: value {value} != {expected}")
+        if float(str(cell["teneur"]).replace(",", ".")) != expected:
+            missing.append(
+                f"{row['food_fr']} | {row['tagname']}: raw teneur {cell['teneur']} != {expected}"
+            )
+        if cell.get("const_code") != row["const_code"]:
+            missing.append(
+                f"{row['food_fr']} | {row['tagname']}: raw const {cell.get('const_code')}"
+            )
+    assert not missing, "provenance walk failed:\n" + "\n".join(missing)
