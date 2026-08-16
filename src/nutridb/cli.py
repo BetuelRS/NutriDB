@@ -290,8 +290,54 @@ def package(
 
 @app.command("build")
 def build() -> None:
-    """Run the full deterministic pipeline (SPEC §16)."""
-    _not_implemented("F1.10", "full build orchestration")
+    """Run the full deterministic pipeline (SPEC §16, P10).
+
+    Chains extract -> transform -> i18n build -> package core; any stage
+    failure aborts the build (fail high, P9). Requires the source cache:
+    run `uv run nutridb sources sync` first.
+    """
+    from nutridb.i18n import I18nError
+    from nutridb.i18n import build as build_labels
+    from nutridb.package import PackageError
+    from nutridb.package import package as run_package
+    from nutridb.paths import paths
+    from nutridb.sources.ciqual import CiqualExtractError
+    from nutridb.sources.ciqual import extract as extract_ciqual
+    from nutridb.transform import TransformError
+    from nutridb.transform import transform as run_transform
+
+    base = paths()
+    try:
+        extract_report = extract_ciqual(
+            base["cache"] / "ciqual", base["build"] / "intermediates" / "ciqual"
+        )
+        transform_report = run_transform(
+            base["build"] / "intermediates" / "ciqual",
+            base["build"] / "canonical" / "ciqual",
+            base["root"],
+        )
+        build_labels(base["build"] / "canonical" / "ciqual", base["root"])
+        package_info = run_package(
+            base["build"] / "canonical" / "ciqual",
+            base["vocab"],
+            base["build"] / "artifacts",
+            base["root"],
+        )
+    except (CiqualExtractError, TransformError, I18nError, PackageError) as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="nutridb build (P10)", title_justify="left")
+    table.add_column("stage")
+    table.add_column("result", justify="right")
+    for name, count in extract_report.items():
+        table.add_row(f"extract {name}", str(count))
+    for name, count in transform_report.items():
+        table.add_row(f"transform {name}", str(count))
+    table.add_row("artifact", package_info["artifact"])
+    table.add_row("size_bytes", f"{package_info['size_bytes']:,}")
+    table.add_row("integrity", package_info["integrity"])
+    rich.console.Console().print(table)
+    typer.echo("build OK")
 
 
 @app.command("diff")
