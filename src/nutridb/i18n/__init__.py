@@ -11,10 +11,11 @@ Composes the ``label`` table of the canonical dataset:
     text_normalized  locale-aware normalized form (NFKD, diacritics
                stripped, lowercased) for accent-insensitive search
 
-Label sources in F1:
-    * native names (fr/en) straight from the immutable source records;
-      a food the source names in one language has one label; the other
-      locale resolves through the fallback chain at query time (fallback
+Label sources (ADR-0005, D7):
+    * native names straight from the immutable source records: the shared
+      contract keeps `record["names"]` as {locale: text} (CIQUAL: fr/en;
+      TCA: pt); one label per language the source provides; the other
+      locales resolve through the fallback chain at query time (fallback
       is never frozen into the table);
     * vocabulary labels: en from the frozen vocabulary (status official)
       and the minimal hand-curated pt-PT list under i18n/labels/ (status
@@ -49,8 +50,6 @@ LABEL_COLUMNS = (
     "text_normalized",
 )
 
-_NATIVE_FIELDS = {"fr": "alim_nom_fr", "en": "alim_nom_eng"}
-
 
 class I18nError(Exception):
     """Fatal input inconsistency in the label composition (fail high, P9)."""
@@ -70,7 +69,7 @@ def build(canonical_dir: Path, root: Path) -> dict[str, int]:
 
     config = load_locales(root / "i18n" / "locales.toml")
 
-    # -- native labels: foods, straight from immutable records ---------------
+    # -- native labels: foods, straight from immutable records (P1) ----------
     links = pl.read_parquet(canonical_dir / "concept_link.parquet")
     records = pl.read_parquet(canonical_dir / "source_record.parquet")
     food_records = records.filter(pl.col("kind") == "food")
@@ -83,8 +82,7 @@ def build(canonical_dir: Path, root: Path) -> dict[str, int]:
     labels: list[tuple[str, ...]] = []
     for concept_id in sorted(by_concept):
         raw = json.loads(by_record[by_concept[concept_id]]["record"])
-        for locale, field in _NATIVE_FIELDS.items():
-            text = raw.get(field)
+        for locale, text in sorted(raw["names"].items()):
             if not text:
                 continue  # source provides no name in this language; fallback
             _require_text(text, f"food {concept_id} {locale}")

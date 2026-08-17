@@ -96,7 +96,7 @@ _SCHEMA = {
         "CREATE TABLE value (concept_id TEXT NOT NULL, nutrient_id TEXT NOT NULL, "
         "value REAL, unit TEXT NOT NULL, value_type TEXT NOT NULL, "
         "acquisition_type TEXT, source_id TEXT NOT NULL, "
-        "source_record_id TEXT NOT NULL, source_nutrient_code INTEGER, "
+        "source_record_id TEXT NOT NULL, source_nutrient_code TEXT, "
         "n_samples REAL, standard_deviation REAL, min_value REAL, max_value REAL, "
         "analytical_method TEXT, confidence_code TEXT, derivation_id TEXT, "
         "basis TEXT NOT NULL, below_loq_threshold REAL)"
@@ -124,9 +124,11 @@ _SCHEMA = {
     ),
     # Materialized read table (SPEC §8: denormalized convenience, built,
     # never edited): the explorer's one-stop join for food value cells.
+    # One row per (concept, nutrient, locale) with the native label (D7:
+    # fallback chains are resolved at query time, never frozen here).
     "mv_food_value": (
-        "CREATE TABLE mv_food_value (concept_id TEXT NOT NULL, label_fr TEXT NOT NULL, "
-        "label_en TEXT NOT NULL, food_group TEXT NOT NULL, nutrient_id TEXT NOT NULL, "
+        "CREATE TABLE mv_food_value (concept_id TEXT NOT NULL, locale TEXT NOT NULL, "
+        "label TEXT NOT NULL, food_group TEXT NOT NULL, nutrient_id TEXT NOT NULL, "
         "value REAL, unit TEXT NOT NULL, value_type TEXT NOT NULL, "
         "confidence_code TEXT, source_id TEXT NOT NULL, "
         "source_record_id TEXT NOT NULL, below_loq_threshold REAL, "
@@ -149,9 +151,13 @@ _INDEXES = {
     "idx_mv_food_value_nutrient": (
         "CREATE INDEX idx_mv_food_value_nutrient ON mv_food_value (nutrient_id)"
     ),
+    "idx_mv_food_value_concept_locale": (
+        "CREATE INDEX idx_mv_food_value_concept_locale "
+        "ON mv_food_value (concept_id, locale, nutrient_id)"
+    ),
 }
 
-_LOCALES_WITH_LABELS = ("fr", "en", "pt-PT")
+_SCHEMA_VERSION = "2"
 
 
 class PackageError(Exception):
@@ -204,7 +210,7 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
         conn.execute("VACUUM")
         conn.execute("ANALYZE")
         conn.commit()
-        conn.execute("PRAGMA user_version = 1")
+        conn.execute("PRAGMA user_version = 2")
         conn.commit()
     finally:
         conn.close()
@@ -279,8 +285,8 @@ def _load_vocabulary(conn: sqlite3.Connection, vocab_dir: Path) -> None:
     )
 
 
-def _default_nutrient_codes(root: Path) -> set[int]:
-    """Source const codes that are the read-table default for their tagname.
+def _default_nutrient_codes(root: Path) -> set[str]:
+    """Source nutrient codes that are the read-table default for their tagname.
 
     The canonical ``value`` table keeps every method with its registered
     ``analytical_method`` (P1); the materialized read table presents one
@@ -290,12 +296,24 @@ def _default_nutrient_codes(root: Path) -> set[int]:
     """
     from nutridb.mappings import load_nutrient_mapping
 
-    codes = {
-        int(row["const_code"]) for row in load_nutrient_mapping(root) if row["is_default"] == "true"
-    }
+    codes: set[str] = set()
+    for source in _registry_sources(root):
+        codes |= {
+            row["nutrient_code"]
+            for row in load_nutrient_mapping(root, source)
+            if row["is_default"] == "true"
+        }
     if not codes:
-        raise PackageError("no default nutrient codes in the mapping")
+        raise PackageError("no default nutrient codes in the mappings")
     return codes
+
+
+def _registry_sources(root: Path) -> list[str]:
+    """Source ids with a mapping CSV (i.e. loadable sources)."""
+    from nutridb.sources.registry import load_registry
+
+    registry = load_registry(root / "sources" / "registry.toml")
+    return sorted(s.id for s in registry.sources.values())
 
 
 def _build_mv_food_value(
@@ -303,31 +321,33 @@ def _build_mv_food_value(
     values: pl.DataFrame,
     concepts: pl.DataFrame,
     labels: pl.DataFrame,
-    default_codes: set[int],
+    default_codes: set[str],
 ) -> int:
-    """Pre-computed denormalised read table (SPEC §8) for the explorer."""
+    """Pre-computed denormalised read table (SPEC §8) for the explorer.
+
+    One row per (concept, nutrient, locale): the label is the native label
+    of that locale (D7); locale fallback happens in the client at query
+    time. Filtered to the default methods per tagname (``is_default``).
+    """
     values = values.filter(pl.col("source_nutrient_code").is_in(list(default_codes)))
-    food_labels = labels.filter(pl.col("ref_kind") == "food")
-    left = (
-        food_labels.filter(pl.col("locale") == "fr")
-        .select(pl.col("ref").alias("concept_id"), pl.col("text").alias("label_fr"))
-        .join(
-            food_labels.filter(pl.col("locale") == "en").select(
-                pl.col("ref").alias("concept_id"), pl.col("text").alias("label_en")
-            ),
-            on="concept_id",
-            how="inner",
+    food_labels = (
+        labels.filter(pl.col("ref_kind") == "food")
+        .select(
+            pl.col("ref").alias("concept_id"),
+            pl.col("locale").alias("locale"),
+            pl.col("text").alias("label"),
         )
+        .unique(subset=["concept_id", "locale"])
     )
     frame = (
         values.join(concepts, on="concept_id")
-        .join(left, on="concept_id")
-        .sort(["concept_id", "nutrient_id"])
+        .join(food_labels, on="concept_id")
+        .sort(["concept_id", "nutrient_id", "locale"])
     )
     rows = frame.select(
         "concept_id",
-        "label_fr",
-        "label_en",
+        "locale",
+        "label",
         "food_group",
         "nutrient_id",
         "value",
@@ -340,7 +360,7 @@ def _build_mv_food_value(
         "basis",
     ).rows()
     conn.executemany(
-        "INSERT INTO mv_food_value (concept_id, label_fr, label_en, food_group, "
+        "INSERT INTO mv_food_value (concept_id, locale, label, food_group, "
         "nutrient_id, value, unit, value_type, confidence_code, source_id, "
         "source_record_id, below_loq_threshold, basis) "
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -350,7 +370,10 @@ def _build_mv_food_value(
 
 
 def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:
-    for locale in _LOCALES_WITH_LABELS:
+    locales = sorted(labels["locale"].unique().to_list())
+    if not locales:
+        raise PackageError("label table has no locales")
+    for locale in locales:
         conn.execute(
             "CREATE VIRTUAL TABLE label_fts_"
             + locale.replace("-", "_")
@@ -372,7 +395,7 @@ def _write_build_metadata(conn: sqlite3.Connection) -> None:
         "nutridb_version": __version__,
         "python_version": platform.python_version(),
         "polars_version": pl.__version__,
-        "schema_version": "1",
+        "schema_version": _SCHEMA_VERSION,
         "profile": "core",
         "page_size": str(PAGE_SIZE),
     }
