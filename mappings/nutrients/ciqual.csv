@@ -2,7 +2,7 @@
 # factor = multiplicador aplicado ao valor da fonte (g->mg nos AG: x10); 1 caso contrário.
 # energy_method só para códigos ENERC; '-' = não energia. value_type_* são as regras das células
 # '-', 'traces' e '< N' (ADR-0003 §4.1).
-const_code,tagname,factor,energy_method,value_type_missing,value_type_trace,value_type_below_loq,unit,is_default
+nutrient_code,tagname,factor,energy_method,value_type_missing,value_type_trace,value_type_below_loq,unit,is_default
 327,ENERC_KJ,1,Reg. UE 1169/2011 (Atwater),not_measured,trace,below_loq,kj,true
 328,ENERC_KCAL,1,Reg. UE 1169/2011 (Atwater),not_measured,trace,below_loq,kcal,true
 332,ENERC_KJ,1,"N x factor de Jones, com fibras",not_measured,trace,below_loq,kj,false

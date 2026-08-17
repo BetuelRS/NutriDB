@@ -1,0 +1,50 @@
+level,code,food_group
+# F2 — grupos INSA/TCA 7.1 -> food_groups canónico (vocab/food_groups.csv).
+# Níveis (ADR-0005): 1=Nível 1 / 2=Nível 2 / 3=Nível 3 da fonte. Um alimento
+# resolve pelo nível mais fino que tenha linha; sem linha no nível fino, cai
+# para o nível acima. Códigos = nomes oficiais da fonte (espaços colapsados;
+# o ficheiro oficial tem variações ortográficas, p.ex. dois L1 quase iguais
+# para legumes/especiarias e L2 'Especiarias ' com espaço final).
+# Decisões de convenção (rever em diff):
+#   'Carne de aves' (L3) -> poultry; resto de Carne -> meat.
+#   Crustáceos/Moluscos (L2) -> seafood; peixe -> fish.
+#   Especiarias (L2 de ambos os L1 de legumes) -> condiments; frutos de casca
+#   rija/sementes oleaginosas -> nuts_seeds; 'Derivados primários de frutos de
+#   casca rija' (L3) -> nuts_seeds.
+#   'Amidos' (L2) -> cereals (derivado de cereais/batata).
+#   'Algas e organismos procariotas' (L2) -> other (sem grupo canónico).
+#   Raízes amiláceas/tubérculos -> vegetables; óleos/gorduras -> fats_oils;
+#   água/sumos/café-chá-cacau -> beverages (água não tem grupo canónico);
+#   açúcar/confeitaria -> sugars_sweets; bebidas alcoólicas -> alcoholic_beverages;
+#   anfíbios/repteis/invertebrados terrestres, ingredientes isolados,
+#   alimentação jovem, dietas especiais -> other.
+1,"Anfíbios, répteis, e invertebrados terrestres",other
+1,"Açúcar e similares, confeitaria e sobremesas doces à base de água",sugars_sweets
+1,Bebidas alcoólicas,alcoholic_beverages
+1,"Café, cacau, chá e tisanas",beverages
+1,"Carne e produtos cárneos",meat
+1,"Cereais e produtos à base de cereais",cereals
+1,"Frutos e produtos derivados de frutos",fruits
+1,"Ingredientes principais isolados, aditivos, aromas, fermentos e auxiliares tecnológicos",other
+1,"Leguminosas, frutos de casca rija, sementes oleaginosas e especiarias",legumes
+1,"Leguminosas, nozes, oleaginosas e especiarias.",legumes
+1,"Leite e produtos lácteos",dairy
+1,"Ovos e ovoprodutos",eggs
+1,"Peixes, mariscos, anfíbios, répteis e invertebrados",fish
+1,"Pratos compostos",composite_dishes
+1,"Produtos alimentares para a população jovem",other
+1,"Produtos hortícolas e derivados",vegetables
+1,"Produtos para dietas não padronizadas, substitutos de alimentos e suplementos alimentares",other
+1,"Raízes amiláceas ou tubérculos e seus produtos, plantas sacarinas",vegetables
+1,"Sumos e néctares de frutos e produtos hortícolas (incluindo concentrados)",beverages
+1,"Temperos, molhos e condimentos",condiments
+1,"Água e bebidas à base de água",beverages
+1,"Óleos e gorduras de origem animal e vegetal e seus derivados",fats_oils
+2,Especiarias,condiments
+2,"Frutos de casca rija, sementes oleaginosas e frutos oleaginosos",nuts_seeds
+2,Amidos,cereals
+2,Crustáceos,seafood
+2,Moluscos,seafood
+2,"Algas e organismos procariotas",other
+3,"Carne de aves",poultry
+3,"Derivados primários de frutos de casca rija e sementes semelhantes",nuts_seeds

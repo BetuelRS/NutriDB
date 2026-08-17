@@ -2,8 +2,14 @@
 
 Configuration-as-data under `mappings/`; every decision lives in a CSV and
 is reviewable in diff. Loaders reuse the vocabulary CSV reader and fail high
-on malformed files. `resolve_food_group` picks the finest non-placeholder
-level that has a mapping row (grp/ssgrp/ssssgrp).
+on malformed files. `resolve_food_group` picks the finest level that has a
+mapping row (levels 3 -> 2 -> 1, ADR-0005).
+
+The mapping tables are per source (``mappings/nutrients/<source_id>.csv``,
+``mappings/foodgroups/<source_id>.csv``) but the column contract is shared:
+`nutrient_code` is the source-native code as text; food-group levels are
+"1"|"2"|"3". The transform iterates sources with no per-source branches
+(SPEC §16 F2, ADR-0005).
 """
 
 from __future__ import annotations
@@ -16,60 +22,57 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 __all__ = [
-    "MAPPING_FILES",
-    "PLACEHOLDER_GROUP_CODES",
+    "FOODGROUP_MAPPING_COLUMNS",
+    "NUTRIENT_MAPPING_COLUMNS",
     "load_foodgroup_mapping",
     "load_nutrient_mapping",
     "resolve_food_group",
 ]
 
-MAPPING_FILES = {
-    "nutrients/ciqual.csv": (
-        "const_code",
-        "tagname",
-        "factor",
-        "energy_method",
-        "value_type_missing",
-        "value_type_trace",
-        "value_type_below_loq",
-        "unit",
-        "is_default",
-    ),
-    "foodgroups/ciqual.csv": ("level", "code", "food_group"),
-}
+NUTRIENT_MAPPING_COLUMNS = (
+    "nutrient_code",
+    "tagname",
+    "factor",
+    "energy_method",
+    "value_type_missing",
+    "value_type_trace",
+    "value_type_below_loq",
+    "unit",
+    "is_default",
+)
 
-PLACEHOLDER_GROUP_CODES = {"00", "0000", "000000"}
-_LEVELS = ("ssssgrp", "ssgrp", "grp")
+FOODGROUP_MAPPING_COLUMNS = ("level", "code", "food_group")
 
-
-def load_nutrient_mapping(root: Path) -> list[dict[str, str]]:
-    """CIQUAL const_code -> canonical nutrient rows (mappings/nutrients/ciqual.csv)."""
-    return load_csv(
-        root / "mappings" / "nutrients" / "ciqual.csv", MAPPING_FILES["nutrients/ciqual.csv"]
-    )
+# Resolution order: finest mapped level first (ADR-0005 §3.2).
+_LEVELS = ("3", "2", "1")
 
 
-def load_foodgroup_mapping(root: Path) -> dict[tuple[str, str], str]:
-    """CIQUAL (level, code) -> canonical food_group (mappings/foodgroups/ciqual.csv)."""
+def load_nutrient_mapping(root: Path, source_id: str) -> list[dict[str, str]]:
+    """Source nutrient_code -> canonical nutrient rows per source."""
+    return load_csv(root / "mappings" / "nutrients" / f"{source_id}.csv", NUTRIENT_MAPPING_COLUMNS)
+
+
+def load_foodgroup_mapping(root: Path, source_id: str) -> dict[tuple[str, str], str]:
+    """Source (level, code) -> canonical food_group per source."""
     rows = load_csv(
-        root / "mappings" / "foodgroups" / "ciqual.csv", MAPPING_FILES["foodgroups/ciqual.csv"]
+        root / "mappings" / "foodgroups" / f"{source_id}.csv", FOODGROUP_MAPPING_COLUMNS
     )
     return {(row["level"], row["code"]): row["food_group"] for row in rows}
 
 
 def resolve_food_group(
-    mapping: dict[tuple[str, str], str], alim: dict[str, str | None]
+    mapping: dict[tuple[str, str], str], group_path: dict[str, str]
 ) -> str | None:
     """Finest mapped level for one food; None when nothing matches (fail high upstream).
 
-    The CIQUAL dump fills every food with all three levels; all-zero codes
-    ('00'/'0000'/'000000') mean "no finer group in the source". The mapping
-    table is the authority: a row for ('grp', '00') is a real decision
-    ("sem grupo na fonte" -> other); unmapped codes fall through to the
-    next level up.
+    The source's group hierarchy (ADR-0005 `food.group_path`, levels "1".."3")
+    is resolved against the mapping table: a row for a level is a real
+    decision; unmapped codes fall through to the next level up. Placeholder
+    codes (e.g. CIQUAL all-zero) are only resolved if the mapping has a row
+    for them — as data, not as code branches (P8).
     """
     for level in _LEVELS:
-        code = alim.get(f"alim_{level}_code")
+        code = group_path.get(level)
         if code is None:
             continue
         food_group = mapping.get((level, code))
