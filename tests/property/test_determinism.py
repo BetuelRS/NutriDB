@@ -43,7 +43,7 @@ def two_packages(tmp_path: Path) -> tuple[str, str]:
     cache.mkdir(parents=True, exist_ok=True)
     for official, synthetic in _FIXTURE_MAP.items():
         copyfile(FIXTURE / synthetic, cache / official)
-    extract(cache, tmp_path / "i")
+    extract(cache, tmp_path / "i" / "ciqual")
     canonical = tmp_path / "c"
     transform(tmp_path / "i", canonical, ROOT)
     build_labels(canonical, ROOT)

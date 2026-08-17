@@ -42,7 +42,7 @@ def db_path(tmp_path_factory: pytest.TempPathFactory) -> str:
     cache.mkdir()
     for official, synthetic in _FIXTURE_MAP.items():
         copyfile(FIXTURE / synthetic, cache / official)
-    extract(cache, base / "i")
+    extract(cache, base / "i" / "ciqual")
     canonical = base / "c"
     transform(base / "i", canonical, ROOT)
     build_labels(canonical, ROOT)
