@@ -71,3 +71,23 @@ sha256 = "5555c572fa3735991298d832d0427788fa69a11b4fd20a5d580d58942369fbb0"
 url = "https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:10.57745/RPWYZD"
 size = 1541998
 notes = "Excel legado SEM fontes (ADR-0003); evidencia oficial, fora do pipeline"
+
+[sources.insa]
+name = "TCA 7.1 — Tabela da Composição de Alimentos (INSA, I.P.)"
+url = "https://portfir.insa.min-saude.pt/pt/"
+license_id = "insa-tca-7.1"
+license_url = "https://portfir.insa.min-saude.pt/pt/"
+version = "7.1"
+attribution_required = true
+attribution = "Instituto Nacional de Saúde Doutor Ricardo Jorge, I. P.- INSA. Tabela da Composição de Alimentos, v 7.1 [base de dados online]. Lisboa. 2026, [data de consulta]. Disponível em: https://portfir.insa.min-saude.pt/pt/"
+share_alike = false
+commercial_use = true
+artifacts = ["core"]
+notes = "Regime proprio nao-SPDX: livre utilizacao com referenciação obrigatoria (e-mail oficial 2026-07-28; ADR-0004). 1376 alimentos, 50 componentes, valores por 100 g de parte edivel (bebidas alcoólicas: 100 ml); FoodEx2 niveis 1-3; folha 'Componentes-Correspondencia' com codigos INFOODS/EuroFIR oficiais. Sem proveniencia por valor publicada (documentado ADR-0004/0005). Energia sem metodo publicado -> analytical_method NULL."
+
+[[sources.insa.files]]
+name = "insa_tca.xlsx"
+sha256 = "155d233b6e16e21848d766bb9a13c1965b8c990b6cd8e69e3f39f4df75c066ca"
+url = "https://portfir.insa.min-saude.pt/wp-content/uploads/2025/11/insa_tca.xlsx"
+size = 416691
+notes = "Tabela completa v 7.1 - 2026 (folha 1: dados 1376x50; folha 2: correspondencia INFOODS/EuroFIR; folha 3: informacao adicional, atualizado 03-03-2026)"
