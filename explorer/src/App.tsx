@@ -23,8 +23,16 @@ function formatValue(value: number | null): string {
   return value.toLocaleString("pt-PT", { maximumFractionDigits: 3 });
 }
 
-function FoodDetail({ conceptId, onClose }: { conceptId: string; onClose: () => void }) {
-  const values: FoodValue[] = useMemo(() => foodValues(conceptId), [conceptId]);
+function FoodDetail({
+  conceptId,
+  locale,
+  onClose,
+}: {
+  conceptId: string;
+  locale: string;
+  onClose: () => void;
+}) {
+  const values: FoodValue[] = useMemo(() => foodValues(conceptId, locale), [conceptId, locale]);
   const [openRecord, setOpenRecord] = useState<string | null>(null);
   const first = values[0];
   if (first === undefined) {
@@ -38,11 +46,11 @@ function FoodDetail({ conceptId, onClose }: { conceptId: string; onClose: () => 
   return (
     <aside className="detail">
       <div className="detail-head">
-        <h2>{first.labelFr}</h2>
+        <h2>{first.label}</h2>
         <button onClick={onClose}>fechar</button>
       </div>
       <p className="detail-sub">
-        {first.labelEn} · grupo {first.foodGroup} · {values.length} nutrientes
+        grupo {first.foodGroup} · {values.length} nutrientes · rótulo em {first.locale}
       </p>
       <table className="values">
         <thead>
@@ -144,7 +152,7 @@ export default function App() {
     return (
       <main className="app">
         <h1>NUTRIDB Explorer</h1>
-        <p className="muted">a carregar o artefacto SQLite (147 MB) via WASM…</p>
+        <p className="muted">a carregar o artefacto SQLite (≈219 MB) via WASM…</p>
       </main>
     );
   }
@@ -161,7 +169,7 @@ export default function App() {
     <main className="app">
       <header>
         <h1>
-          NUTRIDB Explorer <span className="tag">F1.8b</span>
+          NUTRIDB Explorer <span className="tag">F2</span>
         </h1>
         <p className="muted">
           SQLite {status.version} (WASM) · artefacto de {status.builtAt} · pesquisa FTS5
@@ -234,11 +242,18 @@ export default function App() {
             ))}
           </ul>
         </section>
-        {selected !== null && <FoodDetail conceptId={selected} onClose={() => setSelected(null)} />}
+        {selected !== null && (
+          <FoodDetail
+            conceptId={selected}
+            locale={locale}
+            onClose={() => setSelected(null)}
+          />
+        )}
       </div>
 
       <footer className="muted">
-        Dados: CIQUAL 2025 (et alab-2.0) · motor de pesquisa F1 (emenda A7) · sem HTTP-range
+        Dados: CIQUAL 2025 (etalab-2.0) · INSA/TCA 7.1 (insa-tca-7.1) · motor de pesquisa F1
+        (emenda A7) · sem HTTP-range
       </footer>
     </main>
   );

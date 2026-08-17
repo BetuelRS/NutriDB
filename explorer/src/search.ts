@@ -12,8 +12,8 @@ export interface SearchResult {
 
 export interface FoodValue {
   conceptId: string;
-  labelFr: string;
-  labelEn: string;
+  label: string;
+  locale: string;
   foodGroup: string;
   nutrientId: string;
   value: number | null;
@@ -45,6 +45,16 @@ const LOCALE_CHAINS: Record<string, string[]> = {
 };
 
 export const ACTIVE_LOCALES = Object.keys(LOCALE_CHAINS);
+
+// mv_food_value holds one row per (concept, nutrient, locale); labels are
+// native per source (INSA=pt, CIQUAL=fr/en). Display falls back through the
+// locales that exist in the mv: exact match first, then a stable order.
+const VALUE_LOCALE_FALLBACK: Record<string, string[]> = {
+  fr: ["en", "pt"],
+  en: ["fr", "pt"],
+  pt: ["en", "fr"],
+  "pt-PT": ["pt", "en", "fr"],
+};
 
 export function search(queryText: string, locale: string, limit: number): SearchResult[] {
   const match = buildMatch(queryText);
@@ -80,31 +90,39 @@ export function search(queryText: string, locale: string, limit: number): Search
   return collected.slice(0, limit);
 }
 
-export function foodValues(conceptId: string): FoodValue[] {
-  const rows = query(
-    `SELECT v.concept_id, v.label_fr, v.label_en, v.food_group, v.nutrient_id,
-            v.value, v.unit, v.value_type, v.confidence_code, v.source_id,
-            v.source_record_id, v.below_loq_threshold, v.basis, n.name_en
-     FROM mv_food_value v JOIN nutrient n ON n.tagname = v.nutrient_id
-     WHERE v.concept_id = ? ORDER BY v.nutrient_id`,
-    [conceptId],
-  );
-  return rows.map((row) => ({
-    conceptId: row.values[0]?.toString() ?? "",
-    labelFr: row.values[1]?.toString() ?? "",
-    labelEn: row.values[2]?.toString() ?? "",
-    foodGroup: row.values[3]?.toString() ?? "",
-    nutrientId: row.values[4]?.toString() ?? "",
-    value: typeof row.values[5] === "number" ? row.values[5] : null,
-    unit: row.values[6]?.toString() ?? "",
-    valueType: row.values[7]?.toString() ?? "",
-    confidenceCode: row.values[8]?.toString() ?? null,
-    sourceId: row.values[9]?.toString() ?? "",
-    sourceRecordId: row.values[10]?.toString() ?? "",
-    belowLoqThreshold: typeof row.values[11] === "number" ? row.values[11] : null,
-    basis: row.values[12]?.toString() ?? "",
-    nutrientNameEn: row.values[13]?.toString() ?? "",
-  }));
+export function foodValues(conceptId: string, locale: string): FoodValue[] {
+  const chain = [locale, ...(VALUE_LOCALE_FALLBACK[locale] ?? [])];
+  const collected: FoodValue[] = [];
+  for (const candidate of chain) {
+    const rows = query(
+      `SELECT v.concept_id, v.label, v.locale, v.food_group, v.nutrient_id,
+              v.value, v.unit, v.value_type, v.confidence_code, v.source_id,
+              v.source_record_id, v.below_loq_threshold, v.basis, n.name_en
+       FROM mv_food_value v JOIN nutrient n ON n.tagname = v.nutrient_id
+       WHERE v.concept_id = ? AND v.locale = ? ORDER BY v.nutrient_id`,
+      [conceptId, candidate],
+    );
+    for (const row of rows) {
+      collected.push({
+        conceptId: row.values[0]?.toString() ?? "",
+        label: row.values[1]?.toString() ?? "",
+        locale: row.values[2]?.toString() ?? "",
+        foodGroup: row.values[3]?.toString() ?? "",
+        nutrientId: row.values[4]?.toString() ?? "",
+        value: typeof row.values[5] === "number" ? row.values[5] : null,
+        unit: row.values[6]?.toString() ?? "",
+        valueType: row.values[7]?.toString() ?? "",
+        confidenceCode: row.values[8]?.toString() ?? null,
+        sourceId: row.values[9]?.toString() ?? "",
+        sourceRecordId: row.values[10]?.toString() ?? "",
+        belowLoqThreshold: typeof row.values[11] === "number" ? row.values[11] : null,
+        basis: row.values[12]?.toString() ?? "",
+        nutrientNameEn: row.values[13]?.toString() ?? "",
+      });
+    }
+    if (collected.length > 0) break;
+  }
+  return collected;
 }
 
 export function provenance(sourceId: string, sourceRecordId: string): Provenance {
