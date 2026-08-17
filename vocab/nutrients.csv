@@ -28,6 +28,7 @@ FRUS,carbohydrates,Fructose,g
 GLUS,carbohydrates,Glucose (dextrose),g
 SUCS,carbohydrates,Sucrose,g
 LACS,carbohydrates,Lactose,g
+OLSAC,carbohydrates,Oligosaccharides (total),g
 MALS,carbohydrates,Maltose,g
 GALS,carbohydrates,Galactose,g
 STARCH,carbohydrates,Starch,g
@@ -97,6 +98,8 @@ PB,minerals,Lead,ug
 NI,minerals,Nickel,ug
 V,minerals,Vanadium,ug
 VITA_RAE,vitamins_fat_soluble,Vitamin A (retinol activity equivalents),ug
+VITA,vitamins_fat_soluble,Vitamin A (retinol equivalents),ug
+CARTBEQ,vitamins_fat_soluble,Carotene beta equivalents,ug
 RETOL,vitamins_fat_soluble,Retinol,ug
 CARTB,vitamins_fat_soluble,Carotene beta,ug
 CARTA,vitamins_fat_soluble,Carotene alpha,ug
@@ -120,6 +123,7 @@ THIA,vitamins_water_soluble,Thiamin (vitamin B1),mg
 RIBF,vitamins_water_soluble,Riboflavin (vitamin B2),mg
 NIA,vitamins_water_soluble,Niacin (nicotinic acid),mg
 NIAEQ,vitamins_water_soluble,Niacin equivalents (tryptophan + niacin),mg
+NIATRP,vitamins_water_soluble,Tryptophan per 60 (niacin equivalent),mg
 VITB6A,vitamins_water_soluble,Vitamin B6 (total),mg
 VITB6C,vitamins_water_soluble,Pyridoxine (vitamin B6),mg
 PANTAC,vitamins_water_soluble,Pantothenic acid (vitamin B5),mg
