@@ -1,0 +1,62 @@
+# F2 — INSA/TCA 7.1 -> vocabulário canónico (SPEC §5). Fonte: folha
+# "Componentes-Correspondência" do ficheiro oficial insa_tca.xlsx (códigos
+# INFDSTAG2; EUROFIRCT1 quando o INFOODS não define) — ADR-0004 §2.
+# nutrient_code = chave do extractor: <nome>_<unidade> (a unidade faz parte da
+# identidade — Energia existe por kcal e por kJ).
+# factor = multiplicador aplicado ao valor da fonte; trans vem em g e o
+# vocabulário fixa FATRN em mg (x1000). energy_method só para energia: o TCA
+# não publica o método (ADR-0004 §5) -> '-'; - = não energia. value_type_*:
+# o TCA não publica traços nem limites (NaN = não medido, 0 = zero real), as
+# regras ficam por defeito. unit = unidade canónica do valor escrito.
+# Notas de mapeamento (códigos INFOODS não publicados na correspondência):
+#   b_caroteno_total_ug -> CARTB   (INFDSTAG2 "NaN"; CARTBTOT é EuroFIR)
+#   sodio_mg            -> NA      (INFDSTAG2 "NaN"; código INFOODS óbvio)
+nutrient_code,tagname,factor,energy_method,value_type_missing,value_type_trace,value_type_below_loq,unit,is_default
+energia_kcal,ENERC_KCAL,1,-,not_measured,trace,below_loq,kcal,true
+energia_kj,ENERC_KJ,1,-,not_measured,trace,below_loq,kj,true
+lipidos_g,FAT,1,-,not_measured,trace,below_loq,g,true
+acidos_gordos_saturados_g,FASAT,1,-,not_measured,trace,below_loq,g,true
+acidos_gordos_monoinsaturados_g,FAMS,1,-,not_measured,trace,below_loq,g,true
+acidos_gordos_polinsaturados_g,FAPU,1,-,not_measured,trace,below_loq,g,true
+acido_linoleico_g,F18D2CN6,1,-,not_measured,trace,below_loq,g,true
+acidos_gordos_trans_g,FATRN,1000,-,not_measured,trace,below_loq,mg,true
+hidratos_de_carbono_g,CHOAVL,1,-,not_measured,trace,below_loq,g,true
+acucares_g,SUGAR,1,-,not_measured,trace,below_loq,g,true
+oligossacaridos_g,OLSAC,1,-,not_measured,trace,below_loq,g,true
+amido_g,STARCH,1,-,not_measured,trace,below_loq,g,true
+sal_g,NACL,1,-,not_measured,trace,below_loq,g,true
+fibra_g,FIBTG,1,-,not_measured,trace,below_loq,g,true
+proteinas_g,PROCNT,1,-,not_measured,trace,below_loq,g,true
+alcool_g,ALC,1,-,not_measured,trace,below_loq,g,true
+agua_g,WATER,1,-,not_measured,trace,below_loq,g,true
+acidos_organicos_g,OA,1,-,not_measured,trace,below_loq,g,true
+colesterol_mg,CHOLE,1,-,not_measured,trace,below_loq,mg,true
+vitamina_a_ug,VITA,1,-,not_measured,trace,below_loq,ug,true
+equivalentes_de_b_caroteno_ug,CARTBEQ,1,-,not_measured,trace,below_loq,ug,true
+a_caroteno_ug,CARTA,1,-,not_measured,trace,below_loq,ug,true
+b_caroteno_total_ug,CARTB,1,-,not_measured,trace,below_loq,ug,true
+b_criptoxantina_ug,CRYPXB,1,-,not_measured,trace,below_loq,ug,true
+licopeno_ug,LYCPN,1,-,not_measured,trace,below_loq,ug,true
+luteina_ug,LUTN,1,-,not_measured,trace,below_loq,ug,true
+zeaxantina_ug,ZEA,1,-,not_measured,trace,below_loq,ug,true
+vitamina_d_ug,VITD,1,-,not_measured,trace,below_loq,ug,true
+a_tocoferol_mg,TOCPHA,1,-,not_measured,trace,below_loq,mg,true
+tiamina_mg,THIA,1,-,not_measured,trace,below_loq,mg,true
+riboflavina_mg,RIBF,1,-,not_measured,trace,below_loq,mg,true
+niacina_mg,NIA,1,-,not_measured,trace,below_loq,mg,true
+equivalentes_de_niacina_mg,NIAEQ,1,-,not_measured,trace,below_loq,mg,true
+triptofano_60_mg,NIATRP,1,-,not_measured,trace,below_loq,mg,true
+vitamina_b6_mg,VITB6A,1,-,not_measured,trace,below_loq,mg,true
+vitamina_b12_ug,VITB12,1,-,not_measured,trace,below_loq,ug,true
+vitamina_c_mg,VITC,1,-,not_measured,trace,below_loq,mg,true
+folatos_ug,FOL,1,-,not_measured,trace,below_loq,ug,true
+cinza_g,ASH,1,-,not_measured,trace,below_loq,g,true
+sodio_mg,NA,1,-,not_measured,trace,below_loq,mg,true
+potassio_mg,K,1,-,not_measured,trace,below_loq,mg,true
+calcio_mg,CA,1,-,not_measured,trace,below_loq,mg,true
+fosforo_mg,P,1,-,not_measured,trace,below_loq,mg,true
+magnesio_mg,MG,1,-,not_measured,trace,below_loq,mg,true
+ferro_mg,FE,1,-,not_measured,trace,below_loq,mg,true
+zinco_mg,ZN,1,-,not_measured,trace,below_loq,mg,true
+selenio_ug,SE,1,-,not_measured,trace,below_loq,ug,true
+iodo_ug,ID,1,-,not_measured,trace,below_loq,ug,true

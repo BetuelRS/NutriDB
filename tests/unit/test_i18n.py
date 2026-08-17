@@ -38,7 +38,7 @@ def _canonical(base: Path) -> Path:
     cache.mkdir(parents=True, exist_ok=True)
     for official, synthetic in _FIXTURE_MAP.items():
         copyfile(FIXTURE / synthetic, cache / official)
-    extract(cache, base / "i")
+    extract(cache, base / "i" / "ciqual")
     transform(base / "i", base / "c", ROOT)
     return base / "c"
 
@@ -58,12 +58,13 @@ def test_normalize_label() -> None:
 def test_build_counts_and_statuses(tmp_path: Path) -> None:
     canonical = _canonical(tmp_path)
     report = build(canonical, ROOT)
-    assert report["labels"] == 3 + 3 + 157 + 11
+    vocab_en = 161  # frozen F1.1 vocabulary + F2 additive: VITA, CARTBEQ, OLSAC, NIATRP
+    assert report["labels"] == 3 + 3 + vocab_en + 11
     labels = _labels(tmp_path)
     statuses = {r["status"]: r["count"] for r in labels["status"].value_counts().rows(named=True)}
-    assert statuses == {"native": 6, "official": 157, "curated": 11}
+    assert statuses == {"native": 6, "official": vocab_en, "curated": 11}
     assert report["fr"] == 3  # foods only (CIQUAL native language)
-    assert report["en"] == 3 + 157
+    assert report["en"] == 3 + vocab_en
     assert report["pt-PT"] == 11
     assert report["pt-BR"] == 0
 

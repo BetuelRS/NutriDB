@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
+from typing import TYPE_CHECKING, NoReturn
 
 import rich.table
 import rich.text
@@ -16,6 +17,10 @@ from nutridb.logging import configure_logging
 from nutridb.paths import project_root
 from nutridb.sources.download import fetch_unpinned, sync_sources
 from nutridb.sources.registry import ArtifactProfile, load_registry
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
 
 log = structlog.get_logger()
 
@@ -117,7 +122,7 @@ def sources_audit() -> None:
 # ── pipeline ──────────────────────────────────────────────────────────────────
 
 
-def _not_implemented(phase: str, purpose: str) -> None:
+def _not_implemented(phase: str, purpose: str) -> NoReturn:
     """Fail high: skeleton commands are never silent no-ops."""
     typer.secho(f"not implemented yet (phase {phase}) — {purpose}", fg=typer.colors.YELLOW)
     raise typer.Exit(code=2)
@@ -127,21 +132,43 @@ def _not_implemented(phase: str, purpose: str) -> None:
 def extract(
     source: str | None = typer.Option(None, "--source", "-s", help="Only extract this source id."),
 ) -> None:
-    """Extract raw source dumps into canonical intermediates."""
-    if source is not None and source != "ciqual":
-        _not_implemented("F2+", f"extractor for source {source!r}")
+    """Extract raw source dumps into the shared intermediate contract (ADR-0005)."""
     from nutridb.paths import paths
-    from nutridb.sources.ciqual import extract as extract_ciqual
+    from nutridb.sources.registry import load_registry
 
     base = paths()
-    report = extract_ciqual(base["cache"] / "ciqual", base["build"] / "intermediates" / "ciqual")
-    table = rich.table.Table(title="CIQUAL 2025 extraction", title_justify="left")
-    table.add_column("item")
-    table.add_column("count", justify="right")
-    for name, count in report.items():
-        table.add_row(name, str(count))
-    rich.console.Console().print(table)
+    registry = load_registry()
+    ids = [source] if source is not None else sorted(registry.sources)
+    reports: dict[str, dict[str, int]] = {}
+    for source_id in ids:
+        extractor = _EXTRACTORS.get(source_id)
+        if extractor is None:
+            _not_implemented("F2+", f"extractor for source {source_id!r}")
+        reports[source_id] = extractor(
+            base["cache"] / source_id, base["build"] / "intermediates" / source_id
+        )
+        table = rich.table.Table(title=f"{source_id} extraction", title_justify="left")
+        table.add_column("item")
+        table.add_column("count", justify="right")
+        for name, count in reports[source_id].items():
+            table.add_row(name, str(count))
+        rich.console.Console().print(table)
     typer.echo("extract OK")
+
+
+_EXTRACTORS: dict[str, Callable[[Path, Path], dict[str, int]]] = {}
+
+
+def _register_extractors() -> None:
+    """Lazy per-source extractor registry (one import per extractor)."""
+    from nutridb.sources.ciqual import extract as extract_ciqual
+    from nutridb.sources.insa import extract as extract_insa
+
+    _EXTRACTORS["ciqual"] = extract_ciqual
+    _EXTRACTORS["insa"] = extract_insa
+
+
+_register_extractors()
 
 
 @app.command("transform")
@@ -151,8 +178,8 @@ def transform(
     ),
 ) -> None:
     """Transform typed intermediates into the canonical dataset (SPEC §8)."""
-    if source is not None and source != "ciqual":
-        _not_implemented("F2+", f"transform for source {source!r}")
+    if source is not None:
+        _not_implemented("F2", "per-source transform — the transform is source-agnostic")
     from nutridb.paths import paths
     from nutridb.transform import TransformError
     from nutridb.transform import transform as run_transform
@@ -160,14 +187,14 @@ def transform(
     base = paths()
     try:
         report = run_transform(
-            base["build"] / "intermediates" / "ciqual",
-            base["build"] / "canonical" / "ciqual",
+            base["build"] / "intermediates",
+            base["build"] / "canonical",
             base["root"],
         )
     except TransformError as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
-    table = rich.table.Table(title="CIQUAL 2025 canonical transform", title_justify="left")
+    table = rich.table.Table(title="Canonical transform (all sources)", title_justify="left")
     table.add_column("item")
     table.add_column("count", justify="right")
     for name, count in report.items():
@@ -219,7 +246,7 @@ def i18n_build() -> None:
     from nutridb.paths import paths
 
     base = paths()
-    canonical = base["build"] / "canonical" / "ciqual"
+    canonical = base["build"] / "canonical"
     try:
         report = run_build(canonical, base["root"])
     except I18nError as exc:
@@ -272,7 +299,7 @@ def package(
     base = paths()
     try:
         info = run_package(
-            base["build"] / "canonical" / "ciqual",
+            base["build"] / "canonical",
             base["vocab"],
             base["build"] / "artifacts",
             base["root"],
@@ -306,36 +333,45 @@ def build() -> None:
     from nutridb.package import PackageError
     from nutridb.package import package as run_package
     from nutridb.paths import paths
-    from nutridb.sources.ciqual import CiqualExtractError
-    from nutridb.sources.ciqual import extract as extract_ciqual
+    from nutridb.sources.registry import load_registry
     from nutridb.transform import TransformError
     from nutridb.transform import transform as run_transform
 
     base = paths()
+    registry = load_registry()
     try:
-        extract_report = extract_ciqual(
-            base["cache"] / "ciqual", base["build"] / "intermediates" / "ciqual"
-        )
+        extract_reports: dict[str, dict[str, int]] = {}
+        for source_id in sorted(registry.sources):
+            extractor = _EXTRACTORS.get(source_id)
+            if extractor is None:
+                continue  # registered sources without an extractor are not built
+            extract_reports[source_id] = extractor(
+                base["cache"] / source_id, base["build"] / "intermediates" / source_id
+            )
         transform_report = run_transform(
-            base["build"] / "intermediates" / "ciqual",
-            base["build"] / "canonical" / "ciqual",
+            base["build"] / "intermediates",
+            base["build"] / "canonical",
             base["root"],
         )
-        build_labels(base["build"] / "canonical" / "ciqual", base["root"])
+        build_labels(base["build"] / "canonical", base["root"])
         package_info = run_package(
-            base["build"] / "canonical" / "ciqual",
+            base["build"] / "canonical",
             base["vocab"],
             base["build"] / "artifacts",
             base["root"],
         )
-    except (CiqualExtractError, TransformError, I18nError, PackageError) as exc:
+    except (TransformError, I18nError, PackageError) as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    except Exception as exc:
+        typer.secho(f"{type(exc).__name__}: {exc}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
     table = rich.table.Table(title="nutridb build (P10)", title_justify="left")
     table.add_column("stage")
     table.add_column("result", justify="right")
-    for name, count in extract_report.items():
-        table.add_row(f"extract {name}", str(count))
+    for source_id, report in extract_reports.items():
+        for name, count in report.items():
+            table.add_row(f"extract {source_id} {name}", str(count))
     for name, count in transform_report.items():
         table.add_row(f"transform {name}", str(count))
     table.add_row("artifact", package_info["artifact"])

@@ -1,4 +1,4 @@
-"""Unit tests for the CIQUAL 2025 XML extractor (F1.2).
+"""Unit tests for the CIQUAL 2025 XML extractor (F2, ADR-0005 contract).
 
 Uses the synthetic fixture under tests/fixtures/synthetic_ciqual/ (rule
 §17.7: fictional data, marked as such, isolated).
@@ -32,6 +32,8 @@ _FIXTURE_MAP = {
     "sources_2025_11_03.xml": "sources_synthetic.xml",
 }
 
+_CONTRACT_FILES = ("food", "food_group", "constituent", "value")
+
 
 def _make_cache(base: Path) -> Path:
     """Synthetic fixtures copied under their official cache names (ADR-0003)."""
@@ -49,64 +51,71 @@ def _run(base: Path) -> dict[str, int]:
 def test_extract_counts_and_reports(tmp_path: Path) -> None:
     report = _run(tmp_path)
     assert report == {
-        "aliments": 3,
+        "foods": 3,
         "constituents": 5,
         "groups": 3,
         "sources": 2,
         "values": 9,
     }
-    for name in ("foods", "food_groups", "constituents", "sources", "values"):
+    for name in _CONTRACT_FILES:
         assert (tmp_path / "i" / f"{name}.parquet").is_file()
 
 
 def test_extract_values_typed(tmp_path: Path) -> None:
     _run(tmp_path)
-    values = pl.read_parquet(tmp_path / "i" / "values.parquet")
-    typed = values.sort(["alim_code", "const_code"]).with_columns(
-        [pl.col("teneur_raw").alias("raw")]
-    )
-    by_pair = {(r["alim_code"], r["const_code"]): r for r in typed.rows(named=True)}
-    assert by_pair[(1000, 327)]["raw"] == "1140"
-    assert by_pair[(1000, 327)]["teneur_kind"] == "number"
-    assert by_pair[(1000, 327)]["teneur_value"] == 1140.0
-    assert by_pair[(1000, 400)]["raw"] == "59,7"
-    assert by_pair[(1000, 400)]["teneur_value"] == 59.7
-    assert by_pair[(1000, 400)]["min_value"] == 58.7
-    assert by_pair[(1000, 400)]["max_value"] == 60.4
-    assert by_pair[(1000, 34100)]["teneur_kind"] == "trace"
-    assert by_pair[(1000, 34100)]["teneur_value"] is None
-    assert by_pair[(1001, 400)]["teneur_kind"] == "missing"
-    assert by_pair[(1001, 400)]["teneur_value"] is None
-    assert by_pair[(1001, 400)]["code_confiance"] is None
-    assert by_pair[(1001, 400)]["source_code"] is None
-    assert by_pair[(1001, 34100)]["teneur_kind"] == "number"
-    assert by_pair[(1001, 34100)]["teneur_value"] == 0.0
-    assert by_pair[(1002, 34100)]["teneur_kind"] == "below_loq"
-    assert by_pair[(1002, 34100)]["teneur_value"] == 1.5
-    assert by_pair[(1002, 400)]["teneur_value"] == 0.0009
-    assert by_pair[(1002, 400)]["min_value"] == 1e-6
-    assert by_pair[(1002, 400)]["max_value"] == 10.2
-    assert by_pair[(1000, 40302)]["teneur_raw"] == "0,5"
-    assert by_pair[(1000, 40302)]["teneur_value"] == 0.5
-    assert by_pair[(1000, 40302)]["min_value"] == 0.4
-    assert by_pair[(1000, 40302)]["max_value"] == 0.6
+    values = pl.read_parquet(tmp_path / "i" / "value.parquet")
+    by_pair = {(r["food_code"], r["nutrient_code"]): r for r in values.rows(named=True)}
+    assert by_pair[("1000", "327")]["value_kind"] == "number"
+    assert by_pair[("1000", "327")]["value"] == 1140.0
+    assert by_pair[("1000", "400")]["value"] == 59.7
+    assert by_pair[("1000", "400")]["min_value"] == 58.7
+    assert by_pair[("1000", "400")]["max_value"] == 60.4
+    assert by_pair[("1000", "34100")]["value_kind"] == "trace"
+    assert by_pair[("1000", "34100")]["value"] is None
+    assert by_pair[("1001", "400")]["value_kind"] == "missing"
+    assert by_pair[("1001", "400")]["value"] is None
+    assert by_pair[("1001", "400")]["confidence_code"] is None
+    assert by_pair[("1001", "34100")]["value_kind"] == "number"
+    assert by_pair[("1001", "34100")]["value"] == 0.0
+    assert by_pair[("1002", "34100")]["value_kind"] == "below_loq"
+    assert by_pair[("1002", "34100")]["threshold"] == 1.5
+    assert by_pair[("1002", "34100")]["value"] is None
+    assert by_pair[("1002", "400")]["value"] == 0.0009
+    assert by_pair[("1002", "400")]["min_value"] == 1e-6
+    assert by_pair[("1002", "400")]["max_value"] == 10.2
+    assert by_pair[("1000", "40302")]["value"] == 0.5
+    assert by_pair[("1000", "40302")]["min_value"] == 0.4
+    assert by_pair[("1000", "40302")]["max_value"] == 0.6
+    assert all(r["basis"] == "per_100g_edible" for r in values.rows(named=True))
 
 
 def test_extract_keeps_provenance_in_json(tmp_path: Path) -> None:
     _run(tmp_path)
-    values = pl.read_parquet(tmp_path / "i" / "values.parquet")
-    row = values.filter(pl.col("alim_code") == 1000, pl.col("const_code") == 400).row(0)
-    assert '"teneur":"59,7"' in row[-1]
-    assert '"code_confiance":"D"' in row[-1]
-    assert '"source_code":"444"' in row[-1]
+    values = pl.read_parquet(tmp_path / "i" / "value.parquet")
+    row = values.filter(pl.col("food_code") == "1000", pl.col("nutrient_code") == "400").row(0)
+    record = row[-1]
+    assert '"teneur":"59,7"' in record
+    assert '"code_confiance":"D"' in record
+    assert '"source_code":"444"' in record
 
 
-def test_extract_preserves_infooods_of_constituents(tmp_path: Path) -> None:
+def test_extract_preserves_constituent_name_and_unit(tmp_path: Path) -> None:
     _run(tmp_path)
-    const = pl.read_parquet(tmp_path / "i" / "constituents.parquet")
-    codes = {r["const_code"]: r for r in const.rows(named=True)}
-    assert codes[34100]["code_INFOODS"] == "FIB-"
-    assert codes[34100]["const_nom_fr"] == "Fibres alimentaires (g/100 g)"
+    const = pl.read_parquet(tmp_path / "i" / "constituent.parquet")
+    codes = {r["nutrient_code"]: r for r in const.rows(named=True)}
+    assert codes["34100"]["unit"] == "g"
+    assert codes["34100"]["name"] == "Fibres alimentaires (g/100 g)"
+
+
+def test_extract_food_records(tmp_path: Path) -> None:
+    _run(tmp_path)
+    foods = pl.read_parquet(tmp_path / "i" / "food.parquet")
+    assert foods.height == 3
+    row = foods.filter(pl.col("food_code") == "1000").row(0)
+    assert row[1] == "Pastis"
+    assert '"fr":"Pastis"' in row[2] and '"en":' in row[2]
+    assert '"1":"06"' in row[3] and '"3":"060303"' in row[3]
+    assert '"facteur_jones":6.25' in row[4]
 
 
 def test_extract_deterministic(tmp_path: Path) -> None:
@@ -114,7 +123,7 @@ def test_extract_deterministic(tmp_path: Path) -> None:
     second = tmp_path / "b"
     _run(first)
     _run(second)
-    for name in ("foods", "food_groups", "constituents", "sources", "values"):
+    for name in _CONTRACT_FILES:
         a = (first / "i" / f"{name}.parquet").read_bytes()
         b = (second / "i" / f"{name}.parquet").read_bytes()
         assert a == b, f"{name}.parquet is not byte-identical"
@@ -212,7 +221,7 @@ def test_unexpected_min_max_fails_high(tmp_path: Path) -> None:
 
 def test_aliments_parse_factor_and_names() -> None:
     foods = parse_aliments(FIXTURE / "alim_synthetic.xml")
-    assert foods[0][0] == 1000
+    assert foods[0][0] == "1000"
     assert foods[0][7] == 6.25
     assert foods[0][4] == "06"
     assert len(foods) == 3

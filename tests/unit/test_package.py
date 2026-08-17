@@ -1,9 +1,10 @@
-"""Unit tests for core packaging (F1.7, SPEC §8).
+"""Unit tests for core packaging (F2, SPEC §8, ADR-0005).
 
 Builds the SQLite artefact over the synthetic-fixture canonical dataset
 and asserts the §8 schema surface: central tables, external-content FTS5
-per active locale, the materialized read table, indexes, page size,
-VACUUM/ANALYZE effects and build_metadata isolation.
+per active locale, the materialized read table (one row per
+(concept, nutrient, locale)), indexes, page size, VACUUM/ANALYZE effects
+and build_metadata isolation.
 """
 
 from __future__ import annotations
@@ -38,7 +39,7 @@ def _prepare(base: Path) -> tuple[Path, Path]:
     cache.mkdir(parents=True, exist_ok=True)
     for official, synthetic in _FIXTURE_MAP.items():
         copyfile(FIXTURE / synthetic, cache / official)
-    extract(cache, base / "i")
+    extract(cache, base / "i" / "ciqual")
     canonical = base / "c"
     transform(base / "i", canonical, ROOT)
     build_labels(canonical, ROOT)
@@ -65,7 +66,7 @@ def test_package_builds_artifact(tmp_path: Path) -> None:
     try:
         assert conn.execute("PRAGMA page_size").fetchone()[0] == 8192
         assert conn.execute("PRAGMA journal_mode").fetchone()[0] != "wal"
-        assert conn.execute("PRAGMA user_version").fetchone()[0] == 1
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 2
     finally:
         conn.close()
 
@@ -108,6 +109,8 @@ def test_schema_has_all_central_tables(tmp_path: Path) -> None:
             ).fetchall()
         }
         assert {"label_fts_fr", "label_fts_en", "label_fts_pt_PT"} <= virtual
+        ddl = conn.execute("SELECT sql FROM sqlite_master WHERE name = 'value'").fetchone()[0]
+        assert "source_nutrient_code TEXT" in ddl
     finally:
         conn.close()
 
@@ -120,10 +123,12 @@ def test_rows_loaded_and_provenance_walkable(tmp_path: Path) -> None:
         assert conn.execute("SELECT count(*) FROM concept").fetchone()[0] == 3
         assert conn.execute("SELECT count(*) FROM value").fetchone()[0] == 8
 
-        row = conn.execute("SELECT * FROM mv_food_value WHERE nutrient_id = 'FASAT'").fetchone()
+        row = conn.execute(
+            "SELECT * FROM mv_food_value WHERE nutrient_id = 'FASAT' AND locale = 'fr'"
+        ).fetchone()
         assert row["value"] == 0.5  # AG stay in g (INFOODS unit, mapping factor 1)
         assert row["unit"] == "g"
-        assert row["label_fr"] == "Pastis"
+        assert row["label"] == "Pastis"
         assert row["confidence_code"] == "A"
 
         provenance = conn.execute(
@@ -160,8 +165,8 @@ def test_coverage_isolation_of_not_measured(tmp_path: Path) -> None:
         conn.close()
 
 
-def test_mv_food_value_unique_per_food_nutrient(tmp_path: Path) -> None:
-    """Read table: exactly one row per (concept, nutrient) (is_default mapping).
+def test_mv_food_value_unique_per_food_nutrient_locale(tmp_path: Path) -> None:
+    """Read table: exactly one row per (concept, nutrient, locale) (D7).
 
     The canonical `value` table keeps every method (P1); mv_food_value
     presents the default one: 327/328 (Reg. UE 1169/2011) over 332/333
@@ -172,22 +177,26 @@ def test_mv_food_value_unique_per_food_nutrient(tmp_path: Path) -> None:
     conn = _open(tmp_path / "out" / info["artifact"])
     try:
         dup = conn.execute(
-            "SELECT concept_id, nutrient_id, count(*) FROM mv_food_value "
-            "GROUP BY concept_id, nutrient_id HAVING count(*) > 1"
+            "SELECT concept_id, nutrient_id, locale, count(*) FROM mv_food_value "
+            "GROUP BY concept_id, nutrient_id, locale HAVING count(*) > 1"
         ).fetchall()
-        assert dup == [], f"duplicate (concept, nutrient) in mv_food_value: {dup}"
+        assert dup == [], f"duplicate (concept, nutrient, locale) in mv_food_value: {dup}"
 
         codes = {
             row["source_nutrient_code"]
             for row in conn.execute("SELECT DISTINCT source_nutrient_code FROM value")
         }
-        assert {327, 333} <= codes, "canonical value keeps every energy method (P1)"
+        assert {"327", "333"} <= codes, "canonical value keeps every energy method (P1)"
         mv_energy = {
             row["nutrient_id"]
             for row in conn.execute("SELECT DISTINCT nutrient_id FROM mv_food_value")
         }
         assert "ENERC_KCAL" not in mv_energy, "Jones kcal (333) is not the default read value"
         assert "ENERC_KJ" in mv_energy
+        locales = {
+            row["locale"] for row in conn.execute("SELECT DISTINCT locale FROM mv_food_value")
+        }
+        assert locales == {"fr", "en"}
     finally:
         conn.close()
 
@@ -212,7 +221,7 @@ def test_build_metadata_isolated(tmp_path: Path) -> None:
     for iso in (meta_a["built_at"], meta_b["built_at"]):
         assert iso.endswith("+00:00")
         datetime.fromisoformat(iso)
-    assert meta_a["schema_version"] == meta_b["schema_version"] == "1"
+    assert meta_a["schema_version"] == meta_b["schema_version"] == "2"
     assert meta_a["profile"] == "core"
 
 

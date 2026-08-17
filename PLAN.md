@@ -1,7 +1,7 @@
 # PLAN.md — plano vivo do NUTRIDB
 
 > Plano atualizado a cada sessão. Nunca dependas do contexto sobreviver (regra §17.1).
-> Estado atual: **Fase 0 concluída (2026-08-15)** — CLI, registry, audit/sync, CI e ADR aprovados; 19 testes verdes. **Próximo: Fase 1** (vocabulário + CIQUAL ponta a ponta), aguardando ADR-0003 (URL/hash do ficheiro).
+> Estado atual: **Fase 1 concluída (2026-08-16)** — CIQUAL ponta a ponta, golden 61/61, explorer mínimo, merge com CI verde. **Próximo: Fase 2** (multi-fonte: INSA/TCA integrado no esquema comum), em curso no branch `f2/multi-fonte`.
 
 ## Convenções
 
@@ -73,7 +73,39 @@
 
 ---
 
-## Próximas fases (referência — só desdobradas quando F1 fechar)
+## Fase 2 — Multi-fonte: INSA/TCA no esquema comum (branch `f2/multi-fonte`)
+
+**Objetivo**: segunda fonte (INSA/TCA 7.1) integrada no esquema comum de intermediários (ADR-0005) com CIQUAL; pipeline multi-fonte ponta a ponta (extract→transform→i18n→package); golden INSA; explorer atualizado; fecho da fase.
+
+**Decisões registadas**: ADR-0004 (licença `insa-tca-7.1` custom — atribuição obrigatória, uso comercial ok; evidência e-mail oficial 2026-07-28; formato XLSX, célula nativa = valor verbatim; NaN = não medido, 0 = zero real, sem traces/limites; energia sem método publicado → NULL; `per_100ml` nas bebidas alcoólicas) e ADR-0005 (esquema comum: 4 tabelas por fonte em `build/intermediates/<source_id>/`; canónico único `build/canonical/`; `value.source_nutrient_code` TEXT; conceitos sem fusão até F3; `mv_food_value` por locale; schema/user_version 2; FTS `label_fts_<locale>`; sem dependências novas — XLSX via zipfile+xml.etree) — aprovados 2026-08-16, por commitar.
+
+**Critérios de aceitação da spec (§16 F2)**:
+1. Dois extractors produzem o mesmo contrato — ✅ (testes de contrato por fonte)
+2. Build orquestrado com as duas fontes — ✅ P10 real (extract 257 816 + 66 048 células → artefacto 229,6 MB, integrity ok)
+3. Golden INSA — ✅ `tests/golden/insa_10.csv` (35 células, 10 alimentos) 35/35
+4. Sem ramos por fonte no transform — ✅ (factos por fonte em mappings/registry)
+
+| # | Tarefa | DoD | Verificação |
+|---|---|---|---|
+| F2.0 | **ADR-0004 — licença/formato INSA** ✅ 2026-08-16: licença `insa-tca-7.1` verificada no site oficial (custom não-SPDX, atribuição obrigatória, comercial ok) + e-mail oficial INSA 2026-07-28 como evidência; formato XLSX inspecionado (folha de dados + folha "Componentes-Correspondência"); registry com `license_id: insa-tca-7.1` | ADR aprovado; registry coincide | `nutridb sources audit` |
+| F2.1 | **ADR-0005 — esquema comum de intermediários** ✅ 2026-08-16: contrato de 4 tabelas por fonte (`food`, `food_group`, `constituent`, `value` com colunas na ordem fixada) + canónico único + ID `source_nutrient_code` TEXT + conceitos (source, food) sem fusão até F3 + `mv_food_value` 1 linha por (concept, nutrient, locale) com label/locale + schema 2 + FTS por locale | ADR aprovado | leitura dos ADRs |
+| F2.2 | **Registry + sync INSA** ✅ 2026-08-16: entrada `[sources.insa]` (URL oficial, SHA-256 fixado, 1 ficheiro `insa_tca.xlsx`); `sources sync` descarrega e verifica | Hash verificado | `uv run nutridb sources sync` |
+| F2.3 | **Extractor INSA** ✅ 2026-08-16 (`src/nutridb/sources/insa.py`): XLSX com stdlib (zipfile+xml.etree: rels, sharedStrings, células nativas); validação dos 48 headers contra a folha "Componentes-Correspondência" (fail high); chaves `<nome>_<unidade>` (µ→ug, α/β→a/b, NFKD); alias de ortografia da fonte (`alfa_tocoferol_mg`→`a_tocoferol_mg`); células vazias = não medido (P3); basis `per_100ml` só em "Bebidas alcoólicas" (36 alimentos); energia sem método → NULL (P2); record JSON com valor nativo verbatim; report real: foods 1376 / constituents 48 / values 66048; determinístico | Contrato cumprido; report real coerente | `uv run nutridb extract`; `uv run pytest tests/unit/test_extract_insa.py` (8 testes) |
+| F2.4 | **Vocabulário aditivo** ✅ 2026-08-16: +4 tagnames (OLSAC, VITA, CARTBEQ, NIATRP) → 161; freeze F1.1 mantido (expansão aditiva) | `vocab check` 0 erros | `uv run nutridb vocab check` |
+| F2.5 | **Mapeamentos INSA** ✅ 2026-08-16: `mappings/nutrients/insa.csv` (48 linhas; FATRN fator 1000 g→mg; `b_caroteno_total_ug`→CARTB e `sodio_mg`→NA sem código INFOODS publicado, documentado; energy_method `-`); `mappings/foodgroups/insa.csv` (22 L1 + overrides L2/L3: Especiarias→condiments, casca rija→nuts_seeds, Amidos→cereals, Crustáceos/Moluscos→seafood, Algas→other, Carne de aves→poultry; dois L1 legumes→legumes) | 48/48 nutrientes + todos os alimentos resolvem | `pytest tests/unit/test_mappings.py` (golden gate) |
+| F2.6 | **Transform multi-fonte** ✅ 2026-08-16: sem ramos por fonte (factos em mappings/registry); canónico único `build/canonical/`; report real: foods 4860, concepts 4860, source_records 328724, coverage 122, values 230601 (measured 208012 / trace 2514 / below_loq 20075), not_measured 93263, conversions 1376 (trans INSA ×1000), sources 2; dir de intermediários ausente → TransformError (P9) | Counts coerentes; determinístico | `pytest tests/unit/test_transform.py` |
+| F2.7 | **i18n/package multi-fonte** ✅ 2026-08-16: labels nativas por fonte (INSA=pt, CIQUAL=fr/en; pt-PT só vocabulário curado); `mv_food_value` por locale com label/locale; FTS `label_fts_{en,fr,pt,pt_PT}`; schema_version/user_version 2; DDL `value.source_nutrient_code` TEXT | mv 384 897 linhas reais; locales mv {en,fr,pt} | `pytest tests/unit/test_i18n.py tests/unit/test_package.py` |
+| F2.8 | **Golden INSA** ✅ 2026-08-16: `tests/golden/insa_10.csv` (35 células, 10 alimentos — incl. vinho `per_100ml`, trans g→mg, energia sem método) com células nativas verbatim + coordenadas linha/coluna; 4 testes golden (forma/evidência, valores no mv com fator do mapping, alimentos existem, proveniência no SQLite) | 35/35 batem o artefacto real | `uv run pytest tests/golden/` |
+| F2.9 | **Explorer multi-fonte** ✅ 2026-08-16: `foodValues(conceptId, locale)` com label/locale e cadeia de fallback no mv (fr→en→pt; pt-PT→pt→en); vista de detalhe mostra rótulo no idioma resolvido; footer com as duas fontes; `npm run build` verde | build verde | `npm run build` (explorer) |
+| F2.10 | **Fechar a fase**: `uv run nutridb build` com as duas fontes (P10, reconstrução completa); golden 96/96 (61 CIQUAL + 35 INSA); suite completa verde; lint/mypy; PLAN/PROGRESS; CI com `f2/**`; commit/push; merge | P10 real; CI verde | `uv run nutridb build`; `uv run pytest`; `uv run ruff check .`; `uv run mypy .` |
+
+**Entregáveis da fase**: ADR-0004/0005; extractor INSA; +4 tagnames; mappings INSA; transform/i18n/package multi-fonte; golden INSA; explorer multi-fonte; artefacto `nutridb-core-0.1.0.sqlite` ~229,6 MB com 2 fontes.
+
+**Riscos/bloqueios**: licença custom não-SPDX (P6 resolvido no ADR-0004); INSA sem método de energia (P2 documentado, NULL); `_unmapped/` continua gate.
+
+---
+
+## Próximas fases (referência — só desdobradas quando F2 fechar)
 
 - **F2** Multi-fonte: USDA (4 sub-conjuntos), INSA (autorização!), CoFID, Frida, Fineli + 3 à escolha; 1 ADR de licença por fonte. **Ponto de paragem obrigatório: contacto humano para INSA (§17.6).**
 - **F3** Identidade: blocking, sinais, adjudicação, dourado de 500 pares (precisão ≥ 0,98 / recall ≥ 0,90).
