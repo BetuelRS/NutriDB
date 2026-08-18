@@ -15,15 +15,20 @@ writes ONE canonical dataset under ``build/canonical/``:
                     composition cells (kind "value", raw cell JSON verbatim).
     concept         canonical entities, one per (source, food), eternal
                     ULID (P4). F2 loads every source's foods as distinct
-                    concepts; adjudication/merging is F3.
-    concept_link    concept <-> source_record, status "automatic".
+                    concepts; F3 merges identity links from
+                    ``mappings/links.csv`` (see ``_apply_identity_links``).
+    concept_link    concept <-> source_record, status "automatic" (source
+                    membership) or "automatic"/"adjudicated" (F3 cross
+                    links). "review" rows wait for human adjudication.
     value           typed cells: measured / trace / below_loq with the
                     threshold preserved; per-nutrient unit conversion by
                     mapping factor; energy with the registered method;
                     full provenance (source, source_record, source_nutrient_code).
     derivation      empty schema: calculated values require registered
                     formulas and inputs (P2); nothing is derived yet.
-    tombstone       empty schema: no merges exist yet (P4).
+    tombstone       merged concepts with their successor (P4): every F3
+                    identity link tombstones the absorbed concept and
+                    reassigns its values to the survivor.
 
 Absence (P3, D5): the source's missing cells are explicit "not measured";
 they are NOT materialized as rows (that would rebuild the Cartesian product
@@ -36,6 +41,7 @@ live in the mapping CSVs and in the registry, never in code.
 
 from __future__ import annotations
 
+import csv
 import json
 from typing import TYPE_CHECKING, Any
 
@@ -112,6 +118,7 @@ def transform(intermediates_dir: Path, out_dir: Path, root: Path) -> dict[str, i
     concept_rows: list[tuple[str, str, str]] = []
     link_rows: list[tuple[str, str, str]] = []
     value_rows: list[tuple[object, ...]] = []
+    tombstone_rows: list[tuple[str, str, str]] = []
     totals: dict[str, int] = {
         "foods": 0,
         "concepts": 0,
@@ -123,6 +130,7 @@ def transform(intermediates_dir: Path, out_dir: Path, root: Path) -> dict[str, i
         "below_loq": 0,
         "not_measured": 0,
         "conversions_x10": 0,
+        "identity_links": 0,
     }
 
     for source_id in source_ids:
@@ -140,6 +148,22 @@ def transform(intermediates_dir: Path, out_dir: Path, root: Path) -> dict[str, i
             value_rows,
             totals,
         )
+
+    # -- identity links: consume the P8 adjudication record (F3) --------------
+    food_codes: dict[str, set[str]] = {}
+    for source_id in source_ids:
+        foods = pl.read_parquet(intermediates_dir / source_id / "food.parquet")
+        food_codes[source_id] = set(foods["food_code"].to_list())
+    links_csv = root / "mappings" / "links.csv"
+    if links_csv.is_file():
+        applied = _apply_identity_links(
+            links_csv,
+            food_codes,
+            link_rows,
+            tombstone_rows,
+            value_rows,
+        )
+        totals["identity_links"] = applied
 
     _write(
         out_dir / "source.parquet",
@@ -205,7 +229,7 @@ def transform(intermediates_dir: Path, out_dir: Path, root: Path) -> dict[str, i
         sorted(value_rows, key=lambda row: (str(row[0]), str(row[1]), str(row[7]))),
     )
 
-    # -- derivation / tombstone: empty typed schemas (P2, P4) -----------------
+    # -- derivation / tombstone: typed schemas (P2, P4) ----------------------
     _write(
         out_dir / "derivation.parquet",
         {"derivation_id": pl.Utf8, "formula": pl.Utf8, "inputs": pl.Utf8, "factors": pl.Utf8},
@@ -214,7 +238,7 @@ def transform(intermediates_dir: Path, out_dir: Path, root: Path) -> dict[str, i
     _write(
         out_dir / "tombstone.parquet",
         {"tombstone_id": pl.Utf8, "successor_id": pl.Utf8, "reason": pl.Utf8},
-        [],
+        sorted(tombstone_rows, key=lambda row: str(row[0])),
     )
 
     totals["sources"] = len(source_ids)
@@ -371,6 +395,74 @@ def _load_source(
     totals["values"] += present
     totals["not_measured"] += total_pairs - present
     totals["conversions_x10"] += conversions
+
+
+def _apply_identity_links(
+    links_csv: Path,
+    food_codes: dict[str, set[str]],
+    link_rows: list[tuple[str, str, str]],
+    tombstone_rows: list[tuple[str, str, str]],
+    value_rows: list[tuple[object, ...]],
+) -> int:
+    """Apply the F3 identity links from ``mappings/links.csv`` (P8 gate).
+
+    Columns: ``concept_id, source, source_code, status`` (the survivor
+    concept per pair, ADR-0006). Rows with status ``automatic`` or
+    ``adjudicated`` merge the other side's concept into the survivor:
+    the absorbed concept is tombstoned (P4), its values are reassigned
+    to the survivor and a cross ``concept_link`` records the merge.
+    ``review`` rows are the human queue and are ignored here.
+    Unknown sources, unknown codes or duplicated absorbed concepts
+    fail high (P9): the adjudication record is the authority.
+    """
+    consumed = {"automatic", "adjudicated"}
+    absorbed_to: dict[str, tuple[str, str, str, str]] = {}
+    with links_csv.open(encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            if row["status"] is None or row["status"].lstrip().startswith("#"):
+                continue  # header comments (the F1-era empty gate record)
+            status = row["status"].strip()
+            source = row["source"].strip()
+            source_code = row["source_code"].strip()
+            concept_id = row["concept_id"].strip()
+            if status not in consumed | {"review"}:
+                raise TransformError(
+                    f"links.csv: unknown status {status!r} (expected automatic|adjudicated|review)"
+                )
+            if status == "review":
+                continue
+            if source not in food_codes:
+                raise TransformError(f"links.csv: unknown source {source!r}")
+            if source_code not in food_codes[source]:
+                raise TransformError(
+                    f"links.csv: {source} food {source_code!r} has no intermediates"
+                )
+            absorbed = canonical_id("concept", source, "food", source_code)
+            if absorbed == concept_id:
+                continue  # the survivor's own source membership row
+            if absorbed in absorbed_to:
+                raise TransformError(
+                    f"links.csv: {source} {source_code!r} linked to more than one survivor"
+                )
+            absorbed_to[absorbed] = (concept_id, source, source_code, status)
+
+    for i, value_row in enumerate(value_rows):
+        candidate = value_row[0]
+        if isinstance(candidate, str):
+            merge = absorbed_to.get(candidate)
+            if merge is None:
+                continue
+            value_rows[i] = (merge[0], *value_row[1:])
+    for absorbed, (survivor, source, source_code, status) in absorbed_to.items():
+        tombstone_rows.append((absorbed, survivor, "identity_link_f3"))
+        link_rows.append(
+            (
+                survivor,
+                canonical_id("source_record", source, "food", source_code),
+                status,
+            )
+        )
+    return len(absorbed_to)
 
 
 def _write(path: Path, schema: dict[str, Any], rows: Sequence[tuple[object, ...]]) -> None:

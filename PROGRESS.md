@@ -48,3 +48,34 @@
 - **2026-08-16 (continuação 10)**: arranque F2. F2.0 — licença INSA verificada na fonte oficial (e-mail 2026-07-28 como evidência) → ADR-0004; formato XLSX inspecionado (folha de dados com group/column header e células nativas; folha "Componentes-Correspondência") → ADR-0005 (contrato de 4 tabelas por fonte, canónico único, `mv_food_value` por locale, schema 2). F2.1 — ADR-0005 aprovado. F2.2 — registry + sync INSA (SHA-256 verificado). F2.3 — extractor INSA com stdlib: `_shared_strings`/`_sheet_rows` (dict `{col_index: text}`), `_find_header_row`, 48 colunas de valores, correspondência com legendas numeradas/`NaN` ignoradas, `_KEY_ALIASES` (`alfa_tocoferol_mg`→`a_tocoferol_mg`), basis por grupo L1, record JSON verbatim; **correções descobertas nos dados reais**: cabeçalho "Cod | Nome do alimento" na row 2; alinhamento de colunas por índice (5..52) não por letra; unidades só na correspondência; células vazias `None`. F2.4 — +4 tagnames. F2.5 — mappings INSA (48 nutrientes; FATRN ×1000; energy_method `-`; 22 L1 + overrides). F2.6 — transform sem ramos por fonte; report real 4860/328724/230601 (conversions 1376). F2.7 — i18n/package: mv 384 897, FTS 4 locales, schema 2.
 - **2026-08-16 (continuação 11)**: golden INSA + explorer + limpeza. Gerado `tests/golden/insa_10.csv` programaticamente do XLSX real (`%TEMP%\opencode\insa_golden_gen.py`): 10 alimentos, 35 células com coordenadas reais; **bugs do gerador corrigidos**: `_shared_strings` precisa do archive, rows como dicts `{col: text}`, header em rows[1], col = 5 + keys.index(key); células nativas sem aspas no expected; trans INSA em g com fator do mapping (×1000 → mg); energia INSA method NULL (P2). 4 testes golden INSA (incl. proveniência com `analytical_method` na tabela `value`). Explorer: `search.ts` com `label/locale` + `VALUE_LOCALE_FALLBACK`, `App.tsx` com prop locale e footer 2 fontes; `npm run build` verde. Fix 4 testes unit: foodgroups `("1","00")` excluído; `raw` do ciqual com `alim_nom_fr`/`alim_nom_eng`; TransformError sem intermediários; vocab_en 161. Ruff/mypy limpos (19 erros fixos). Build completo re-verificado (counts idênticos, artefacto 229 572 608 B); golden/integration/property verdes. CI: branches `f2/**`. **106 testes verdes**.
 - **2026-08-17**: fecho do `test_extract_insa.py`. Escrito o ficheiro com workbook sintético gerado no teste (stdlib zipfile+xml.etree; 48 headers reais verbatim; correspondência com legendas/NaN/alias "Alfa-tocoferol"); **bugs da fixture corrigidos**: `sheet_xml` emitia um `<row>` por célula (→ 1 `<row>` por linha); linhas de dados sem colunas 0–4 (código/nome/níveis); legendas numeradas "1. " vs regra real `^\d+\s` ("1 Energia [kcal]" + linhas reais); `_read` sem `.parquet`; testes 2–4 sem chamar `extract`; null_count com `.item()`; esperado 83 calculado do FOODS (13 células preenchidas). Ruff/mypy no ficheiro (TYPE_CHECKING, `list[str | None]`, `\u03b1`). **114 testes verdes** (49 unit + 8 INSA + 8 golden + integração/property); format/lint/mypy limpos (33 ficheiros); PLAN.md F2.3 atualizado; PROGRESS.md atualizado. **Fecho da fase (F2.10)**: 12 commits atómicos (`docs(f2)` ADRs, `feat(f2)` registry/extractor/mappings/transform/i18n/golden/explorer, `ci(f2)`, `docs(f2)` PLAN/PROGRESS); push `f2/multi-fonte`; merge `--no-ff` em `f0/fundacoes` + push (e4fb3a9); PROGRESS/PLAN marcados concluídos.
+## Estado atual (2026-08-18)
+
+**Fase 0**: concluida (`f0/fundacoes`). **Fase 1**: concluida (`f1/ciqual-ponta-a-ponta`). **Fase 2**: concluida (`f2/multi-fonte`; merge e4fb3a9).
+
+**Fase 3 - Identidade: concluida** (branch `f3/identidade`; F3.0-F3.8).
+
+| Tarefa | Estado | Nota |
+|---|---|---|
+| F3.0 Matcher (blocking + sinais + veto + adjudicacao) | done | 111 267 candidatos; AUTO_THRESHOLD 0.84 (subiu de 0.72 apos 42 FALSE nos autos), REVIEW 0.50; tie-break 1:1 (-score, -sim, insa, ciqual); veto de nutrientes (>= 2 divergentes de 6 nucleares); conflito distintivo/numerico demove para review; single-term sim >= 0.65; `evaluate()` com precision/recall/food_recall (recall conta TRUEs do golden em review = adjudicados) |
+| F3.1 Dicionario | done | `food_terms.csv` 466+ linhas + 27 queijos (brie..bleu); correcao: celulas pt so com o token (frases "queijo X" colapsavam as keys e impediam partilha de termo) |
+| F3.2 Golden 633 pares | done | 281 true / 352 false; 42 FALSE nos 238 autos a 0.72; 1 FP final aceite (60100015->T130, 411 reclama 9532 primeiro); 15 FN de par = colaterais 1:1 (irmaos TRUE); 4 missed-TRUE (Brie, Purée, chevre, Mascarpone); 2 familia-not-identity (1234 pastagem, 1900000018 cenoura baby); 817 carapau->Chinchard maigre e 820 cavala->Maquereau espagnol adicionados como TRUE |
+| F3.3 CLI link | done | Escreve links.csv (123 finais x 2 + 6237 review x 2 = 12 720 linhas); metricas golden 0.9919/0.9037/0.9956; exit 1 se gates falharem |
+| F3.4 Transform consome links.csv | done | 123 tombstones identity_link_f3; concept_link 4983 (cross com status da decisao); valores do absorvido reassignados ao survivor; review ignorado; fail high em codigo desconhecido/duplicado; comentarios `#` do gate F1 tolerados |
+| F3.5 i18n fundido | done | by_concept agrega todos os registos do conceito (primeiro nome nao-vazio por locale, deterministico); status automatic+adjudicated; labels reais 8700 |
+| F3.6 mv dedup | done | sort (concept, nutrient, locale, source_id, source_record_id) + unique keep=first; 390 323 linhas reais, 0 duplicados |
+| F3.7 Testes | done | +9 testes (evaluate, _status, write_links_csv roundtrip, _apply_identity_links merge/tombstone/fail-high); sandbox root (mappings/sources/vocab/i18n sem links.csv) em toda a suite - testes ja nao tocam o registo de adjudicacao real; 119 testes verdes |
+| F3.8 Fecho | done | CI `f3/**`; PLAN/PROGRESS; commits atomicos `(f3)`; push; merge `--no-ff` em `f0/fundacoes` |
+
+**Entregaveis da fase**: matching.py; food_terms.csv; golden 633; links.csv 12 720 linhas; CLI link; transform/i18n/package F3; testes sandbox; CI.
+
+## Decisoes em aberto
+
+- Nenhuma.
+
+## Bloqueios / pendencia
+
+- Nenhum. F3 fechada (push + merge a confirmar no CI).
+
+## Historico de sessoes
+
+- **2026-08-18**: F3 completa. Matcher afinado (0.84), golden 633 gerado e revisto (42 FALSE, 15 FN colaterais 1:1, food_recall 0.9956), `nutridb link` + transform/i18n/package integrados, sandbox root nos testes (correcao de mojibake via `git checkout` + reaplicacao com edit tool), suite 119 testes verdes, lint/mypy limpos, pipeline real verificado ponta a ponta (123 tombstones, 390 323 mv rows, 0 duplicados).

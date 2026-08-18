@@ -116,3 +116,28 @@
 ## Decisões em aberto (pendentes de aprovação)
 
 Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Apache-2.0, pt-PT/EN, CIQUAL 2025 em `core`, XLS+fallback XML, página mínima de pesquisa em F1, cobertura+flags, método de energia, INFOODS + i18n mínimo, dourados/Fixtures, esquema fino, semver 0.1.0, links 1:1, `_unmapped`/READMEs, registry oficial+Zenodo, divergences só F4. Sem decisões em aberto para arrancar F0.
+---
+
+## Fase 3 - Identidade (branch `f3/identidade`)
+
+**Objetivo**: resolucao de entidades INSA x CIQUAL: blocking, sinais, adjudicacao, golden de 633 pares rotulados (SPEC §16 F3: precisao >= 0.98, recall >= 0.90); `nutridb link` + consumo de `mappings/links.csv` no transform (tombstones P4, concept_link cross, valores reassignados).
+
+**Criterios de aceitacao da spec (§16 F3)**:
+1. Golden >= 500 pares rotulados -> 633 (281 true / 352 false)
+2. Precisao >= 0.98 e recall >= 0.90 -> 0.9919 / 0.9037 (food_recall 0.9956) no golden real
+3. Decisoes em `mappings/links.csv` consumidas pelo transform (gate P8)
+4. `nutridb link` reporta as metricas e falha alto (exit 1) se os gates nao passarem
+
+| # | Tarefa | DoD | Verificacao |
+|---|---|---|---|
+| F3.0 | Matcher: blocking (termo partilhado + raw df <= 25), sinais (0.55/0.25/0.20), veto de nutrientes, conflitos distintivo/numerico, single-term, 1:1 deterministico, `evaluate()` com precision/recall/food_recall | 111 267 candidatos; AUTO 0.84 / REVIEW 0.50; 123 finais 1:1 | `pytest tests/unit/test_identity.py` |
+| F3.1 | Dicionario `mappings/identity/food_terms.csv`: 466+ linhas + 27 queijos (celulas pt so com o token da variedade) | Termos partilhados bilingues | leitura do CSV |
+| F3.2 | Golden `tests/golden/identity_pairs.csv`: 633 pares (281 true / 352 false) - julgamento puro (pares + rotulos), revisao manual dos 238 autos a 0.72 (42 FALSE), 181 vencedores 1:1 e amostra de review; 4 missed-TRUE verificados; 2 pares familia-not-identity | >= 500 pares; labels revistos | `uv run nutridb link` |
+| F3.3 | `nutridb link`: escreve `mappings/links.csv` (123 finais automatic + 6237 review = 12 720 linhas) e reporta as metricas do golden; exit 1 se precision < 0.98 ou recall < 0.90 | Report real coerente | `uv run nutridb link` |
+| F3.4 | Transform consome `mappings/links.csv` (status automatic/adjudicated; review ignorado): tombstone do conceito absorvido (P4), reassign de valores ao survivor, concept_link cross; codigo desconhecido/duplicado = fail high | Real: 123 tombstones, concept_link 4983, integridade ok | `uv run nutridb transform` |
+| F3.5 | i18n: conceitos fundidos agregam nomes de todos os registos (deterministico, primeiro nao-vazio); status automatic + adjudicated | Real: labels 8700 | `uv run nutridb i18n build` |
+| F3.6 | `mv_food_value` dedup deterministico por (concept, nutrient, locale) com tie-break por fonte | Real: 390 323 linhas, 0 duplicados | SQL no artefacto |
+| F3.7 | Testes: evaluate/_status/write_links_csv unitarios (sinteticos), `_apply_identity_links` (merge/tombstone/fail-high), sandbox root sem links.csv em toda a suite | 119+ testes verdes; lint/mypy limpos | `uv run pytest`; `uv run ruff check .`; `uv run mypy .` |
+| F3.8 | Fecho: CI `f3/**`, PLAN/PROGRESS, commits atomicos `(f3)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | P10 real (build completo com links) | `gh run watch` |
+
+**Entregaveis da fase**: `src/nutridb/identity/matching.py`; `mappings/identity/food_terms.csv`; golden 633; `mappings/links.csv` (12 720 linhas); CLI `link`; transform/i18n/package F3; testes; CI `f3/**`.

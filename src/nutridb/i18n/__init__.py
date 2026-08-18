@@ -74,17 +74,18 @@ def build(canonical_dir: Path, root: Path) -> dict[str, int]:
     records = pl.read_parquet(canonical_dir / "source_record.parquet")
     food_records = records.filter(pl.col("kind") == "food")
     by_record = {r["source_record_id"]: r for r in food_records.rows(named=True)}
-    by_concept = {
-        r["concept_id"]: r["source_record_id"]
-        for r in links.filter(pl.col("status") == "automatic").rows(named=True)
-    }
+    by_concept: dict[str, list[str]] = {}
+    for r in links.filter(pl.col("status").is_in(["automatic", "adjudicated"])).rows(named=True):
+        by_concept.setdefault(r["concept_id"], []).append(r["source_record_id"])
 
     labels: list[tuple[str, ...]] = []
     for concept_id in sorted(by_concept):
-        raw = json.loads(by_record[by_concept[concept_id]]["record"])
-        for locale, text in sorted(raw["names"].items()):
-            if not text:
-                continue  # source provides no name in this language; fallback
+        names: dict[str, str] = {}
+        for record_id in sorted(by_concept[concept_id]):
+            for locale, text in json.loads(by_record[record_id]["record"])["names"].items():
+                if text and locale not in names:
+                    names[locale] = text  # first non-empty wins, deterministic
+        for locale, text in sorted(names.items()):
             _require_text(text, f"food {concept_id} {locale}")
             labels.append(_row("food", concept_id, locale, "native", text))
 

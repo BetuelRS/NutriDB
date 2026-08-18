@@ -23,7 +23,6 @@ from nutridb.sources.ciqual import extract
 from nutridb.transform import transform
 
 FIXTURE = project_root() / "tests" / "fixtures" / "synthetic_ciqual"
-ROOT = project_root()
 
 _FIXTURE_MAP = {
     "alim_2025_11_03.xml": "alim_synthetic.xml",
@@ -34,16 +33,16 @@ _FIXTURE_MAP = {
 }
 
 
-def _prepare(base: Path) -> tuple[Path, Path]:
+def _prepare(base: Path, root: Path) -> tuple[Path, Path]:
     cache = base / "cache"
     cache.mkdir(parents=True, exist_ok=True)
     for official, synthetic in _FIXTURE_MAP.items():
         copyfile(FIXTURE / synthetic, cache / official)
     extract(cache, base / "i" / "ciqual")
     canonical = base / "c"
-    transform(base / "i", canonical, ROOT)
-    build_labels(canonical, ROOT)
-    return canonical, ROOT / "vocab"
+    transform(base / "i", canonical, root)
+    build_labels(canonical, root)
+    return canonical, root / "vocab"
 
 
 def _open(artifact: Path | str) -> sqlite3.Connection:
@@ -52,9 +51,9 @@ def _open(artifact: Path | str) -> sqlite3.Connection:
     return conn
 
 
-def test_package_builds_artifact(tmp_path: Path) -> None:
-    canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out", ROOT)
+def test_package_builds_artifact(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
+    info = package(canonical, vocab, tmp_path / "out", sandbox_root)
     assert info["artifact"] == "nutridb-core-0.1.0.sqlite"
     assert info["integrity"] == "ok"
     artifact = tmp_path / "out" / info["artifact"]
@@ -71,9 +70,9 @@ def test_package_builds_artifact(tmp_path: Path) -> None:
         conn.close()
 
 
-def test_schema_has_all_central_tables(tmp_path: Path) -> None:
-    canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out", ROOT)
+def test_schema_has_all_central_tables(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
+    info = package(canonical, vocab, tmp_path / "out", sandbox_root)
     conn = _open(tmp_path / "out" / info["artifact"])
     try:
         names = {
@@ -115,9 +114,9 @@ def test_schema_has_all_central_tables(tmp_path: Path) -> None:
         conn.close()
 
 
-def test_rows_loaded_and_provenance_walkable(tmp_path: Path) -> None:
-    canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out", ROOT)
+def test_rows_loaded_and_provenance_walkable(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
+    info = package(canonical, vocab, tmp_path / "out", sandbox_root)
     conn = _open(tmp_path / "out" / info["artifact"])
     try:
         assert conn.execute("SELECT count(*) FROM concept").fetchone()[0] == 3
@@ -150,9 +149,9 @@ def test_rows_loaded_and_provenance_walkable(tmp_path: Path) -> None:
         conn.close()
 
 
-def test_coverage_isolation_of_not_measured(tmp_path: Path) -> None:
-    canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out", ROOT)
+def test_coverage_isolation_of_not_measured(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
+    info = package(canonical, vocab, tmp_path / "out", sandbox_root)
     conn = _open(tmp_path / "out" / info["artifact"])
     try:
         pairs = conn.execute(
@@ -165,15 +164,15 @@ def test_coverage_isolation_of_not_measured(tmp_path: Path) -> None:
         conn.close()
 
 
-def test_mv_food_value_unique_per_food_nutrient_locale(tmp_path: Path) -> None:
+def test_mv_food_value_unique_per_food_nutrient_locale(tmp_path: Path, sandbox_root: Path) -> None:
     """Read table: exactly one row per (concept, nutrient, locale) (D7).
 
     The canonical `value` table keeps every method (P1); mv_food_value
     presents the default one: 327/328 (Reg. UE 1169/2011) over 332/333
     (Jones), 25000 (N x facteur de Jones) over 25003 (N x 6.25).
     """
-    canonical, vocab = _prepare(tmp_path)
-    info = package(canonical, vocab, tmp_path / "out", ROOT)
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
+    info = package(canonical, vocab, tmp_path / "out", sandbox_root)
     conn = _open(tmp_path / "out" / info["artifact"])
     try:
         dup = conn.execute(
@@ -201,12 +200,12 @@ def test_mv_food_value_unique_per_food_nutrient_locale(tmp_path: Path) -> None:
         conn.close()
 
 
-def test_build_metadata_isolated(tmp_path: Path) -> None:
-    canonical, vocab = _prepare(tmp_path)
-    first = Path(package(canonical, vocab, tmp_path / "a", ROOT)["path"])
+def test_build_metadata_isolated(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
+    first = Path(package(canonical, vocab, tmp_path / "a", sandbox_root)["path"])
     second = tmp_path / "b" / "nutridb-core-0.1.0.sqlite"
     second.parent.mkdir()
-    package(canonical, vocab, second.parent, ROOT)
+    package(canonical, vocab, second.parent, sandbox_root)
     conn = _open(first)
     try:
         meta_a = dict(conn.execute("SELECT key, value FROM build_metadata").fetchall())
@@ -225,8 +224,8 @@ def test_build_metadata_isolated(tmp_path: Path) -> None:
     assert meta_a["profile"] == "core"
 
 
-def test_missing_label_fails_high(tmp_path: Path) -> None:
-    canonical, vocab = _prepare(tmp_path)
+def test_missing_label_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
     (canonical / "label.parquet").unlink()
     with pytest.raises(PackageError, match=r"label\.parquet missing"):
-        package(canonical, vocab, tmp_path / "out", ROOT)
+        package(canonical, vocab, tmp_path / "out", sandbox_root)

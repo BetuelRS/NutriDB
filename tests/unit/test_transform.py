@@ -22,7 +22,6 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 FIXTURE = project_root() / "tests" / "fixtures" / "synthetic_ciqual"
-ROOT = project_root()
 
 _FIXTURE_MAP = {
     "alim_2025_11_03.xml": "alim_synthetic.xml",
@@ -41,9 +40,9 @@ def _make_cache(base: Path) -> Path:
     return cache
 
 
-def _run(base: Path) -> dict[str, int]:
+def _run(base: Path, root: Path) -> dict[str, int]:
     extract_ciqual(_make_cache(base), base / "i" / "ciqual")
-    return transform(base / "i", base / "c", ROOT)
+    return transform(base / "i", base / "c", root)
 
 
 def _read(base: Path, name: str) -> pl.DataFrame:
@@ -57,8 +56,8 @@ def _by_pair(rows: pl.DataFrame) -> dict[tuple[str, str], dict[str, object]]:
     }
 
 
-def test_transform_counts_and_tables(tmp_path: Path) -> None:
-    report = _run(tmp_path)
+def test_transform_counts_and_tables(tmp_path: Path, sandbox_root: Path) -> None:
+    report = _run(tmp_path, sandbox_root)
     assert report["foods"] == 3
     assert report["concepts"] == 3
     assert report["coverage"] == 5
@@ -78,8 +77,8 @@ def test_transform_counts_and_tables(tmp_path: Path) -> None:
         assert (tmp_path / "c" / f"{name}.parquet").is_file(), name
 
 
-def test_value_typing_and_unit_conversion(tmp_path: Path) -> None:
-    _run(tmp_path)
+def test_value_typing_and_unit_conversion(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
     values = _read(tmp_path, "value")
     nutrients = values["nutrient_id"].to_list()
 
@@ -110,8 +109,8 @@ def test_value_typing_and_unit_conversion(tmp_path: Path) -> None:
     assert values.filter(pl.col("value_type") == "trace").height == 1
 
 
-def test_absence_via_coverage_never_cross_product(tmp_path: Path) -> None:
-    _run(tmp_path)
+def test_absence_via_coverage_never_cross_product(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
     values = _read(tmp_path, "value")
     coverage = _read(tmp_path, "coverage")
 
@@ -129,8 +128,8 @@ def test_absence_via_coverage_never_cross_product(tmp_path: Path) -> None:
     assert zero["value_type"].to_list() == ["measured"]  # legal zero preserved
 
 
-def test_value_provenance_full_chain(tmp_path: Path) -> None:
-    _run(tmp_path)
+def test_value_provenance_full_chain(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
     values = _read(tmp_path, "value")
     records = _read(tmp_path, "source_record")
     concepts = _read(tmp_path, "concept")
@@ -158,16 +157,16 @@ def test_value_provenance_full_chain(tmp_path: Path) -> None:
     assert row[concepts.columns.index("food_group")] == "alcoholic_beverages"
 
 
-def test_concept_links_automatic_1_to_1(tmp_path: Path) -> None:
-    _run(tmp_path)
+def test_concept_links_automatic_1_to_1(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
     links = _read(tmp_path, "concept_link")
     assert links.height == 3
     assert set(links["status"].unique()) == {"automatic"}
     assert links["concept_id"].is_unique().all()
 
 
-def test_derivation_and_tombstone_empty_schema(tmp_path: Path) -> None:
-    _run(tmp_path)
+def test_derivation_and_tombstone_empty_schema(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
     for name, columns in (
         ("derivation", {"derivation_id", "formula", "inputs", "factors"}),
         ("tombstone", {"tombstone_id", "successor_id", "reason"}),
@@ -177,8 +176,8 @@ def test_derivation_and_tombstone_empty_schema(tmp_path: Path) -> None:
         assert set(table.columns) == columns
 
 
-def test_source_row_from_registry(tmp_path: Path) -> None:
-    _run(tmp_path)
+def test_source_row_from_registry(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
     source = _read(tmp_path, "source")
     assert source.height == 1
     row = source.row(0, named=True)
@@ -187,11 +186,11 @@ def test_source_row_from_registry(tmp_path: Path) -> None:
     assert "CIQUAL" in row["name"]
 
 
-def test_transform_deterministic(tmp_path: Path) -> None:
+def test_transform_deterministic(tmp_path: Path, sandbox_root: Path) -> None:
     first = tmp_path / "a"
     second = tmp_path / "b"
-    _run(first)
-    _run(second)
+    _run(first, sandbox_root)
+    _run(second, sandbox_root)
     for name in (
         "source",
         "coverage",
@@ -207,19 +206,19 @@ def test_transform_deterministic(tmp_path: Path) -> None:
         assert a == b, f"{name}.parquet is not byte-identical"
 
 
-def test_missing_intermediates_fail_high(tmp_path: Path) -> None:
+def test_missing_intermediates_fail_high(tmp_path: Path, sandbox_root: Path) -> None:
     with pytest.raises(TransformError, match="no source intermediates"):
-        transform(tmp_path / "i", tmp_path / "c", ROOT)
+        transform(tmp_path / "i", tmp_path / "c", sandbox_root)
 
 
-def test_missing_contract_table_fails_high(tmp_path: Path) -> None:
+def test_missing_contract_table_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
     (tmp_path / "i" / "ciqual").mkdir(parents=True)
     (tmp_path / "i" / "ciqual" / "food.parquet").write_bytes(b"x")
     with pytest.raises(TransformError, match="intermediates missing"):
-        transform(tmp_path / "i", tmp_path / "c", ROOT)
+        transform(tmp_path / "i", tmp_path / "c", sandbox_root)
 
 
-def test_unmapped_constituent_fails_high(tmp_path: Path) -> None:
+def test_unmapped_constituent_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
     cache = _make_cache(tmp_path)
     cache.joinpath("const_2025_11_03.xml").write_text(
         '<?xml version="1.0" encoding="utf-8"?><TABLE>'
@@ -239,4 +238,56 @@ def test_unmapped_constituent_fails_high(tmp_path: Path) -> None:
     )
     extract_ciqual(cache, tmp_path / "i" / "ciqual")
     with pytest.raises(TransformError, match="unmapped source nutrient code '99999'"):
-        transform(tmp_path / "i", tmp_path / "c", ROOT)
+        transform(tmp_path / "i", tmp_path / "c", sandbox_root)
+
+
+def test_identity_links_merge_tombstone_and_reassign(tmp_path: Path, sandbox_root: Path) -> None:
+    """Synthetic: F3 links.csv merges, tombstones and value reassignment (P4)."""
+    from nutridb.identity import canonical_id as cid
+    from nutridb.transform import _apply_identity_links
+
+    links_csv = tmp_path / "links.csv"
+    survivor = cid("concept", "insa", "food", "25")
+    links_csv.write_text(
+        f"concept_id,source,source_code,status\n"
+        f"{survivor},insa,25,automatic\n"
+        f"{survivor},ciqual,19041,automatic\n"
+        f"{survivor},insa,26,review\n"
+        f"{cid('concept', 'ciqual', 'food', '19042')},ciqual,19042,adjudicated\n",
+        encoding="utf-8",
+    )
+    link_rows: list[tuple[str, str, str]] = []
+    tombstone_rows: list[tuple[str, str, str]] = []
+    absorbed = cid("concept", "ciqual", "food", "19041")
+    value_rows: list[tuple[object, ...]] = [
+        (survivor, "ENERC_KCAL", 50.0, "kcal"),
+        (absorbed, "WATER", 80.0, "g"),
+    ]
+    applied = _apply_identity_links(
+        links_csv,
+        {"insa": {"25", "26"}, "ciqual": {"19041", "19042"}},
+        link_rows,
+        tombstone_rows,
+        value_rows,
+    )
+
+    assert applied == 1  # only the ciqual 19041 -> 25 merge; review row ignored
+    assert (absorbed, survivor, "identity_link_f3") in tombstone_rows
+    assert len(tombstone_rows) == 1
+    assert (survivor, cid("source_record", "ciqual", "food", "19041"), "automatic") in link_rows
+    assert all(row[0] == survivor for row in value_rows)  # absorbed values moved
+    assert any(row[1] == "WATER" for row in value_rows)
+
+
+def test_identity_links_unknown_code_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
+    from nutridb.identity import canonical_id as cid
+    from nutridb.transform import _apply_identity_links
+
+    links_csv = tmp_path / "links.csv"
+    links_csv.write_text(
+        "concept_id,source,source_code,status\n"
+        f"{cid('concept', 'insa', 'food', '25')},ciqual,99999,automatic\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(TransformError, match="has no intermediates"):
+        _apply_identity_links(links_csv, {"insa": {"25"}, "ciqual": set()}, [], [], [])
