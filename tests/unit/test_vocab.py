@@ -44,8 +44,8 @@ trace,Trace,true,x
 not_applicable,Not applicable,true,x
 """
 
-FACET_OK = """id,name_en,name_pt
-breast,Breast,Peito
+FACET_OK = """id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR
+breast,Breast,Peito,Poitrine,Pechuga,Brust,Petto,Peito,Peito
 """
 
 
@@ -152,11 +152,26 @@ def test_missing_absence_type_detected(tmp_path: Path) -> None:
 def test_duplicate_facet_id_detected(tmp_path: Path) -> None:
     root = _synthetic_vocab(tmp_path)
     (root / "vocab" / "facets" / "parts.csv").write_text(
-        "id,name_en,name_pt\nbreast,Breast,Peito\nbreast,Breast,Peito\n", encoding="utf-8"
+        "id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR\n"
+        "breast,Breast,Peito,Poitrine,Pechuga,Brust,Petto,Peito,Peito\n"
+        "breast,Breast,Peito,Poitrine,Pechuga,Brust,Petto,Peito,Peito\n",
+        encoding="utf-8",
     )
     report = check_vocabulary(root)
     assert not report.ok
     assert any("facets/parts id" in e for e in report.errors)
+
+
+def test_empty_facet_name_detected(tmp_path: Path) -> None:
+    root = _synthetic_vocab(tmp_path)
+    (root / "vocab" / "facets" / "parts.csv").write_text(
+        "id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR\n"
+        "breast,Breast,Peito,,Pechuga,Brust,Petto,Peito,Peito\n",
+        encoding="utf-8",
+    )
+    report = check_vocabulary(root)
+    assert not report.ok
+    assert any("facets/parts" in e and "empty cell" in e for e in report.errors)
 
 
 def test_wrong_header_detected(tmp_path: Path) -> None:

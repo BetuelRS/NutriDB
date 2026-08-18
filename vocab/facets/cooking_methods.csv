@@ -1,13 +1,13 @@
-id,name_en,name_pt
-boiled,Boiled,Cozido em água
-baked,Baked,Forno (assado)
-roasted,Roasted,Assado seco
-grilled,Grilled,Grelhado
-fried,Fried,Frito
-steamed,Steamed,Cozido a vapor
-stewed,Stewed,Guisado/estufado
-poached,Poached,Escalfado
-sauted,Sautéed,Saltitado
-microwaved,Microwaved,Micro-ondas
-pressure_cooked,Pressure cooked,Panela de pressão
-broiled,Broiled,Grelhado intenso
+id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR
+boiled,Boiled,Cozido em água,Bouilli (à l'eau),Cocido (en agua),Gekocht (in Wasser),Bollito (in acqua),Cozido em água,Cozido em água
+baked,Baked,Forno (assado),Au four,Al horno,Im Ofen,Al forno,Forno (assado),Forno (assado)
+roasted,Roasted,Assado seco,Rôti,Asado (seco),Geröstet,Arrosto,Assado seco,Assado seco
+grilled,Grilled,Grelhado,Grillé,A la parrilla,Gegrillt,Alla griglia,Grelhado,Grelhado
+fried,Fried,Frito,Frit,Frito,Frittiert,Fritto,Frito,Frito
+steamed,Steamed,Cozido a vapor,Cuit à la vapeur,Al vapor,Gedämpft,Al vapore,Cozido a vapor,Cozido no vapor
+stewed,Stewed,Guisado/estufado,Mijoté/étuvé,Guisado,Geschmort,Stufato,Guisado/estufado,Ensopado/refogado
+poached,Poached,Escalfado,Poché,Escalfado,Pochiert,In camicia,Escalfado,Escalfado
+sauted,Sautéed,Saltitado,Sauté,Salteado,Geschwenkt/angebraten,Saltato,Salteado,Salteado
+microwaved,Microwaved,Micro-ondas,Au micro-ondes,Al microondas,In der Mikrowelle,Al microonde,Micro-ondas,Micro-ondas
+pressure_cooked,Pressure cooked,Panela de pressão,À l'autocuiseur,En olla a presión,Im Schnellkochtopf,A pressione,Panela de pressão,Panela de pressão
+broiled,Broiled,Grelhado intenso,Grillé intense,Gratinado/braseado,Überbacken/gegrillt,Grigliato,Grelhado intenso,Grelhado intenso

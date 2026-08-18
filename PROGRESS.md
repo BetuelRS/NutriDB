@@ -68,14 +68,35 @@
 
 **Entregaveis da fase**: matching.py; food_terms.csv; golden 633; links.csv 12 720 linhas; CLI link; transform/i18n/package F3; testes sandbox; CI.
 
+## Estado atual (2026-08-18)
+
+**Fase 4 - Multilinguismo: concluida** (branch `f4/multilinguismo`; F4.0-F4.8; F4.9 em fecho).
+
+| Tarefa | Estado | Nota |
+|---|---|---|
+| F4.0 ADR-0006 | done | Ambio F4: composicao por prioridade (reviewed > native > glossario > divergences); gates P7/161/95%/divergencias; fallback nunca congelado; composicao facetada gramatical adiada (F5+) |
+| F4.1 Glossarios | done | 7 locales x 161 tagnames (fr, pt, pt-PT, pt-BR, es, de, it), status curated, evidence "terminologia INFOODS/EuroFIR, verificada a mao 2026-08-18"; 11 curados F1 migrados para pt-PT; `i18n/labels/vocab_pt_PT.csv` apagado (substituido) |
+| F4.2 Facetas | done | `vocab/facets/*.csv` 9 colunas (139 linhas); mojibake cp1252 do name_pt reparado (Pao, Maca, Acucar, Salmao, Feijao, ...); `vocab check` valida header + celulas nao-vazias (removeu codigo morto do check) |
+| F4.3 Divergencias | done | `i18n/divergences.csv` 67 linhas (53 nutrientes + 14 alimentos: 10 CIQUAL + 4 INSA); drift-check vs glossarios; conceito desconhecido falha; pares en-GB/en-US registados sem gate |
+| F4.4 i18n build F4 | done | Gates: mt_unreviewed aborta; cobertura 161 por locale (pt: 108, generic forbidden nos 53 divergentes); >= 95% status; `reviewed_<locale>.csv` como override topo (curated); sorted deterministico; counts por locale + status |
+| F4.5 Package | done | 8 tabelas `label_fts_*` (9775 linhas cada no artefacto real) |
+| F4.6 Pesquisa cruzada | done | `api.search` resolve o rotulo pela cadeia do locale pedido + dedupe por conceito; golden real: "zucchini" em pt-PT -> "Curgete, polpa e pele, cozida"; "abacaxi" em pt-BR -> "Abacaxi, polpa sem casca, cru" |
+| F4.7 CLI i18n review | done | Lista `i18n/review_queue/<locale>.csv`, `--apply` grava aprovados em `i18n/labels/reviewed_<locale>.csv`; fila vazia no real (P7: tudo nasce native/official/curated); `i18n/untranslatable.csv` com header |
+| F4.8 Testes | done | test_i18n F4 (gates P7/divergencias/cobertura/drift/reviewed); sandbox com divergences sintetico derivado dos glossarios (sem concept_ids reais); FTS 8 locales; pesquisa cruzada + dedupe; golden i18n real (amostra por locale, gates, search no sqlite); 136 testes verdes; ruff/mypy limpos (35 ficheiros) |
+| F4.9 Fecho | em curso | CI `f4/**`; commits atomicos `(f4)`; merge `--no-ff`; push; CI verde |
+
+**Entregaveis da fase**: ADR-0006; glossarios 7 locales (1127 rotulos); facetas 8 locales; divergences.csv 67 linhas; i18n build F4 com gates; 8 tabelas FTS; pesquisa cruzada; CLI `i18n review`; testes + golden i18n. **Artefacto real**: 9 775 labels (fr 3706 native+curated, en 3706 native+official, pt 1542 native+curated, pt-PT/pt-BR 169 curated, es/de/it 161 curated), 8 FTS, 231 243 776 bytes.
+
 ## Decisoes em aberto
 
 - Nenhuma.
 
 ## Bloqueios / pendencia
 
-- Nenhum. F3 fechada (push + merge a confirmar no CI).
+- Nenhum. F4.9 (merge + CI) em curso.
 
 ## Historico de sessoes
+
+- **2026-08-18**: F4 (multilinguismo). ADR-0006 aprovado (ambito, gates, composicao honesta). Glossarios 7 locales x 161 tagnames autorados e validados (161/161). Facetas expandidas para 8 locales (139 linhas, 9 colunas) com mojibake reparado. `divergences.csv` 67 linhas (53 nutrientes + 14 alimentos). i18n build F4 reescrito: prioridade reviewed > native > glossario > divergences; gates P7 (mt_unreviewed aborta), cobertura 161 por locale com excecao pt (108: generic proibido nos 53 divergentes), >= 95% status, drift-check, conceito desconhecido falha; 1a corrida do build falhou no gate pt (53 tagnames divergentes) e foi corrigida; `locales.toml` com 8 ativas; `vocab_pt_PT.csv` apagado (substituido pelo glossario pt-PT). `api.search` F4: resolve rotulo pela cadeia do locale pedido + dedupe por conceito; CLI `i18n review` + `untranslatable.csv`. Testes: test_i18n reescrito (11 testes F4), sandbox com divergences sintetico, FTS 8 locales, pesquisa cruzada/dedupe, golden i18n real (labels por locale, gates, search "zucchini"->Curgete pt-PT no sqlite); 136 testes verdes; ruff/mypy limpos. Artefacto real reconstruido (P10): 9775 labels, 8 FTS, 231 243 776 bytes.
 
 - **2026-08-18**: F3 completa. Matcher afinado (0.84), golden 633 gerado e revisto (42 FALSE, 15 FN colaterais 1:1, food_recall 0.9956), `nutridb link` + transform/i18n/package integrados, sandbox root nos testes (correcao de mojibake via `git checkout` + reaplicacao com edit tool), suite 119 testes verdes, lint/mypy limpos, pipeline real verificado ponta a ponta (123 tombstones, 390 323 mv rows, 0 duplicados).

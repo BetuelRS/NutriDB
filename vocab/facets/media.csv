@@ -1,15 +1,15 @@
-id,name_en,name_pt
-in_water,In water,Em água
-in_broth,In broth,Em caldo
-in_oil,In oil,Em óleo
-in_olive_oil,In olive oil,Em azeite
-in_butter,In butter,Em manteiga
-in_vinegar,In vinegar,Em vinagre
-in_wine,In wine,Em vinho
-in_beer,In beer,Em cerveja
-in_syrup,In syrup,Em calda/xarope
-in_sugar,In sugar,Em açúcar
-in_salt,In salt,Em sal
-in_milk,In milk,Em leite
-in_tomato_sauce,In tomato sauce,Em molho de tomate
-in_batter,In batter,Em massa de fritura
+id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR
+in_water,In water,Em água,Dans l'eau,En agua,In Wasser,In acqua,Em água,Em água
+in_broth,In broth,Em caldo,Dans un bouillon,En caldo,In Brühe,In brodo,Em caldo,Em caldo
+in_oil,In oil,Em óleo,Dans l'huile,En aceite,In Öl,In olio,Em óleo,Em óleo
+in_olive_oil,In olive oil,Em azeite,Dans l'huile d'olive,En aceite de oliva,In Olivenöl,In olio d'oliva,Em azeite,Em azeite
+in_butter,In butter,Em manteiga,Dans le beurre,En mantequilla,In Butter,Nel burro,Em manteiga,Em manteiga
+in_vinegar,In vinegar,Em vinagre,Dans le vinaigre,En vinagre,In Essig,In aceto,Em vinagre,Em vinagre
+in_wine,In wine,Em vinho,Dans le vin,En vino,In Wein,Nel vino,Em vinho,Em vinho
+in_beer,In beer,Em cerveja,Dans la bière,En cerveza,In Bier,Nella birra,Em cerveja,Em cerveja
+in_syrup,In syrup,Em calda/xarope,Dans un sirop,En almíbar,In Sirup,Nello sciroppo,Em calda/xarope,Em calda
+in_sugar,In sugar,Em açúcar,Dans le sucre,En azúcar,In Zucker,Nello zucchero,Em açúcar,Em açúcar
+in_salt,In salt,Em sal,Dans le sel,En sal,In Salz,Nel sale,Em sal,Em sal
+in_milk,In milk,Em leite,Dans le lait,En leche,In Milch,Nel latte,Em leite,Em leite
+in_tomato_sauce,In tomato sauce,Em molho de tomate,Dans une sauce tomate,En salsa de tomate,In Tomatensauce,Nel sugo di pomodoro,Em molho de tomate,Em molho de tomate
+in_batter,In batter,Em massa de fritura,En pâte à frire,En rebozado,Im Backteig,In pastella,Em massa de fritura,Em massa de fritura

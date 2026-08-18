@@ -1,21 +1,21 @@
-id,name_en,name_pt
-fermented,Fermented,Fermentado
-smoked,Smoked,Fumado
-cured,Cured,Curado
-salted,Salted,Salgado
-pickled,Pickled,Picado em vinagre
-sweetened,Sweetened,Açucarado
-pasteurized,Pasteurized,Pasteurizado
-ultra_pasteurized,UHT treated,UHT
-homogenized,Homogenized,Homogeneizado
-fortified,Fortified,Fortificado
-enriched,Enriched,Enriquecido
-bleached,Bleached,Branqueado
-refined,Refined,Refinado
-sprouted,Sprouted,Germinado
-aged,Aged,Maturado
-clarified,Clarified,Clarificado
-condensed,Condensed,Condensado
-evaporated,Evaporated,Evaporado
-powdered,Powdered,Em pó
-reduced_water,Water removed,Água removida
+id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR
+fermented,Fermented,Fermentado,Fermenté,Fermentado,Fermentiert,Fermentato,Fermentado,Fermentado
+smoked,Smoked,Fumado,Fumé,Ahumado,Geräuchert,Affumicato,Fumado,Defumado
+cured,Cured,Curado,Salé/séché,Curado,Gepökelt,Stagionato,Curado,Curado
+salted,Salted,Salgado,Salé,Salado,Gesalzen,Salato,Salgado,Salgado
+pickled,Pickled,Picado em vinagre,Au vinaigre (pickles),Encurtido,Eingelegt (Essig),Sottaceto,Picado em vinagre,Em conserva (picles)
+sweetened,Sweetened,Açucarado,Sucré,Endulzado,Gesüßt,Dolcificato,Açucarado,Adoçado
+pasteurized,Pasteurized,Pasteurizado,Pasteurisé,Pasteurizado,Pasteurisiert,Pastorizzato,Pasteurizado,Pasteurizado
+ultra_pasteurized,UHT treated,UHT,Traité UHT,UHT,Hocherhitzt (UHT),UHT,UHT,UHT
+homogenized,Homogenized,Homogeneizado,Homogénéisé,Homogeneizado,Homogenisiert,Omogeneizzato,Homogeneizado,Homogeneizado
+fortified,Fortified,Fortificado,Enrichi (fortifié),Fortificado,Angereichert,Fortificato,Fortificado,Fortificado
+enriched,Enriched,Enriquecido,Enrichi,Enriquecido,Angereichert,Arricchito,Enriquecido,Enriquecido
+bleached,Bleached,Branqueado,Blanchi,Blanqueado,Gebleicht,Sbiancato,Branqueado,Branqueado
+refined,Refined,Refinado,Raffiné,Refinado,Raffiniert,Raffinato,Refinado,Refinado
+sprouted,Sprouted,Germinado,Germé,Germinado,Gekeimt,Germogliato,Germinado,Germinado
+aged,Aged,Maturado,Affiné,Madurado,Gereift,Stagionato,Maturado,Maturado
+clarified,Clarified,Clarificado,Clarifié,Clarificado,Geklärt,Chiarificato,Clarificado,Clarificado
+condensed,Condensed,Condensado,Condensé,Condensado,Kondensiert,Condensato,Condensado,Condensado
+evaporated,Evaporated,Evaporado,Évaporé,Evaporado,Eingedickt,Evaporato,Evaporado,Evaporado
+powdered,Powdered,Em pó,En poudre,En polvo,Pulverisiert,In polvere,Em pó,Em pó
+reduced_water,Water removed,Água removida,Eau retirée,Agua reducida,Wasserentzug,Acqua rimossa,Água removida,Água removida

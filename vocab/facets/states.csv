@@ -1,19 +1,19 @@
-id,name_en,name_pt
-raw,Raw,Cru
-cooked,Cooked,Cozinhado
-frozen,Frozen,Congelado
-dried,Dried,Seco/desidratado
-canned,Canned (in can),Enlatado
-fresh,Fresh,Fresco
-peeled,Peeled,Descascado
-shelled,Shelled,Descascado/descasqueirado
-boneless,Boneless,Sem osso
-whole,Whole,Inteiro
-diced,Diced,Em cubos
-sliced,Sliced,Em fatias
-ground,Ground,Moido
-liquid,Liquid,Líquido
-solid,Solid,Sólido
-rehydrated,Rehydrated,Reidratado
-blanched,Blanched,Escaldado
-parboiled,Parboiled,Pré-cozido
+id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR
+raw,Raw,Cru,Cru,Crudo,Roh,Crudo,Cru,Cru
+cooked,Cooked,Cozinhado,Cuit,Cocido,Gekocht,Cotto,Cozinhado,Cozido
+frozen,Frozen,Congelado,Surgelé,Congelado,Gefroren,Congelato,Congelado,Congelado
+dried,Dried,Seco/desidratado,Séché,Seco,Getrocknet,Essiccato,Seco/desidratado,Seco/desidratado
+canned,Canned (in can),Enlatado,En conserve,Enlatado,Aus der Dose,In scatola,Enlatado,Enlatado
+fresh,Fresh,Fresco,Frais,Fresco,Frisch,Fresco,Fresco,Fresco
+peeled,Peeled,Descascado,Épluché,Pelado,Geschält,Sbucciato,Descascado,Descascado
+shelled,Shelled,Descascado/descasqueirado,Écossé/décortiqué,Descascarado,Gepellt,Sgusciato,Descascado/descasqueirado,Descascado
+boneless,Boneless,Sem osso,Sans os,Sin hueso,Ohne Knochen,Senza osso,Sem osso,Sem osso
+whole,Whole,Inteiro,Entier,Entero,Ganz,Intero,Inteiro,Inteiro
+diced,Diced,Em cubos,En dés,En dados,Gewürfelt,A dadini,Em cubos,Em cubos
+sliced,Sliced,Em fatias,En tranches,En rodajas,In Scheiben,A fette,Em fatias,Em fatias
+ground,Ground,Moído,Haché/moulu,Molido,Gemahlen,Macinato,Moído,Moído
+liquid,Liquid,Líquido,Liquide,Líquido,Flüssig,Liquido,Líquido,Líquido
+solid,Solid,Sólido,Solide,Sólido,Fest,Solido,Sólido,Sólido
+rehydrated,Rehydrated,Reidratado,Réhydraté,Rehidratado,Rehydriert,Reidratato,Reidratado,Reidratado
+blanched,Blanched,Escaldado,Blanchi,Escaldado,Blanchiert,Sbollentato,Escaldado,Escaldado
+parboiled,Parboiled,Pré-cozido,Précuit,Precocido,Vorgegart,Precotto,Pré-cozido,Pré-cozido

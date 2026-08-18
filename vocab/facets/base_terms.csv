@@ -1,31 +1,31 @@
-id,name_en,name_pt
-rice,Rice,Arroz
-wheat_bread,Bread (wheat),Pão de trigo
-cow_milk,Cow milk,Leite de vaca
-chicken,Chicken,Frango
-beef,Beef,Vaca/bovino
-pork,Pork,Porco
-lamb,Lamb,Borrego
-egg,Hen egg,Ovo de galinha
-tomato,Tomato,Tomate
-potato,Potato,Batata
-onion,Onion,Cebola
-carrot,Carrot,Cenoura
-apple,Apple,Maçã
-banana,Banana,Banana
-orange,Orange,Laranja
-lettuce,Lettuce,Alface
-cheese,Cheese,Queijo
-yogurt,Yogurt,iogurte
-butter,Butter,Manteiga
-olive_oil,Olive oil,Azeite
-sugar,Sugar,Açúcar
-honey,Honey,Mel
-cod,Cod,Bacalhau
-salmon,Salmon,Salmão
-tuna,Tuna,Atum
-bean,Bean (common),Feijão
-pea,Pea,Ervilha
-lentil,Lentil,Lentilha
-chickpea,Chickpea,Grão-de-bico
-walnut,Walnut,Noz
+id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR
+rice,Rice,Arroz,Riz,Arroz,Reis,Riso,Arroz,Arroz
+wheat_bread,Bread (wheat),Pão de trigo,Pain (de blé),Pan (de trigo),Weizenbrot,Pane (di grano),Pão de trigo,Pão de trigo
+cow_milk,Cow milk,Leite de vaca,Lait de vache,Leche de vaca,Kuhmilch,Latte di vacca,Leite de vaca,Leite de vaca
+chicken,Chicken,Frango,Poulet,Pollo,Hähnchen,Pollo,Frango,Frango
+beef,Beef,Vaca/bovino,Bœuf,Ternera/vacuno,Rindfleisch,Manzo,Vaca/bovino,Boi/bovino
+pork,Pork,Porco,Porc,Cerdo,Schweinefleisch,Maiale,Porco,Porco
+lamb,Lamb,Borrego,Agneau,Cordero,Lammfleisch,Agnello,Borrego,Cordeiro
+egg,Hen egg,Ovo de galinha,Œuf de poule,Huevo de gallina,Hühnerei,Uovo di gallina,Ovo de galinha,Ovo de galinha
+tomato,Tomato,Tomate,Tomate,Tomate,Tomate,Pomodoro,Tomate,Tomate
+potato,Potato,Batata,Pomme de terre,Patata,Kartoffel,Patata,Batata,Batata
+onion,Onion,Cebola,Oignon,Cebolla,Zwiebel,Cipolla,Cebola,Cebola
+carrot,Carrot,Cenoura,Carotte,Zanahoria,Karotte,Carota,Cenoura,Cenoura
+apple,Apple,Maçã,Pomme,Manzana,Apfel,Mela,Maçã,Maçã
+banana,Banana,Banana,Banane,Plátano,Banane,Banana,Banana,Banana
+orange,Orange,Laranja,Orange,Naranja,Orange,Arancia,Laranja,Laranja
+lettuce,Lettuce,Alface,Laitue,Lechuga,Kopfsalat,Lattuga,Alface,Alface
+cheese,Cheese,Queijo,Fromage,Queso,Käse,Formaggio,Queijo,Queijo
+yogurt,Yogurt,Iogurte,Yaourt,Yogur,Joghurt,Yogurt,Iogurte,Iogurte
+butter,Butter,Manteiga,Beurre,Mantequilla,Butter,Burro,Manteiga,Manteiga
+olive_oil,Olive oil,Azeite,Huile d'olive,Aceite de oliva,Olivenöl,Olio d'oliva,Azeite,Azeite
+sugar,Sugar,Açúcar,Sucre,Azúcar,Zucker,Zucchero,Açúcar,Açúcar
+honey,Honey,Mel,Miel,Miel,Honig,Miele,Mel,Mel
+cod,Cod,Bacalhau,Morue/cabillaud,Bacalao,Kabeljau,Merluzzo,Bacalhau,Bacalhau
+salmon,Salmon,Salmão,Saumon,Salmón,Lachs,Salmone,Salmão,Salmão
+tuna,Tuna,Atum,Thon,Atún,Thunfisch,Tonno,Atum,Atum
+bean,Bean (common),Feijão,Haricot (commun),Judía (común),Gartenbohne,Fagiolo (comune),Feijão,Feijão
+pea,Pea,Ervilha,Petit pois,Guisante,Erbse,Pisello,Ervilha,Ervilha
+lentil,Lentil,Lentilha,Lentille,Lenteja,Linse,Lenticchia,Lentilha,Lentilha
+chickpea,Chickpea,Grão-de-bico,Pois chiche,Garbanzo,Kichererbse,Cece,Grão-de-bico,Grão-de-bico
+walnut,Walnut,Noz,Noix,Nuez,Walnuss,Noce,Noz,Noz

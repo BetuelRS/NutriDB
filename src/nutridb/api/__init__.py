@@ -5,6 +5,12 @@ resolving the locale fallback chain from ``i18n/locales.toml`` at runtime.
 It queries the per-locale external-content FTS5 index on the normalized
 label column (built by F1.7) and maps hits back to labels and concepts.
 
+F4 (cross-lingual search, SPEC §7): the FTS pass still walks the fallback
+chain (first locale with hits wins), but the returned label is resolved
+through the query locale's chain — writing "chicken" in locale `es` finds
+the concept whose display label resolves to the English name — and hits
+are deduplicated by concept.
+
 Everything here is read-only and immutable: the artefact never changes
 after packaging (P5), so the API is a thin, deterministic lens.
 """
@@ -93,8 +99,43 @@ def search(
             ]
             if results:
                 break  # first locale with hits wins; chain is consulted only on empty
-        return results[:limit]
+        return _resolve_labels(conn, results, (locale, *chains[locale]), limit)
     except sqlite3.OperationalError as exc:
         raise ApiError(f"FTS query failed: {exc}") from exc
     finally:
         conn.close()
+
+
+def _resolve_labels(
+    conn: sqlite3.Connection,
+    hits: list[SearchResult],
+    chain: tuple[str, ...],
+    limit: int,
+) -> list[SearchResult]:
+    """Resolve each hit's display label through the query locale chain
+    (preferring the query locale) and deduplicate by concept (SPEC §7:
+    cross-lingual search finds the concept, not the matched language)."""
+    resolved: dict[tuple[str, str], SearchResult] = {}
+    for hit in hits:
+        if (hit.ref_kind, hit.ref) in resolved:
+            continue
+        best = hit
+        for hop in chain:
+            row = conn.execute(
+                "SELECT locale, status, text FROM label "
+                "WHERE ref_kind = ? AND ref = ? AND locale = ?",
+                (hit.ref_kind, hit.ref, hop),
+            ).fetchone()
+            if row is not None:
+                best = SearchResult(
+                    ref_kind=hit.ref_kind,
+                    ref=hit.ref,
+                    locale=row[0],
+                    status=row[1],
+                    text=row[2],
+                    score=hit.score,
+                )
+                break
+        resolved[(hit.ref_kind, hit.ref)] = best
+    ordered = sorted(resolved.values(), key=lambda r: r.score)
+    return ordered[:limit]
