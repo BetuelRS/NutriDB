@@ -141,3 +141,29 @@ Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Ap
 | F3.8 | Fecho: CI `f3/**`, PLAN/PROGRESS, commits atomicos `(f3)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | P10 real (build completo com links) | `gh run watch` |
 
 **Entregaveis da fase**: `src/nutridb/identity/matching.py`; `mappings/identity/food_terms.csv`; golden 633; `mappings/links.csv` (12 720 linhas); CLI `link`; transform/i18n/package F3; testes; CI `f3/**`.
+
+---
+
+## Fase 4 - Multilinguismo (branch `f4/multilinguismo`)
+
+**Objetivo**: 8 locales compostas (fr, en, pt, pt-PT, pt-BR, es, de, it) com 100% de rotulos em estatuto native/official/curated; zero mt_unreviewed no core (gate P7); pesquisa cruzada funcional; glossarios, divergencias regionais com gate, fluxo de revisao (SPEC §7/§16 F4; ADR-0006).
+
+**Criterios de aceitacao da spec (§16 F4)**:
+1. 8 locales com >= 95% de rotulos em estatuto native/official/curated -> 100% (ADR-0006: distribuicao de estatutos; cobertura de nutrientes 161/161 por locale)
+2. Zero mt_unreviewed no core -> gate no build falha alto
+3. Pesquisa cruzada funcional -> "chicken" encontra o conceito cujo rotulo pt-PT e "frango"; testes no artefacto real
+
+| # | Tarefa | DoD | Verificacao |
+|---|---|---|---|
+| F4.0 | ✅ 2026-08-18: ADR-0006 (ambito F4: glossarios, divergencias, gates, composicao honesta) | Aprovado | leitura do ADR |
+| F4.1 | ✅ 2026-08-18: Glossarios nutrientes: `i18n/glossary/{fr,pt,pt-PT,pt-BR,es,de,it}.csv` (161 tagnames cada, terminologia INFOODS/EuroFIR/FAO, status curated, coluna evidence); os 11 curados pt-PT migrados | 161 x 7 rotulos; 0 tagnames em falta | `uv run nutridb i18n build`; leitura |
+| F4.2 | ✅ 2026-08-18: Facetas: `vocab/facets/*.csv` com colunas `name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR` (139 facetas); `vocab check` valida (header + celulas nao-vazias) | 139 x 6 celulas; check 0 erros | `uv run nutridb vocab check` |
+| F4.3 | ✅ 2026-08-18: `i18n/divergences.csv` (67 linhas: 53 pares pt de nutrientes + 14 alimentos) + gate no build: conceito divergente exige rotulo em cada variante; generico onde ha divergencia -> falha; drift-check vs glossarios; conceito desconhecido falha | 67 pares; gate testado | `pytest tests/unit/test_i18n.py` |
+| F4.4 | ✅ 2026-08-18: i18n build F4: composicao por prioridade (reviewed > native > glossario > divergences); gate P7 (mt_unreviewed falha); gate tagnames 161 por locale (pt: 108, sem generico para divergentes); gate >= 95% status; report por locale | Real: 8 locales, 9775 labels, 100% native/official/curated | `uv run nutridb i18n build` |
+| F4.5 | ✅ 2026-08-18: Package: FTS por locale das 8 ativas | 8 tabelas label_fts (9775 cada) | SQL no artefacto |
+| F4.6 | ✅ 2026-08-18: Pesquisa cruzada: `api.search` resolve rotulo exibido pela cadeia do locale pedido + dedupe por conceito; golden real "zucchini"->"Curgete, polpa e pele, cozida" (pt-PT) | "chicken"->"frango" no artefacto | `pytest tests/integration/test_search.py` |
+| F4.7 | ✅ 2026-08-18: Fluxo de revisao: `nutridb i18n review` (lista `i18n/review_queue/<locale>.csv`, aplica aprovados em `i18n/labels/reviewed_<locale>.csv` consumido pelo build); `i18n/untranslatable.csv` com header | Fila vazia; CLI operacional; teste sintetico | `uv run nutridb i18n review`; `pytest` |
+| F4.8 | ✅ 2026-08-18: Testes: glossarios (161/161), gates P7/divergencias/95%, FTS 8 locales, pesquisa cruzada, golden i18n (amostra por locale vs artefacto) | 136 testes verdes; lint/mypy limpos | `uv run pytest`; `uv run ruff check .`; `uv run mypy .` |
+| F4.9 | Fecho: CI `f4/**`, PLAN/PROGRESS, commits atomicos `(f4)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | P10 real (build completo com 8 locales) | `gh run watch` |
+
+**Entregaveis da fase**: ADR-0006; glossarios 7 locales (1127 rotulos); facetas 8 locales; divergences.csv + gate; i18n build F4 (gates P7/95%); FTS 8 locales; pesquisa cruzada; CLI `i18n review`; testes + golden i18n.
