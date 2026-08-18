@@ -24,7 +24,6 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 FIXTURE = project_root() / "tests" / "fixtures" / "synthetic_ciqual"
-ROOT = project_root()
 
 _FIXTURE_MAP = {
     "alim_2025_11_03.xml": "alim_synthetic.xml",
@@ -38,17 +37,17 @@ _TEMPORAL_TABLES = {"build_metadata"}
 
 
 @pytest.fixture()
-def two_packages(tmp_path: Path) -> tuple[str, str]:
+def two_packages(tmp_path: Path, sandbox_root: Path) -> tuple[str, str]:
     cache = tmp_path / "cache"
     cache.mkdir(parents=True, exist_ok=True)
     for official, synthetic in _FIXTURE_MAP.items():
         copyfile(FIXTURE / synthetic, cache / official)
     extract(cache, tmp_path / "i" / "ciqual")
     canonical = tmp_path / "c"
-    transform(tmp_path / "i", canonical, ROOT)
-    build_labels(canonical, ROOT)
-    first = package(canonical, ROOT / "vocab", tmp_path / "a", ROOT)
-    second = package(canonical, ROOT / "vocab", tmp_path / "b", ROOT)
+    transform(tmp_path / "i", canonical, sandbox_root)
+    build_labels(canonical, sandbox_root)
+    first = package(canonical, sandbox_root / "vocab", tmp_path / "a", sandbox_root)
+    second = package(canonical, sandbox_root / "vocab", tmp_path / "b", sandbox_root)
     return str(first["path"]), str(second["path"])
 
 

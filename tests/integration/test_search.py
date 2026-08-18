@@ -24,7 +24,6 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
 FIXTURE = project_root() / "tests" / "fixtures" / "synthetic_ciqual"
-ROOT = project_root()
 
 _FIXTURE_MAP = {
     "alim_2025_11_03.xml": "alim_synthetic.xml",
@@ -37,16 +36,19 @@ _FIXTURE_MAP = {
 
 @pytest.fixture(scope="module")
 def db_path(tmp_path_factory: pytest.TempPathFactory) -> str:
+    from conftest import make_sandbox_root
+
     base = tmp_path_factory.mktemp("search")
+    root = make_sandbox_root(base)
     cache = base / "cache"
     cache.mkdir()
     for official, synthetic in _FIXTURE_MAP.items():
         copyfile(FIXTURE / synthetic, cache / official)
     extract(cache, base / "i" / "ciqual")
     canonical = base / "c"
-    transform(base / "i", canonical, ROOT)
-    build_labels(canonical, ROOT)
-    info = package(canonical, ROOT / "vocab", base / "out", ROOT)
+    transform(base / "i", canonical, root)
+    build_labels(canonical, root)
+    info = package(canonical, root / "vocab", base / "out", root)
     return str(info["path"])
 
 

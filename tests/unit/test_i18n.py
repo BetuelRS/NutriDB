@@ -22,7 +22,6 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 FIXTURE = project_root() / "tests" / "fixtures" / "synthetic_ciqual"
-ROOT = project_root()
 
 _FIXTURE_MAP = {
     "alim_2025_11_03.xml": "alim_synthetic.xml",
@@ -33,13 +32,13 @@ _FIXTURE_MAP = {
 }
 
 
-def _canonical(base: Path) -> Path:
+def _canonical(base: Path, root: Path) -> Path:
     cache = base / "cache"
     cache.mkdir(parents=True, exist_ok=True)
     for official, synthetic in _FIXTURE_MAP.items():
         copyfile(FIXTURE / synthetic, cache / official)
     extract(cache, base / "i" / "ciqual")
-    transform(base / "i", base / "c", ROOT)
+    transform(base / "i", base / "c", root)
     return base / "c"
 
 
@@ -55,9 +54,9 @@ def test_normalize_label() -> None:
     assert normalize_label("Açúcares") == "acucares"
 
 
-def test_build_counts_and_statuses(tmp_path: Path) -> None:
-    canonical = _canonical(tmp_path)
-    report = build(canonical, ROOT)
+def test_build_counts_and_statuses(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical = _canonical(tmp_path, sandbox_root)
+    report = build(canonical, sandbox_root)
     vocab_en = 161  # frozen F1.1 vocabulary + F2 additive: VITA, CARTBEQ, OLSAC, NIATRP
     assert report["labels"] == 3 + 3 + vocab_en + 11
     labels = _labels(tmp_path)
@@ -69,9 +68,9 @@ def test_build_counts_and_statuses(tmp_path: Path) -> None:
     assert report["pt-BR"] == 0
 
 
-def test_native_labels_from_records(tmp_path: Path) -> None:
-    canonical = _canonical(tmp_path)
-    build(canonical, ROOT)
+def test_native_labels_from_records(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical = _canonical(tmp_path, sandbox_root)
+    build(canonical, sandbox_root)
     labels = _labels(tmp_path)
     foods = labels.filter(pl.col("ref_kind") == "food")
     assert foods.height == 6
@@ -83,9 +82,9 @@ def test_native_labels_from_records(tmp_path: Path) -> None:
     assert "eau de vie de fruits" in normalized
 
 
-def test_vocab_labels_official_and_curated(tmp_path: Path) -> None:
-    canonical = _canonical(tmp_path)
-    build(canonical, ROOT)
+def test_vocab_labels_official_and_curated(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical = _canonical(tmp_path, sandbox_root)
+    build(canonical, sandbox_root)
     labels = _labels(tmp_path)
     water = labels.filter(pl.col("ref") == "WATER", pl.col("ref_kind") == "nutrient")
     by_locale = {r["locale"]: r for r in water.rows(named=True)}
@@ -96,15 +95,17 @@ def test_vocab_labels_official_and_curated(tmp_path: Path) -> None:
     assert by_locale["pt-PT"]["text_normalized"] == "agua"
 
 
-def test_missing_canonical_fails_high(tmp_path: Path) -> None:
+def test_missing_canonical_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
     with pytest.raises(I18nError, match="canonical dataset missing"):
-        build(tmp_path / "c", ROOT)
+        build(tmp_path / "c", sandbox_root)
 
 
-def test_empty_curated_label_fails_high(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_empty_curated_label_fails_high(
+    tmp_path: Path, sandbox_root: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     from nutridb import i18n as i18n_module
 
-    canonical = _canonical(tmp_path)
+    canonical = _canonical(tmp_path, sandbox_root)
     real_load = i18n_module.load_csv
 
     def fake_load(path: Path, columns: tuple[str, ...]) -> list[dict[str, str]]:
@@ -114,12 +115,12 @@ def test_empty_curated_label_fails_high(tmp_path: Path, monkeypatch: pytest.Monk
 
     monkeypatch.setattr(i18n_module, "load_csv", fake_load)
     with pytest.raises(I18nError, match="empty label for pt-PT WATER"):
-        build(canonical, ROOT)
+        build(canonical, sandbox_root)
 
 
-def test_i18n_deterministic(tmp_path: Path) -> None:
-    a = _canonical(tmp_path / "a")
-    b = _canonical(tmp_path / "b")
-    build(a, ROOT)
-    build(b, ROOT)
+def test_i18n_deterministic(tmp_path: Path, sandbox_root: Path) -> None:
+    a = _canonical(tmp_path / "a", sandbox_root)
+    b = _canonical(tmp_path / "b", sandbox_root)
+    build(a, sandbox_root)
+    build(b, sandbox_root)
     assert (a / "label.parquet").read_bytes() == (b / "label.parquet").read_bytes()
