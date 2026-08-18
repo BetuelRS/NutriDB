@@ -342,6 +342,8 @@ def _build_mv_food_value(
     frame = (
         values.join(concepts, on="concept_id")
         .join(food_labels, on="concept_id")
+        .sort(["concept_id", "nutrient_id", "locale", "source_id", "source_record_id"])
+        .unique(subset=["concept_id", "nutrient_id", "locale"], keep="first")
         .sort(["concept_id", "nutrient_id", "locale"])
     )
     rows = frame.select(
