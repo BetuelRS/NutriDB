@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import os
 import shutil
 import subprocess
@@ -320,9 +321,77 @@ def i18n_build() -> None:
 
 
 @i18n_app.command("review")
-def i18n_review() -> None:
-    """Export the human review queue as reviewable patches (F4)."""
-    _not_implemented("F4", "translation review queue")
+def i18n_review(
+    apply: bool = typer.Option(
+        False, "--apply", help="write approved candidates to i18n/labels/reviewed_<locale>.csv"
+    ),
+) -> None:
+    """List the human review queue and apply approved decisions (F4, ADR-0006 §3.4).
+
+    Queue: i18n/review_queue/<locale>.csv with columns
+    (ref_kind, ref, label, candidate_status); approved rows land in
+    i18n/labels/reviewed_<locale>.csv, consumed by `i18n build` as
+    curated overrides (highest priority).
+    """
+    from nutridb.i18n import I18nError, load_locales
+    from nutridb.paths import paths
+
+    base = paths()
+    root = base["root"]
+    active = load_locales(root / "i18n" / "locales.toml")["active"]
+    queue_dir = root / "i18n" / "review_queue"
+    labels_dir = root / "i18n" / "labels"
+    queue_dir.mkdir(exist_ok=True)
+    labels_dir.mkdir(exist_ok=True)
+    total = 0
+    for locale in active:
+        path = queue_dir / f"{locale}.csv"
+        if not path.is_file():
+            continue
+        lines = [
+            ln for ln in path.open(encoding="utf-8", newline="") if not ln.lstrip().startswith("#")
+        ]
+        reader = csv.DictReader(lines)
+        if reader.fieldnames != ["ref_kind", "ref", "label", "candidate_status"]:
+            raise I18nError(f"{path}: header does not match expected columns")
+        candidates = [dict(row) for row in reader]
+        if not candidates:
+            continue
+        total += len(candidates)
+        approved = [
+            (r["ref_kind"], r["ref"], r["label"])
+            for r in candidates
+            if r["candidate_status"] == "approved"
+        ]
+        rejected = sum(1 for r in candidates if r["candidate_status"] == "rejected")
+        bad = [r for r in candidates if r["candidate_status"] not in ("approved", "rejected")]
+        if bad:
+            raise I18nError(f"{path}: invalid candidate_status in {bad}")
+        table = rich.table.Table(title=f"review queue {locale}", title_justify="left")
+        table.add_column("ref_kind")
+        table.add_column("ref")
+        table.add_column("label")
+        table.add_column("status")
+        for r in sorted(candidates, key=lambda r: (r["ref_kind"], r["ref"])):
+            table.add_row(r["ref_kind"], r["ref"], r["label"], r["candidate_status"])
+        rich.console.Console().print(table)
+        if apply and approved:
+            out = labels_dir / f"reviewed_{locale}.csv"
+            with out.open("w", encoding="utf-8", newline="") as fh:
+                fh.write(
+                    "# Decisoes de revisao humana (CLI `i18n review --apply`); "
+                    "consumidas pelo build como curated (ADR-0006).\n"
+                )
+                writer = csv.writer(fh)
+                writer.writerow(("ref_kind", "ref", "label"))
+                writer.writerows(sorted(approved))
+            typer.echo(
+                f"reviewed {locale}: {len(approved)} approved -> {out.name}, {rejected} rejected"
+            )
+    if total == 0:
+        typer.echo("review queue empty: all labels are native/official/curated at birth (P7)")
+        return
+    typer.echo(f"review total: {total} candidates")
 
 
 @app.command("merge")
