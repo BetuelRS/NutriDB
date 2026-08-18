@@ -1,0 +1,72 @@
+# Divergencias regionais registadas (SPEC §7, ADR-0006):
+#  - nutrientes: pares pt-PT/pt-BR onde os termos divergem (rotulos nos glossarios);
+#  - alimentos: rotulos curados das variantes + pares en-GB/en-US para composicao futura.
+# Gate no build: ref divergente exige rotulo em cada variante e NAO pode ter rotulo generico.
+ref_kind,ref,ptPT,ptBR,enGB,enUS
+food,nfx_061RPT6PNFGQ27Q70SKR75TBX1,,,"Rutabaga or Swede, cooked","Rutabaga, cooked"
+food,nfx_139BSQJJSBFBSTNZ0WQSXMF536,,,"Coriander, fresh","Cilantro, fresh"
+food,nfx_1RQ8S1HJ8NPPAGT0AKAXEXG590,,,"Roman rocket, raw","Roman arugula, raw"
+food,nfx_1SM4031FNH17C6A8Y3FZDWXNXA,Beringela cozida,Berinjela cozida,"Aubergine, cooked","Eggplant, cooked"
+food,nfx_1Y53E03REC2CQTSYH43NV2MZN4,,,"Spring onion, sautéed/pan-fried, without added fat","Scallion, sautéed/pan-fried, without added fat"
+food,nfx_43XVY2CS429HC4KK3WZHM6R7H6,"Curgete, polpa e pele, cozida","Abobrinha, polpa e casca, cozida","Courgette, flesh and skin, cooked","Zucchini, flesh and skin, cooked"
+food,nfx_46FF4FQ3BX14262CEEDSSYSK41,Brócolos crus,Brócolis crus,,
+food,nfx_592JCTFNWYH4XN4KNFX5KKEDWF,Beringela crua,Berinjela crua,,
+food,nfx_59G1WPRCW5D8YVS7JQXCX4QFR5,,,"Maize/corn tortilla wrap, to be filled","Corn tortilla wrap, to be filled"
+food,nfx_5WAXNCVY3238REJ2NWP012390F,"Ananás, polpa sem pele, cru","Abacaxi, polpa sem casca, cru",,
+food,nfx_6R7T1WXC93M4NP6XP5S4TWDBAS,Curgete crua,Abobrinha crua,,
+food,nfx_6T8J03C92HJ896000XH5T12ECF,Ananás,Abacaxi,,
+food,nfx_7HQBVX3QS4P8VSHS1WNX7431VM,,,"Chive or spring onion, fresh","Chive or scallion, fresh"
+food,nfx_7NZVJBD1S0HQB4QXY7HNG1BN14,"Brócolos cozidos em água, crocantes","Brócolis cozidos em água, crocantes",,
+nutrient,AS,Arsénio,Arsênio,,
+nutrient,CARTA,Alfa-caroteno,Alfacaroteno,,
+nutrient,CARTB,Beta-caroteno,Betacaroteno,,
+nutrient,CHOAVL,Hidratos de carbono disponíveis,Carboidratos disponíveis,,
+nutrient,CHOAVLDF,Hidratos de carbono disponíveis com fibra alimentar (por diferença),Carboidratos disponíveis com fibra alimentar (por diferença),,
+nutrient,CHOCDF,Hidratos de carbono totais (por diferença com fibra alimentar),Carboidratos totais (por diferença com fibra alimentar),,
+nutrient,CR,Crómio,Cromo,,
+nutrient,CRYPXB,Beta-criptoxantina,Betacriptoxantina,,
+nutrient,F10D0,Ácido gordo 10:0 (cáprico),Ácido graxo 10:0 (cáprico),,
+nutrient,F12D0,Ácido gordo 12:0 (láurico),Ácido graxo 12:0 (láurico),,
+nutrient,F14D0,Ácido gordo 14:0 (mirístico),Ácido graxo 14:0 (mirístico),,
+nutrient,F14D1,Ácido gordo 14:1 (miristoleico),Ácido graxo 14:1 (miristoleico),,
+nutrient,F15D0,Ácido gordo 15:0 (pentadecanoico),Ácido graxo 15:0 (pentadecanoico),,
+nutrient,F16D0,Ácido gordo 16:0 (palmítico),Ácido graxo 16:0 (palmítico),,
+nutrient,F16D1,Ácido gordo 16:1 (palmitoleico),Ácido graxo 16:1 (palmitoleico),,
+nutrient,F17D0,Ácido gordo 17:0 (margárico),Ácido graxo 17:0 (margárico),,
+nutrient,F18D0,Ácido gordo 18:0 (esteárico),Ácido graxo 18:0 (esteárico),,
+nutrient,F18D1,Ácido gordo 18:1 total,Ácido graxo 18:1 total,,
+nutrient,F18D1CN7,Ácido gordo 18:1 c11 (vaccénico),Ácido graxo 18:1 c11 (vaccênico),,
+nutrient,F18D1CN9,Ácido gordo 18:1 c9 (oleico),Ácido graxo 18:1 c9 (oleico),,
+nutrient,F18D2CL,Ácido gordo 18:2 linoleico conjugado (CLA),Ácido graxo 18:2 linoleico conjugado (CLA),,
+nutrient,F18D2CN6,"Ácido gordo 18:2 c9,c12 (linoleico)","Ácido graxo 18:2 c9,c12 (linoleico)",,
+nutrient,F18D2CNN6,Ácido gordo 18:2 n-6 conjugado,Ácido graxo 18:2 n-6 conjugado,,
+nutrient,F18D3CN3,"Ácido gordo 18:3 c9,c12,c15 (alfa-linolénico)","Ácido graxo 18:3 c9,c12,c15 (alfa-linolênico)",,
+nutrient,F18D3CN6,"Ácido gordo 18:3 c6,c9,c12 (gama-linolénico)","Ácido graxo 18:3 c6,c9,c12 (gama-linolênico)",,
+nutrient,F18D3N3,Ácido gordo 18:3 n-3 (alfa-linolénico),Ácido graxo 18:3 n-3 (alfa-linolênico),,
+nutrient,F18D4N3,Ácido gordo 18:4 n-3 (estearidónico),Ácido graxo 18:4 n-3 (estearidônico),,
+nutrient,F20D0,Ácido gordo 20:0 (araquídico),Ácido graxo 20:0 (araquídico),,
+nutrient,F20D1,Ácido gordo 20:1 (gadoleico),Ácido graxo 20:1 (gadoleico),,
+nutrient,F20D2,Ácido gordo 20:2 n-6,Ácido graxo 20:2 n-6,,
+nutrient,F20D3N3,Ácido gordo 20:3 n-3,Ácido graxo 20:3 n-3,,
+nutrient,F20D4N6,Ácido gordo 20:4 n-6 (araquidónico),Ácido graxo 20:4 n-6 (araquidônico),,
+nutrient,F20D5N3,Ácido gordo 20:5 n-3 (EPA),Ácido graxo 20:5 n-3 (EPA),,
+nutrient,F22D0,Ácido gordo 22:0 (beénico),Ácido graxo 22:0 (beênico),,
+nutrient,F22D1,Ácido gordo 22:1 (erúcico),Ácido graxo 22:1 (erúcico),,
+nutrient,F22D5N3,Ácido gordo 22:5 n-3 (DPA),Ácido graxo 22:5 n-3 (DPA),,
+nutrient,F22D6N3,Ácido gordo 22:6 n-3 (DHA),Ácido graxo 22:6 n-3 (DHA),,
+nutrient,F24D0,Ácido gordo 24:0 (lignocérico),Ácido graxo 24:0 (lignocérico),,
+nutrient,F24D1,Ácido gordo 24:1 c15 (nervónico),Ácido graxo 24:1 c15 (nervônico),,
+nutrient,F26D0,Ácido gordo 26:0 (cerótico),Ácido graxo 26:0 (cerótico),,
+nutrient,F4D0,Ácido gordo 4:0 (butírico),Ácido graxo 4:0 (butírico),,
+nutrient,F6D0,Ácido gordo 6:0 (caproico),Ácido graxo 6:0 (caproico),,
+nutrient,F8D0,Ácido gordo 8:0 (caprílico),Ácido graxo 8:0 (caprílico),,
+nutrient,FAMS,Ácidos gordos monoinsaturados,Ácidos graxos monoinsaturados,,
+nutrient,FAPU,Ácidos gordos polinsaturados,Ácidos graxos poli-insaturados,,
+nutrient,FASAT,Ácidos gordos saturados,Ácidos graxos saturados,,
+nutrient,FATRN,Ácidos gordos trans,Ácidos graxos trans,,
+nutrient,GLUS,Glucose (dextrose),Glicose (dextrose),,
+nutrient,MN,Manganés,Manganês,,
+nutrient,MO,Molibdénio,Molibdênio,,
+nutrient,NT,Azoto total,Nitrogênio total,,
+nutrient,OLSAC,Oligossacáridos (totais),Oligossacarídeos (totais),,
+nutrient,SE,Selénio,Selênio,,
