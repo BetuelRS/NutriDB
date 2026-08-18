@@ -229,9 +229,67 @@ def vocab_check() -> None:
 
 
 @app.command("link")
-def link() -> None:
-    """Entity resolution: blocking, signals, adjudication (F3)."""
-    _not_implemented("F3", "entity resolution")
+def link(
+    write: bool = typer.Option(True, help="Write mappings/links.csv (P8 adjudication record)"),
+) -> None:
+    """Entity resolution: blocking, signals, adjudication (F3).
+
+    Runs blocking + signals over the pinned intermediates and the
+    bilingual dictionary, writes the adjudication record to
+    ``mappings/links.csv`` (automatic finals + review queue) and reports
+    precision / recall against the hand-labelled golden set.
+    """
+    from nutridb.identity.matching import (
+        _status,
+        evaluate,
+        match_foods,
+        resolve_one_to_one,
+        write_links_csv,
+    )
+    from nutridb.paths import paths
+
+    base = paths()
+    proposals = match_foods(base["build"] / "intermediates", base["root"])
+    autos = [p for p in proposals if _status(p) == "automatic"]
+    review = [p for p in proposals if _status(p) == "review"]
+    finals = len(resolve_one_to_one(autos))
+
+    table = rich.table.Table(title="Identity resolution (F3)", title_justify="left")
+    table.add_column("signal")
+    table.add_column("count", justify="right")
+    table.add_row("candidates", str(len(proposals)))
+    table.add_row("automatic finals", str(finals))
+    table.add_row("review queue", str(len(review)))
+    rich.console.Console().print(table)
+
+    if write:
+        rows = write_links_csv(proposals, base["root"] / "mappings" / "links.csv")
+        typer.echo(f"links.csv: {rows} rows (automatic + review)")
+
+    golden = base["root"] / "tests" / "golden" / "identity_pairs.csv"
+    if golden.is_file():
+        metrics = evaluate(proposals, golden)
+        table = rich.table.Table(title="Golden evaluation (SPEC F3)", title_justify="left")
+        table.add_column("metric")
+        table.add_column("value", justify="right")
+        for key in (
+            "golden_true",
+            "golden_false",
+            "true_positives",
+            "false_positives",
+            "false_negatives",
+            "auto_finals",
+            "review_adjudicated",
+            "precision",
+            "recall",
+            "food_recall",
+        ):
+            value = metrics[key]
+            table.add_row(key, f"{value:.4f}" if isinstance(value, float) else str(value))
+        rich.console.Console().print(table)
+        if metrics["precision"] < 0.98 or metrics["recall"] < 0.90:
+            raise typer.Exit(code=1)
+    typer.echo("link OK")
 
 
 i18n_app = typer.Typer(name="i18n", help="Multilingual label pipeline (SPEC §7).")
