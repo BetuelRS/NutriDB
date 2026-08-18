@@ -1,0 +1,505 @@
+term,pt,fr,en
+# F3 — dicionário alimentar bilingue (pt-PT <-> fr/en) para o bloqueio e sinais
+# de candidatura (SPEC §6, F3). term = chave canónica; sinónimos separados por
+# '|' dentro de cada língua, sempre token único (o matcher trabalha por token).
+# Revisão feita sobre os nomes reais das fontes (INSA/TCA 7.1, CIQUAL 2025).
+# Regra: apenas termos com correspondência segura; um token pode pertencer a
+# várias famílias (ex.: 'gordo' = full-fat em leite e 'fat' em carne).
+water,agua|aguas|água,eau,water
+tap,rede publica|rede pública|torneira,robinet,tap
+mineral,mineral,minerale|minérale,mineral
+sparkling,gaseificada|gasocarbónica|frisante,gazeuse,sparkling
+still,plana,plate,still
+milk,leite,lait,milk
+whole,gordo|inteiro|inteira,entier,whole|full-fat
+wholemeal,integral,complet|complete,wholemeal
+semi_skimmed,meio gordo,demi-ecrémé|demi-écrémé,semi-skimmed
+skimmed,magro|magra,maigre,skimmed
+lactose_free,sem lactose,sans lactose,lactose-free
+yogurt,iogurte,yaourt,yogurt
+greek_yogurt,iogurte grego,yaourt grec,greek yogurt
+cheese,queijo,fromage,cheese
+cheese_spread,queijo creme,fromage a tartiner|fromage à tartiner,cheese spread
+fresh_cheese,queijo fresco,fromage frais,fresh cheese
+soft_cheese,atabafado,fromage de chèvre,goat cheese
+requeijao,requeijão,fromage frais,requeijao
+cream,nata|natas|creme,crème|creme,cream
+butter,manteiga,beurre,butter
+margarine,margarina,margarine,margarine
+margarine_light,minarina,minarine,margarine
+vegetable_fat,creme vegetal|creme culinario|creme culinário,matière grasse végétale|matiere grasse vegetale,vegetable fat
+oil,oleo|óleo,huile,oil
+olive_oil,azeite,huile d olive|huile d'olive,olive oil
+lard,banha,saindoux,lard
+egg,ovo|ovos,oeuf|oeufs,egg
+egg_yolk,gema,jaune,yolk
+egg_white,clara,blanc,white
+omelette,omelete,omelette,omelette
+chicken,frango|galinha,poulet,chicken
+chicken_liver,figado de galinha|fígado de galinha,foie de poulet,chicken liver
+turkey,peru,dinde,turkey
+duck,pato,canard,duck
+goose,ganso,oie,goose
+quail,codorniz,caille,quail
+partridge,perdiz,perdrix,partridge
+pigeon,pombo,pigeon,pigeon
+rabbit,coelho,lapin,rabbit
+venison,veado,cerf,venison
+wild_boar,javali,sanglier,wild boar
+hare,lebre,lièvre|lievre,hare
+beef,vaca|boi,boeuf|bœuf,beef
+veal,vitela,veau,veal
+lamb,borrego,agneau,lamb
+mutton,carneiro,mouton,mutton
+kid,cabrito,chevreau,kid
+goat,cabra,chèvre|chevre,goat
+watercress,agrião|agriao,cresson de fontaine,watercress
+celeriac,,céleri-rave|celeri-rave,celeriac
+soaked,demolhadas|demolhada|demolhados|demolhado,trempées|trempees,soaked
+horse,cavalo,cheval,horse
+pork,porco,porc,pork
+meat,carne,viande,meat
+steak,bife,steak|bavette,steak
+loin,lombo,filet|longe,loin
+leg,perna,gigot|cuisse,leg
+breast,peito,blanc|poitrine,breast
+shoulder,pa|pá,épaule|epaule,shoulder
+shoulder_neck,chambão|chambao,collier|échine|echine,neck
+chop,costeleta,côtelette|cotelette,chop|cutlet
+rack,,carré|carre,rack
+ribs,entrecosto,travers,spare ribs
+belly,toucinho,lard,bacon
+bacon,bacon,bacon,bacon
+ham,presunto,jambon,ham
+cooked_ham,fiambre,jambon blanc,cooked ham
+sausage,salsicha,saucisse,sausage
+frankfurt,frankfurt,knack,frankfurter
+chorizo,chouriço,chorizo,chorizo
+blood_sausage,morcela|chouriço de sangue,boudin noir,blood sausage
+salami,salame,salami,salami
+mortadella,mortadela,mortadelle,mortadella
+pate,paté|pasta de figado|pasta de fígado,pâté|pate,pate
+liver,figado|fígado,foie,liver
+kidney,rim,rognon,kidney
+heart,coracao|coração,coeur|coeur,heart
+tongue,lingua|língua,langue,tongue
+spleen,baco|baço,rate,spleen
+ear,orelha,oreille,ear
+blood,sangue,sang,blood
+tripe,tripa,tripes,tripe
+head,cabeca|cabeça,tête|tete,head
+foot,pe|pé,pied,foot|trotter
+burger,hamburguer|hambúrguer,steak haché|hache|haché,burger
+meatball,almodega|almôndega,boulette,meatball
+skewer,espetada,brochette,skewer
+roast,assado|assada|assar,rôti|roti|rôtie|rotie,roast|roasted
+grilled,grelhado|grelhada|grelhados,grillé|grille|grillée|grillee,grilled
+fried,frito|frita|fritos,frit|frite,fried
+boiled,cozido|cozida|cozidos,cuit|cuite|bouilli|bouillie,boiled|cooked
+raw,cru|crua|crus,crue|cru,raw
+breaded,panado|panada,pané|pane,breaded
+stewed,estufado|estufada|estufados,étuvé|etuve,stewed
+lean,magro|magra|magros,maigre,lean
+fat,gorda|gordo,grasse|gras,fat
+skin,pele,peau,skin
+with_skin,com pele,avec peau,with skin
+without_skin,sem pele,sans peau,without skin
+sauce,molho,sauce,sauce
+without_sauce,sem molho,sans sauce,without sauce
+broth,caldo,bouillon,broth
+soup,sopa,soupe,soup
+chicken_soup,canja,consommé|consomme,chicken soup
+fish,peixe,poisson,fish
+cod,,cabillaud,cod
+salted_cod,bacalhau,morue,salted cod
+salt_cod,demolhado,trempée|trempee,soaked salt cod
+hake,pescada,merlu,hake
+ling,maruca,lingue,ling
+tuna,atum,thon,tuna
+sardine,sardinha,sardine,sardine
+mackerel,cavala|sarda,maquereau,mackerel
+horse_mackerel,carapau|chicharro,chinchard,horse mackerel
+sea_bream,dourada, dorade,sea bream
+red_sea_bream,goraz,dorade rose,red sea bream
+sea_bream2,pargo,pageot|pagre,sea bream
+sea_bass,robalo,bar|loubine,sea bass
+salmon,salmao|salmão,saumon,salmon
+trout,truta,truite,trout
+rainbow,arco-íris|arco iris|arco-iris,arc-en-ciel|ciel,rainbow
+sole,linguado,sole,sole
+plaice,solha,plie,plaice
+ray,raia,raie,ray
+monkfish,tamboril,lotte|baudroie,monkfish
+grouper,garoupa,mérou|merou,grouper
+wreckfish,cherne,cernier,wreckfish
+redfish,cantarilho,sébaste|sebaste,redfish
+eel,enguia,anguille,eel
+lamprey,lampreia,lamproie,lamprey
+swordfish,espadarte,espadon,swordfish
+scabbardfish,peixe-espada,sabre,scabbardfish|silver scabbardfish
+conger,safio,congre,conger
+skate,cação,émissole|emissolle,skate
+red_mullet,salmonete,rouget,red mullet
+grey_mullet,tainha,mulet,grey mullet
+pouting,faneca,tacaud,pouting
+blue_whiting,abrotea|abrótea,merlan bleu,blue whiting
+anchovy,anchova,anchois,anchovy
+meagre,corvina,maigre,
+clam,ameijoa|amêijoa,palourde,clam
+cockle,berbigao|berbigão,coque,cockle
+mussel,mexilhao|mexilhão,moule,mussel
+oyster,ostra,huître|huitre,oyster
+scallop,vieira,coquille Saint-Jacques,scallop
+barnacle,percebes,pouce-pied,barnacle
+limpet,lapas,patelle,limpet
+cuttlefish,choco,seiche,cuttlefish
+squid,lula|pota,calmar|encornet,squid
+octopus,polvo,poulpe,octopus
+prawn,gamba|gambas,crevette,prawn|shrimp
+shrimp,camarao|camarão,crevette,shrimp
+clawed_lobster,lagosta,homard,clawed lobster
+spiny_lobster,,langouste,spiny lobster
+langoustine,lagostim,langoustine,langoustine
+crab,sapateira,crabe,crab
+snail,caracol,escargot,snail
+whelk,buzio|búzio,bulot,whelk
+roe,ovas,oeufs,roe|eggs
+seafood,marisco,fruits de mer,seafood
+rice,arroz,riz,rice
+wheat,trigo,blé|ble,wheat
+rye,centeio,seigle,rye
+oats,aveia,avoine,oats
+barley,cevada,orge,barley
+corn,milho,maïs|mais,corn|maize
+millet,millet,millet,millet
+spelt,espelta,épeautre|epeautre,spelt
+semolina,semola|sêmola,semoule,semolina
+bran,farelo,son,bran
+germ,germen|gérmen,germe,germ
+flour,farinha,farine,flour
+pasta,massa,pâtes|pates,pasta
+spaghetti,esparguete,spaghetti,spaghetti
+lasagna,lasanha,lasagne,lasagna
+bread,pao|pão,pain,bread
+bread_loaf,pao de forma|pão de forma,pain de mie,sandwich bread
+toast,tosta,biscotte,toast
+biscuit,bolacha|biscoitos|biscoito,biscuit,biscuit|cookie
+croissant,croissant,croissant,croissant
+donut,donut,beignet,donut
+cake,bolo|bolos,gâteau|gateau,cake
+brownie,brownie,brownie,brownie
+marble_cake,marbré|marbre|bolo mármore|bolo marmore,marbré|marbre,marble cake
+muffin,queque,muffin,muffin
+madeleine,madalena,madeleine,madeleine
+pastry,pastel,pâtisserie|patisserie,pastry
+pudding,pudim,flan|pudding,pudding
+jam,doce,confiture,jam
+compote,compota,compote,compote
+jelly,geleia,gélée|gelee,jelly
+marmalade,marmelada,marmelade,marmalade
+honey,mel,miel,honey
+sugar,acucar|açúcar,sucre,sugar
+brown_sugar,acucar amarelo|açúcar amarelo,sucre roux,brown sugar
+molasses,melaco|melaço,mélasse|melasse,molasses
+sugar_cane_honey,mel de cana,sirop de canne,sugar cane syrup
+chocolate,chocolate,chocolat,chocolate
+cocoa,cacau,cacao,cocoa
+ice_cream,gelado|gelados,glace,ice cream
+jelly_dessert,gelatina,gélatine|gelee,jelly
+meringue,merengue,meringue,meringue
+eclair,éclair|eclair,eclair,eclair
+candy,rebuçados|rebucados,bonbon|candy,candy
+gum,pastilha elástica|pastilha elastica,chewing-gum,gum
+rice_pudding,arroz doce,riz au lait,rice pudding
+mousse,mousse,mousse,mousse
+fruit,fruta|frutos,fruits,fruit|fruits
+apple,maca|maçã,pomme,apple
+pear,pera,poire,pear
+banana,banana,banane,banana
+orange,laranja,orange,orange
+mandarin,tangerina|tângera,mandarine,mandarin
+clementine,clementina,clémentine|clementine,clementine
+lemon,limao|limão,citron,lemon
+lime,lima,limette,lime
+grapefruit,toranja,pamplemousse,grapefruit
+watermelon,melancia,pastèque|pasteque,watermelon
+melon,melao|melão|meloa,melon,melon
+strawberry,morango,fraise,strawberry
+raspberry,framboesa,framboise,raspberry
+blueberry,mirtilo,myrtille,blueberry
+currant,groselha,groseille,currant
+blackberry,amora,mûre|mure,blackberry
+cherry,cereja,cerise,cherry
+morello,ginja,griotte,morello cherry
+peach,pesego|pêssego,pêche|peche,peach
+nectarine,nectarina,nectarine,nectarine
+apricot,alperce,abricot,apricot
+plum,ameixa,prune,plum
+grape,uva|uvas,raisin,grape
+raisin,passas|uva seca,raisins secs,raisin
+sultana,sultanas,raisin sec,sultana
+fig,figo,figue,fig
+date,tamara|tâmara,datte,date
+pomegranate,roma|romã,grenade,pomegranate
+kiwi,quivi,kiwi,kiwi
+pineapple,ananas|ananás,ananas,pineapple
+mango,manga,mangue,mango
+papaya,papaia,papaye,papaya
+cherimoya,anona,chérimole|cherimole,cherimoya
+persimmon,diospero|dióspiro,kaki,persimmon
+loquat,nespera|nêspera,nèfle|nefle,loquat
+quince,marmelo,coing,quince
+avocado,abacate,avocat,avocado
+coconut,coco,noix de coco,coconut
+passion_fruit,maracuja|maracujá,fruit de la passion,passion fruit
+feijoa,feijoa,feijoa,feijoa
+lychee,lichia,litchi,lychee
+guava,goiaba,goyave,guava
+tamarillo,tamarilho,tamarillo,tamarillo
+starfruit,carambola,carambole,star fruit
+chestnut,castanha,châtaigne|chataigne,chestnut
+almond,amendoa|amêndoa,amande,almond
+hazelnut,avela|avelã,noisette,hazelnut
+walnut,noz,noix,walnut
+pecan,noz pecan,noix de pécan,pecan
+pine_nut,pinhao|pinhão,pignon,pine nut
+peanut,amendoim,cacahuète|cacahuete,peanut
+cashew,castanha de caju,noix de cajou,cashew
+pistachio,pistacio|pistácio,pistache,pistachio
+macadamia,macadamia,macadamia,macadamia
+seed,sementes|semente,graines,seeds
+flaxseed,linhaca|linhaça,lin,flaxseed
+sesame,sesamo|sésamo,sésame|sesame,sesame
+sunflower,girassol,tournesol,sunflower
+poppy,papoila,pavot,poppy
+chia,chia,chia,chia
+hemp,canhamo|cânhamo,chanvre,hemp
+lupin,tremoco|tremoço,lupin,lupin
+olive,azeitona,olive,olive
+vegetable,vegetal|vegetais|legumes,végétal|vegetale|végétale,vegetable
+potato,batata,pomme de terre,potato
+sweet_potato,batata doce,patate douce,sweet potato
+cassava,mandioca,manioc,cassava
+yam,inhame,igname,yam
+tapioca,tapioca,tapioca,tapioca
+starch,amido|fecula|fécula,amidon|fécule|feule,starch
+carrot,cenoura,carotte,carrot
+onion,cebola,oignon,onion
+garlic,alho,ail,garlic
+leek,alho-francês|alho-frances,poireau,leek
+turnip,nabo,navet,turnip
+radish,rabanete|rabanetes,radis,radish
+beetroot,beterraba,betterave,beetroot
+celery,aipo,céleri|celeri,celery
+cucumber,pepino,concombre,cucumber
+tomato,tomate,tomate,tomato
+pepper,pimento|pimentos,poivron,pepper
+chili,malagueta,piment,chili
+eggplant,beringela,aubergine,eggplant|aubergine
+courgette,curgete,courgette,courgette|zucchini
+squash,abobora|abóbora,courge,squash|pumpkin
+chayote,chuchu,chayote,chayote
+okra,quiabo,gombo,okra
+spinach,espinafres,épinards|epinards,spinach
+lettuce,alface,laitue,lettuce
+chicory,chicoria|chicória,chicorée|chicoree,chicory
+endive,endivia|endívia,endive,endive
+rocket,rucula|rúcula,roquette,rocket|arugula
+cabbage,couve,chou,cabbage
+cauliflower,couve-flor,chou-fleur,cauliflower
+broccoli,brocolos|brócolos,brocoli,broccoli
+brussels,couve-de-bruxelas,chou de Bruxelles,brussels sprout
+red_cabbage,couve-roxa,chou rouge,red cabbage
+kale,,chou kale,kale
+collard,couve-galega,couve cavalier,collard
+turnip_greens,grelos|nabiças,feuilles de navet,turnip tops
+pea,ervilhas|ervilha,petits pois,peas|pea
+bean,feijao|feijão,haricots|haricot,beans|bean
+green_bean,feijao-verde|feijão-verde,haricot vert,green bean
+chickpea,grao|grão|grão-de-bico,pois chiche,chickpea
+broad_bean,favas|fava,fèves|feve,broad bean
+lentil,lentilhas,lentilles,lentil
+soybean,soja,soja,soybean|soy
+sweet_corn,milho doce,maïs doux,sweet corn
+asparagus,espargos,asperges,asparagus
+artichoke,alcachofra,artichaut,artichoke
+sunchoke,,topinambour,jerusalem artichoke
+mushroom,cogumelos|cogumelo,champignon,mushroom
+truffle,trufa,truffe,truffle
+fennel,funcho,fenouil,fennel
+caper,alcaparras,câpres|capres,caper
+samphire,salicornia|salicórnia,salicorne,samphire
+sprouts,rebentos,pousses,sprouts
+bamboo,bambu,bambou,bamboo
+alfalfa,alfalfa,luzerne,alfalfa
+parsley,salsa,persil,parsley
+coriander,coentros,coriandre,coriander
+chives,cebolinho,ciboulette,chives
+chervil,cerefolio|cerefólio,cerfeuil,chervil
+tarragon,estragao|estragão,estragon,tarragon
+basil,manjericao|manjericão,basilic,basil
+marjoram,manjerona,marjolaine,marjoram
+oregano,oregao|orégão,origan,oregano
+thyme,tomilho,thym,thyme
+rosemary,alecrim,romarin,rosemary
+mint,hortela|hortelã,menthe,mint
+cinnamon,canela,cannelle,cinnamon
+clove,cravo|cravinho,clou de girofle,clove
+nutmeg,noz-moscada,muscade,nutmeg
+pepper_spice,pimenta,poivre,pepper
+paprika,colorau|pimentão,paprika,paprika
+saffron,acafrao|açafrão,safran,saffron
+palm_oil,palma,palme,palm oil
+turmeric,acafrao-da-india|açafrão-da-índia,curcuma,turmeric
+curry,caril,curry,curry
+cumin,cominhos,cumin,cumin
+cardamom,cardamomo,cardamome,cardamom
+ginger,gengibre,gingembre,ginger
+mustard,mostarda,moutarde,mustard
+vinegar,vinagre,vinaigre,vinegar
+vinaigrette,vinagrete,vinaigrette,vinaigrette
+mayonnaise,maionese,mayonnaise,mayonnaise
+ketchup,ketchup,ketchup,ketchup
+salt,sal,sel,salt
+sea_salt,flor de sal,fleur de sel,sea salt
+drink,bebida|bebidas,boisson,drink
+soft_drink,refrigerante,soda,soft drink
+juice,sumo|sumos,jus,juice
+nectar,nectar|néctar,nectar,nectar
+coffee,cafe|café,café|cafe,coffee
+tea,cha|chá,thé|the,tea
+herbal_tea,tisana,tisane,herbal tea
+wine,vinho,vin,wine
+beer,cerveja,bière|biere,beer
+cider,sidra,cidre,cider
+brandy,aguardente|brandy,eau-de-vie,brandy|spirit
+liqueur,licor,liqueur,liqueur
+whisky,whisky,whisky,whisky
+gin,gin,gin,gin
+rum,rum,rhum,rum
+anis,anis,anis,anise
+yeast,fermento,levure,yeast
+flakes,flocos,flocons,flakes
+cereal,cereal|cereais,céréales|cereales,cereal
+pizza,pizza,pizza,pizza
+quiche,quiche,quiche,quiche
+puff_pastry,massa folhada,pâte feuilletée|pate feuilletee,puff pastry
+shortcrust,massa quebrada,pâte brisée|pate brisee,shortcrust pastry
+pita,pao pita|pão pita,pain pita,pita bread
+breadstick,gressino,gressin,breadstick
+homemade,caseiro|caseira,maison,homemade
+canned,conserva|enlatado,appertisé|appertise|conserve,canned
+frozen,congelado|congelada,surgelé|surgelée,frozen
+fresh,fresco|fresca|frescos,frais|fraîche|fraiche,fresh
+dried,seco|seca|secas,sec|sèche|seche,dried
+dehydrated,desidratado|desidratada,déshydraté|dehydrate,dehydrated
+crystallized,cristalizada,cristallise|confit,crystallized
+powder,po|pó|em po|em pó,en poudre,powder|powdered
+pulp,polpa,pulpe,pulp
+pieces,pedacos|pedaços,morceaux,pieces
+grated,ralado,râpé|rape,grated
+drained,escorrido|escorrida,égoutté|egoutte,drained
+squeezed,espremido,pressé|presse,squeezed
+concentrated,concentrado,concentré|concentre,concentrated
+infusion,infusao|infusão,infusion,infusion
+instant,soluvel|solúvel,soluble,instant|soluble
+decaffeinated,descafeinado,décaféiné|decafeine,decaffeinated
+substitute,sucedaneo|sucedâneo,succédané|succedane,substitute
+fortified,enriquecido|enriquecida,enrichi,fortified|enriched
+flavoured,aromatizado|aromatizada,aromatisé|aromatise,flavoured
+sweetened,acucarado|açucarado,sucré|sucrée,sweetened
+sweetener,edulcorantes|edulcorante,édulcorants|edulcorants,sweetener
+natural,natural,nature|nature,plain|natural
+liquid,liquido|líquido,liquide,liquid
+solid,solido|sólido,solide,solid
+pasteurized,pasteurizado,pasteurisé|pasteurise,pasteurized
+uht,uht,uht,uht
+kefir,kefir,kéfir|kefir,kefir
+bifidus,bifidus,bifidus,bifidus
+spread,para barrar,à tartiner|a tartiner,spread
+tahini,tahini,tahini,tahini
+miso,miso,miso,miso
+seitan,seitan,seitan,seitan
+tofu,tofu,tofu,tofu
+plant_based,alternativa,spécialité|specialite,alternative|plant-based
+bulgur,bulgur,boulgour,bulgur
+carob,alfarroba,caroube,carob
+couscous,cuscuz,couscous,couscous
+polenta,polenta,polenta,polenta
+muesli,muesli,muesli,muesli
+corn_flakes,corn flakes,corn flakes,corn flakes
+granola,granola,granola,granola
+protein,proteina|proteína,protéine|proteine,protein
+textured,texturizada,texturé|texture,textured
+stuffed,recheado,garni|fourré|fourre,stuffed|filled
+dry,seca|seco,sec,dry
+green,verde,vert|verte,green
+white,branco|branca,blanc|blanche,white
+black,preto|preta,noir|noire,black
+red,tinto|vermelha,rouge,red
+roasted,torrado|torrada,grillé|grille,roasted
+salted,salgado|salgada,salé|sale,salted
+light,light|magro,allégé|allege,light|reduced
+reduced,reducao|redução,réduit|reduit,reduced
+diet,dieta,dietétique|dietetique,diet
+sparkling_wine,espumante,effervescent|mousseux,sparkling
+green_wine,vinho verde,vin vert,green wine
+port_wine,porto,porto,port wine
+madeira,madeira,madère|madeira,madeira wine
+sangria,sangria,sangria,sangria
+vermuth,vermute|aperitivo,vermouth,vermouth|aperitif
+vodka,vodka,vodka,vodka
+sake,sake,saké|sake,sake
+marsala,marsala,marsala,marsala
+calvados,calvados,calvados,calvados
+cognac,cognac,armagnac|cognac,cognac|armagnac
+stock_cube,cubo,cube,cube
+infant_cereal,lactea|láctea,lactée|lactee,baby cereal
+caldeirada,caldeirada,matelote,fish stew
+acorda,açorda|acorda,soupe au pain,bread soup
+feijoada,feijoada,feijoada,bean stew
+rancho,rancho,rancho,rice stew
+bras,bras,brás|bras,brás
+gomes,gomes de sá|gomes de sa,,gomes de sá
+empada,empada,chausson|tourte,pie
+empadao,empadão|empadao,pâté en croûte|pate en croute,pastry pie
+croquete,croquete,croquette,croquette
+rissol,rissol,croustade,rissol
+samosa,chamuca|chamuça,samoussa,samosa
+francesinha,francesinha,francesinha,french sandwich
+hot_dog,cachorro,hot dog,hot dog
+bolonhesa,bolonhesa,bolognaise,bolognese
+valenciana,valenciana,valencienne,valencian
+jardineira,jardineira,jardinière|jardiniere,garden style
+marrare,marrare,marrare,marrare style
+cacador,caçador|cacador,chasseur,hunter style
+vinha,vinha,vinha,vinha
+alentejana,alentejana,alentejane,alentejana
+portuguese,portuguesa,portugais,portuguese
+brie,brie,brie,brie
+camembert,camembert,camembert,camembert
+parmesan,parmesão|parmesao|parmesan,parmesan,parmesan
+roquefort,roquefort,roquefort,roquefort
+gouda,gouda,gouda,gouda
+gruyere,gruyère|gruyere,gruyère|gruyere,gruyère
+cheddar,cheddar,cheddar,cheddar
+mozzarella,mozzarella,mozzarella,mozzarella
+edam,edam,edam,edam
+emmental,emmental,emmental,emmental
+raclette,raclette,raclette,raclette
+reblochon,reblochon,reblochon,reblochon
+saint_nectaire,saint-nectaire,saint-nectaire,saint nectaire
+mimolette,mimolette,mimolette,mimolette
+comte,comté|comte,comté|comte,comté
+munster,munster,munster,munster
+maroilles,maroilles,maroilles,maroilles
+livarot,livarot,livarot,livarot
+pont_leveque,pont-l'évêque|pont-leveque,pont-l'évêque|pont-leveque,pont-l'évêque
+chaource,chaource,chaource,chaource
+salers,salers,salers,salers
+cantal,cantal,cantal,cantal
+tomme,tomme,tomme,tomme
+abondance,abondance,abondance,abondance
+fourme,fourme,fourme,fourme
+ossau_iraty,ossau-iraty,ossau-iraty,ossau-iraty
+bleu,azul,bleu,blue cheese
