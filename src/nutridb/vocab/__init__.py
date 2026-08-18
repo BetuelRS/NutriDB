@@ -28,6 +28,16 @@ _FACET_FILES = (
     "treatments",
     "qualifiers",
 )
+_FACET_NAME_COLUMNS = (
+    "name_en",
+    "name_pt",
+    "name_fr",
+    "name_es",
+    "name_de",
+    "name_it",
+    "name_pt_PT",
+    "name_pt_BR",
+)
 _REQUIRED_ABSENCE_TYPES = {
     "not_measured",
     "not_detected",
@@ -48,6 +58,8 @@ SCHEMAS = {
     "food_groups.csv": ("id", "name_en", "name_pt"),
     "nutrient_relation.csv": ("parent", "child"),
 }
+for _fname in _FACET_FILES:
+    SCHEMAS[f"facets/{_fname}"] = ("id", *_FACET_NAME_COLUMNS)
 
 
 @dataclass
@@ -127,7 +139,7 @@ def check_vocabulary(root: Path) -> VocabReport:
 
     for fname in _FACET_FILES:
         try:
-            rows = load_csv(vocab_dir / "facets" / f"{fname}.csv", ("id", "name_en", "name_pt"))
+            rows = load_csv(vocab_dir / "facets" / f"{fname}.csv", SCHEMAS[f"facets/{fname}"])
         except (FileNotFoundError, ValueError) as exc:
             report.errors.append(f"facets/{fname}: {exc}")
             continue

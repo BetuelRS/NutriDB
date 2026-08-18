@@ -1,19 +1,19 @@
-id,name_en,name_pt
-organic,Organic,Biológico
-conventional,Conventional,Convencional
-low_fat,Low fat,Magro (baixo teor de gordura)
-reduced_fat,Reduced fat,Teor reduzido de gordura
-whole_fat,Whole fat,Gordo (teor integral)
-skim,Skimmed,Magro/desnatado
-semi_skimmed,Semi-skimmed,Meio-gordo
-whole_grain,Whole grain,Integral (cereal)
-refined,Refined,Refinado
-light,Light,Ligeiro/light
-unsweetened,Unsweetened,Sem açúcar adicionado
-seasoned,Seasoned,Temperado
-gluten_free,Gluten free,Sem glúten
-lactose_free,Lactose free,Sem lactose
-iodized,Iodized,Com iodo adicionado
-plain,Plain,Simples/natural
-premium,Premium,Prémio
-standard,Standard,Padrão
+id,name_en,name_pt,name_fr,name_es,name_de,name_it,name_pt_PT,name_pt_BR
+organic,Organic,Biológico,Bio,Ecológico,Bio,Biologico,Biológico,Orgânico
+conventional,Conventional,Convencional,Conventionnel,Convencional,Konventionell,Convenzionale,Convencional,Convencional
+low_fat,Low fat,Magro (baixo teor de gordura),Allégé en matières grasses,Bajo en grasa,Fettarm,A basso contenuto di grassi,Magro (baixo teor de gordura),Magro (baixo teor de gordura)
+reduced_fat,Reduced fat,Teor reduzido de gordura,Teneur réduite en matières grasses,Reducido en grasa,Fettreduziert,Ridotto in grassi,Teor reduzido de gordura,Teor reduzido de gordura
+whole_fat,Whole fat,Gordo (teor integral),Entier (matières grasses complètes),Entero (grasa completa),Vollfett,Intero (grassi pieni),Gordo (teor integral),Gordo (teor integral)
+skim,Skimmed,Magro/desnatado,Écrémé,Desnatado,Fettfrei (Magermilch),Scremato,Magro/desnatado,Desnatado
+semi_skimmed,Semi-skimmed,Meio-gordo,Demi-écrémé,Semidesnatado,Halbentrahmt,Parzialmente scremato,Meio-gordo,Semidesnatado
+whole_grain,Whole grain,Integral (cereal),Complet (céréale),Integral (cereal),Vollkorn,Integrale (cereale),Integral (cereal),Integral (cereal)
+refined,Refined,Refinado,Raffiné,Refinado,Raffiniert,Raffinato,Refinado,Refinado
+light,Light,Ligeiro/light,Léger,Ligero,Leicht (light),Leggero (light),Ligeiro/light,Light
+unsweetened,Unsweetened,Sem açúcar adicionado,Sans sucre ajouté,Sin azúcar añadido,Ohne Zuckerzusatz,Senza zuccheri aggiunti,Sem açúcar adicionado,Sem açúcar adicionado
+seasoned,Seasoned,Temperado,Assaisonné,Sazonado,Gewürzt,Condito,Temperado,Temperado
+gluten_free,Gluten free,Sem glúten,Sans gluten,Sin gluten,Glutenfrei,Senza glutine,Sem glúten,Sem glúten
+lactose_free,Lactose free,Sem lactose,Sans lactose,Sin lactosa,Laktosefrei,Senza lattosio,Sem lactose,Sem lactose
+iodized,Iodized,Com iodo adicionado,Enrichi en iode,Yodado,Jodiert,Iodato,Com iodo adicionado,Com iodo adicionado
+plain,Plain,Simples/natural,Nature,Natural/simple,Natur,Naturale,Simples/natural,Simples/natural
+premium,Premium,Prémio,Premium,Premium,Premium,Premium,Prémio,Premium
+standard,Standard,Padrão,Standard,Estándar,Standard,Standard,Padrão,Padrão
