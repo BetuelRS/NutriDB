@@ -111,7 +111,9 @@ def test_search_reviewed_override_searches_and_dedupes(db_path: str, tmp_path: P
     base = tmp_path / "search_review"
     base.mkdir()
     root = make_sandbox_root(base)
-    (root / "i18n" / "labels" / "reviewed_pt-PT.csv").write_text(
+    labels_dir = root / "i18n" / "labels"
+    labels_dir.mkdir(parents=True, exist_ok=True)
+    (labels_dir / "reviewed_pt-PT.csv").write_text(
         "# approved decision (CLI `i18n review --apply`)\n"
         "ref_kind,ref,label\nnutrient,WATER,Água (H2O)\n",
         encoding="utf-8",

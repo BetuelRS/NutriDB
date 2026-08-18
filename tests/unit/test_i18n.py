@@ -159,12 +159,19 @@ def test_mt_unreviewed_aborts_core(
         build(canonical, sandbox_root)
 
 
+def _reviewed(root: Path, locale: str, body: str) -> None:
+    labels = root / "i18n" / "labels"
+    labels.mkdir(parents=True, exist_ok=True)
+    (labels / f"reviewed_{locale}.csv").write_text(body, encoding="utf-8")
+
+
 def test_generic_pt_forbidden_for_divergent_ref(tmp_path: Path, sandbox_root: Path) -> None:
     canonical = _canonical(tmp_path, sandbox_root)
-    (sandbox_root / "i18n" / "labels" / "reviewed_pt.csv").write_text(
+    _reviewed(
+        sandbox_root,
+        "pt",
         "# reviewer mistake: generic label for a divergent ref\n"
         "ref_kind,ref,label\nnutrient,CHOAVL,Hidratos de carbono\n",
-        encoding="utf-8",
     )
     with pytest.raises(I18nError, match="generic pt label used for divergent ref"):
         build(canonical, sandbox_root)
@@ -172,10 +179,11 @@ def test_generic_pt_forbidden_for_divergent_ref(tmp_path: Path, sandbox_root: Pa
 
 def test_reviewed_overrides_win_and_stay_curated(tmp_path: Path, sandbox_root: Path) -> None:
     canonical = _canonical(tmp_path, sandbox_root)
-    (sandbox_root / "i18n" / "labels" / "reviewed_pt-PT.csv").write_text(
+    _reviewed(
+        sandbox_root,
+        "pt-PT",
         "# approved decision (CLI `i18n review --apply`)\n"
         "ref_kind,ref,label\nnutrient,WATER,Água (H2O)\n",
-        encoding="utf-8",
     )
     report = build(canonical, sandbox_root)
     assert report["reviewed"] == 1
