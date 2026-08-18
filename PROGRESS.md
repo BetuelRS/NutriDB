@@ -83,7 +83,7 @@
 | F4.6 Pesquisa cruzada | done | `api.search` resolve o rotulo pela cadeia do locale pedido + dedupe por conceito; golden real: "zucchini" em pt-PT -> "Curgete, polpa e pele, cozida"; "abacaxi" em pt-BR -> "Abacaxi, polpa sem casca, cru" |
 | F4.7 CLI i18n review | done | Lista `i18n/review_queue/<locale>.csv`, `--apply` grava aprovados em `i18n/labels/reviewed_<locale>.csv`; fila vazia no real (P7: tudo nasce native/official/curated); `i18n/untranslatable.csv` com header |
 | F4.8 Testes | done | test_i18n F4 (gates P7/divergencias/cobertura/drift/reviewed); sandbox com divergences sintetico derivado dos glossarios (sem concept_ids reais); FTS 8 locales; pesquisa cruzada + dedupe; golden i18n real (amostra por locale, gates, search no sqlite); 136 testes verdes; ruff/mypy limpos (35 ficheiros) |
-| F4.9 Fecho | em curso | CI `f4/**`; commits atomicos `(f4)`; merge `--no-ff`; push; CI verde |
+| F4.9 Fecho | done | CI `f4/**`; commits atomicos `(f4)` (9); push; merge `--no-ff` em `f0/fundacoes` (8649801) + push; CI verde (checks+explorer) |
 
 **Entregaveis da fase**: ADR-0006; glossarios 7 locales (1127 rotulos); facetas 8 locales; divergences.csv 67 linhas; i18n build F4 com gates; 8 tabelas FTS; pesquisa cruzada; CLI `i18n review`; testes + golden i18n. **Artefacto real**: 9 775 labels (fr 3706 native+curated, en 3706 native+official, pt 1542 native+curated, pt-PT/pt-BR 169 curated, es/de/it 161 curated), 8 FTS, 231 243 776 bytes.
 
@@ -93,7 +93,7 @@
 
 ## Bloqueios / pendencia
 
-- Nenhum. F4.9 (merge + CI) em curso.
+- Nenhum. F4 fechada (merge 8649801, CI verde).
 
 ## Historico de sessoes
 
