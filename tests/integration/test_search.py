@@ -22,6 +22,7 @@ from nutridb.transform import transform
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+    from pathlib import Path
 
 FIXTURE = project_root() / "tests" / "fixtures" / "synthetic_ciqual"
 
@@ -82,9 +83,53 @@ def test_search_phrase_multi_token(db_path: str) -> None:
 
 
 def test_search_fallback_chain(db_path: str) -> None:
-    es = search(db_path, "water", "es")  # es -> en (no es labels in F1)
-    assert "Water (by difference is not allowed)" in _texts(es)
-    assert all(r.locale == "en" for r in es)
+    # es FTS has no food labels; "water" hits the en index, but the label
+    # resolves through the es chain -> es label (F4: find the concept,
+    # display it in the query locale)
+    es = search(db_path, "water", "es")
+    water = [h for h in es if h.ref == "WATER"]
+    assert water
+    assert water[0].text == "Agua"
+    assert water[0].locale == "es"
+    assert water[0].status == "curated"
+
+
+def test_search_cross_lingual_resolves_label(db_path: str) -> None:
+    # "energy" hits the en FTS (no es label matches), but the concept's
+    # display label resolves through the es chain -> es label (F4, SPEC §7)
+    hits = search(db_path, "energy", "es")
+    energy = [h for h in hits if h.ref == "ENERC_KCAL"]
+    assert energy
+    assert energy[0].text == "Energía"
+    assert energy[0].locale == "es"
+    assert energy[0].status == "curated"
+
+
+def test_search_reviewed_override_searches_and_dedupes(db_path: str, tmp_path: Path) -> None:
+    from conftest import make_sandbox_root
+
+    base = tmp_path / "search_review"
+    base.mkdir()
+    root = make_sandbox_root(base)
+    (root / "i18n" / "labels" / "reviewed_pt-PT.csv").write_text(
+        "# approved decision (CLI `i18n review --apply`)\n"
+        "ref_kind,ref,label\nnutrient,WATER,Água (H2O)\n",
+        encoding="utf-8",
+    )
+    cache = base / "cache"
+    cache.mkdir()
+    for official, synthetic in _FIXTURE_MAP.items():
+        copyfile(FIXTURE / synthetic, cache / official)
+    extract(cache, base / "i" / "ciqual")
+    canonical = base / "c"
+    transform(base / "i", canonical, root)
+    build_labels(canonical, root)
+    info = package(canonical, root / "vocab", base / "out", root)
+    hits = search(str(info["path"]), "h2o", "pt-PT")
+    water = [h for h in hits if h.ref == "WATER"]
+    assert len(water) == 1  # override + glossary rows deduplicated by concept
+    assert water[0].text == "Água (H2O)"
+    assert water[0].status == "curated"
 
 
 def test_search_empty_and_unknown_locale(db_path: str) -> None:
@@ -115,6 +160,15 @@ def test_package_fts_visible_from_sqlite(db_path: str) -> None:
         frames = conn.execute(
             "SELECT name FROM sqlite_master WHERE sql LIKE 'CREATE VIRTUAL TABLE%' ORDER BY name"
         ).fetchall()
-        assert [f[0] for f in frames] == ["label_fts_en", "label_fts_fr", "label_fts_pt_PT"]
+        assert [f[0] for f in frames] == [
+            "label_fts_de",
+            "label_fts_en",
+            "label_fts_es",
+            "label_fts_fr",
+            "label_fts_it",
+            "label_fts_pt",
+            "label_fts_pt_BR",
+            "label_fts_pt_PT",
+        ]
     finally:
         conn.close()

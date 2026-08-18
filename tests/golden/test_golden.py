@@ -20,6 +20,7 @@ import math
 import polars as pl
 import pytest
 
+from nutridb.i18n import load_divergences, load_locales
 from nutridb.paths import project_root
 
 ROOT = project_root()
@@ -335,3 +336,99 @@ def test_insa_golden_provenance_walk_on_sqlite() -> None:
         if str(cell.get("cod")) != row["alim_code"]:
             missing.append(f"{row['food_pt']} | {tag}: raw cod {cell.get('cod')}")
     assert not missing, "INSA provenance walk failed:\n" + "\n".join(missing)
+
+
+# -- F4: multilingual labels over the real artefact ---------------------------
+
+LABEL_PARQUET = ROOT / "build" / "canonical" / "label.parquet"
+
+
+def test_golden_i18n_labels_across_locales() -> None:
+    """Sample label rows per locale, referenced from i18n/glossary/*.csv
+    (configuration-as-data, reviewed in diff) and divergences.csv."""
+    if not LABEL_PARQUET.is_file():
+        pytest.skip("canonical label table not built")
+    labels = pl.read_parquet(LABEL_PARQUET)
+    assert set(labels["locale"].unique().to_list()) == {
+        "fr",
+        "en",
+        "pt",
+        "pt-PT",
+        "pt-BR",
+        "es",
+        "de",
+        "it",
+    }
+    by_tag = {
+        (r["locale"], r["ref"]): r["text"]
+        for r in labels.filter(pl.col("ref_kind") == "nutrient").rows(named=True)
+    }
+    assert by_tag["fr", "ENERC_KCAL"] == "Énergie"
+    assert by_tag["en", "ENERC_KCAL"] == "Energy (kcal; method registered per source)"
+    assert by_tag["pt", "ENERC_KCAL"] == "Energia"
+    assert by_tag["pt-PT", "ENERC_KCAL"] == "Energia"
+    assert by_tag["pt-BR", "ENERC_KCAL"] == "Energia"
+    assert by_tag["es", "ENERC_KCAL"] == "Energía"
+    assert by_tag["de", "ENERC_KCAL"] == "Energie"
+    assert by_tag["it", "ENERC_KCAL"] == "Energia"
+    # divergent nutrient: variants present, generic pt absent (SPEC §7)
+    assert by_tag["pt-PT", "CHOAVL"] == "Hidratos de carbono disponíveis"
+    assert by_tag["pt-BR", "CHOAVL"] == "Carboidratos disponíveis"
+    assert ("pt", "CHOAVL") not in by_tag
+    # divergent food: regional variant labels on the concept (ADR-0006)
+    food = {
+        (r["locale"], r["ref"]): r["text"]
+        for r in labels.filter(pl.col("ref_kind") == "food").rows(named=True)
+    }
+    assert food["pt-PT", "nfx_5WAXNCVY3238REJ2NWP012390F"] == "Ananás, polpa sem pele, cru"
+    assert food["pt-BR", "nfx_5WAXNCVY3238REJ2NWP012390F"] == "Abacaxi, polpa sem casca, cru"
+
+
+def test_golden_i18n_gates_hold_on_real_build() -> None:
+    """Per-locale nutrient coverage, status purity and the divergence gate
+    (ADR-0006 §3.2) over the real build."""
+    if not LABEL_PARQUET.is_file():
+        pytest.skip("canonical label table not built")
+    config = load_locales(ROOT / "i18n" / "locales.toml")
+    divergences = load_divergences(ROOT / "i18n" / "divergences.csv")
+    divergent_pt = {
+        r["ref"] for r in divergences if r["ref_kind"] == "nutrient" and r["ptPT"] and r["ptBR"]
+    }
+    labels = pl.read_parquet(LABEL_PARQUET)
+    assert labels.filter(pl.col("status") == "mt_unreviewed").height == 0
+    assert set(labels["status"].unique().to_list()) <= {"native", "official", "curated"}
+    for locale in config["active"]:
+        by_locale = labels.filter(pl.col("locale") == locale)
+        assert by_locale.height > 0
+        tags = set(by_locale.filter(pl.col("ref_kind") == "nutrient")["ref"].to_list())
+        expected = 161 if locale != "pt" else 161 - len(divergent_pt)
+        assert len(tags) == expected, f"locale {locale}: {len(tags)} nutrient labels"
+        ok = by_locale.filter(pl.col("status").is_in(["native", "official", "curated"]))
+        assert ok.height / by_locale.height >= 0.95, f"locale {locale}: status gate"
+    generic = labels.filter(
+        (pl.col("ref_kind") == "nutrient")
+        & pl.col("ref").is_in(divergent_pt)
+        & (pl.col("locale") == "pt")
+    )
+    assert generic.height == 0, "generic pt labels for divergent refs"
+
+
+def test_golden_i18n_search_cross_lingual_on_sqlite() -> None:
+    """F4 cross-lingual search on the real artefact: an English query in a
+    locale without that word finds the concept and displays it in the
+    query locale (SPEC §7: the concept is found, the language follows the
+    locale)."""
+    if not SQLITE.is_file():
+        pytest.skip("packaged artefact not built")
+    from nutridb.api import search
+
+    zucchini = search(SQLITE, "zucchini", "pt-PT")
+    courgette = [h for h in zucchini if h.ref == "nfx_43XVY2CS429HC4KK3WZHM6R7H6"]
+    assert courgette
+    assert courgette[0].text == "Curgete, polpa e pele, cozida"
+    assert courgette[0].locale == "pt-PT"
+    assert courgette[0].status == "curated"
+
+    pineapple = search(SQLITE, "abacaxi", "pt-BR")
+    ananas = [h for h in pineapple if h.ref == "nfx_5WAXNCVY3238REJ2NWP012390F"]
+    assert ananas and ananas[0].text == "Abacaxi, polpa sem casca, cru"
