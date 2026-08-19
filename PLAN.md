@@ -1,7 +1,7 @@
 # PLAN.md — plano vivo do NUTRIDB
 
 > Plano atualizado a cada sessão. Nunca dependas do contexto sobreviver (regra §17.1).
-> Estado atual: **Fase 1 concluída (2026-08-16)** — CIQUAL ponta a ponta, golden 61/61, explorer mínimo, merge com CI verde. **Próximo: Fase 2** (multi-fonte: INSA/TCA integrado no esquema comum), em curso no branch `f2/multi-fonte`.
+> **Estado oficial:** direção de produto aprovada em 2026-08-19. O dataset é o produto principal; o Explorer é a interface de inspeção; integrações e expansão de fontes seguem depois dos gates de produção.
 
 ## Convenções
 
@@ -10,6 +10,58 @@
 - Qualquer decisão cara de reverter → ADR numerado (contexto, opções, decisão, consequências).
 - Testes primeiro em tudo o que envolve correção numérica.
 - Legendas: `[ ]` pendente · `[x]` feito · DoD = definição de feito · Verificação = comando concreto que prova o DoD.
+
+## Direção confirmada
+
+O NutriDB será uma plataforma aberta e versionada de dados de composição
+alimentar para desenvolvedores, investigadores e consulta pública. O núcleo é
+o dataset; o Explorer torna a informação intuitiva sem esconder proveniência,
+ausências ou divergências. A direção está registada no
+[`ADR-0010`](docs/adr/0010-direcao-produto.md).
+
+### Produto
+
+- Dataset canónico, auditável e reutilizável como primeira prioridade.
+- Explorer web com pesquisa, fichas, comparação de fontes, proveniência e cobertura.
+- Workspace neutro futuro para selecionar alimentos/quantidades e calcular totais com inputs visíveis; sem aconselhamento clínico.
+- API, bibliotecas e exports adicionais apenas depois da release confiável do dataset.
+
+### Escopo inicial
+
+- Fontes: CIQUAL 2025 + INSA/TCA 7.1.
+- Idiomas: `pt-PT` primeiro, `en` depois; outras variantes por prioridade e cobertura.
+- Saídas: SQLite + Parquet + Explorer.
+- Fora do core: diário, tracking, contas, recomendações clínicas e imputação de valores.
+
+### Plano atual orientado à produção
+
+| Prioridade | Objetivo | Critério verificável |
+|---|---|---|
+| P0 | Fechar o contrato do produto e emendar a SPEC sobre o workspace neutro | ADR-0010 aprovado; fronteiras documentadas |
+| P1 | Fechar P1/P3/P4/P6/P9/P10 | aquisição e ausência tipadas; IDs auditáveis; gate de licenças; build único; CI sem falhas |
+| P2 | Publicar um dataset verificável | golden 200; Hypothesis; QA no CI; manifesto e checksums; rebuild externo |
+| P3 | Explorer v1 | `pt-PT`/`en`, pesquisa, ficha, proveniência, comparação e cobertura testadas |
+| P4 | Expandir catálogo com segurança | cada fonte com ADR, hash, extractor, mapping, golden e QA |
+| P5 | Integrar consumidores | API, bibliotecas, exports e publicação só após P2/P3 |
+
+### Bloqueadores atuais
+
+- `acquisition_type` está nulo em todos os valores do artefacto real.
+- O empacotador ainda não aplica o gate de compatibilidade de licença.
+- `nutridb build` ainda exige sync separado e não executa todos os gates.
+- A suite tem 192 testes recolhidos, com um teste CLI obsoleto a falhar.
+- Golden 200, propriedades Hypothesis e job QA da CI ainda não existem.
+
+As secções seguintes preservam o histórico detalhado das fases já executadas.
+Não devem ser interpretadas como o estado oficial atual quando divergirem deste
+bloco.
+
+---
+
+## Histórico detalhado de implementação
+
+As tabelas abaixo registam decisões e entregáveis por fase. O estado oficial e
+as próximas ações estão na secção anterior.
 
 ---
 
@@ -105,7 +157,7 @@
 
 ---
 
-## Próximas fases (referência — só desdobradas quando F2 fechar)
+## Registo histórico: fases previstas após F2
 
 - **F2** Multi-fonte: USDA (4 sub-conjuntos), INSA (autorização!), CoFID, Frida, Fineli + 3 à escolha; 1 ADR de licença por fonte. **Ponto de paragem obrigatório: contacto humano para INSA (§17.6).**
 - **F3** Identidade: blocking, sinais, adjudicação, dourado de 500 pares (precisão ≥ 0,98 / recall ≥ 0,90).
@@ -113,7 +165,7 @@
 - **F5** Fusão e derivações. **F6** Qualidade (suite + 200 dourados). **F7** Empacotamento (gate de licenças automático; lite < 25 MB).
 - **F8** Explorador (13 vistas). **F9** API e clientes. **F10** 1.0 (reprodutibilidade externa).
 
-## Decisões em aberto (pendentes de aprovação)
+## Registo histórico: decisões resolvidas
 
 Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Apache-2.0, pt-PT/EN, CIQUAL 2025 em `core`, XLS+fallback XML, página mínima de pesquisa em F1, cobertura+flags, método de energia, INFOODS + i18n mínimo, dourados/Fixtures, esquema fino, semver 0.1.0, links 1:1, `_unmapped`/READMEs, registry oficial+Zenodo, divergences só F4. Sem decisões em aberto para arrancar F0.
 ---
