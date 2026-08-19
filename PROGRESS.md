@@ -137,7 +137,7 @@
 | A8.6 API alargada | done | `search(kind=, food_group=)` (trigram quando todos os termos >= 3 chars, senao prefixo); `foods_for_nutrient()` ranking por valor; real: "polpa" pt-PT → Ananas/Curgete; "vitamina c" pt-PT → VITC; top VITC fr = acerola 2850 mg |
 | A8.7 Explorer | done | IndexedDB (chave `<artefacto>@v<schema>` — schema novo invalida); modo nutrientes (pesquisa + ranking com abertura do alimento); chips de grupo (faceta); trigramas espelhados; `npm run build` verde; dev server: pagina/artefacto(240 730 112 B)/wasm 200 |
 | A8.8 ADR-0008 | done | Aprovado: contexto (36,7 s, so-prefixo, re-descarga explorer), opcoes com evidencia (VACUUM, ULID translate vs loop, cache, trigram vs LIKE, IDB), decisao, consequencias |
-| A8.9 Fecho | done | 176 testes verdes; ruff/mypy limpos; commits atomicos `(f5b)` (7); merge `--no-ff` pendente em `f0/fundacoes` + push + CI |
+| A8.9 Fecho | done | 176 testes verdes; ruff/mypy limpos; commits atomicos `(f5b)` (9); merge `--no-ff` em `f0/fundacoes` (98576d5) + push; CI verde (checks + explorer) |
 
 **Entregaveis da emenda**: ADR-0008; cache.py + testes (6); CLI `build --full`; schema 4 (16 tabelas FTS = 8 prefixo + 8 trigram); API kind/food_group/foods_for_nutrient (+9 testes integracao); explorer F2/A8; golden ULID.
 
@@ -147,7 +147,7 @@
 
 ## Bloqueios / pendencia
 
-- Nenhum. f5b fechada — falta merge `--no-ff` em `f0/fundacoes`, push e confirmar CI.
+- Nenhum. Emenda A8 fechada (merge `98576d5` em `f0/fundacoes`, push, CI verde).
 
 ## Historico de sessoes
 
