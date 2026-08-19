@@ -19,8 +19,20 @@ export function escapeFtsTerm(term: string): string {
   return term.replace(/["*]/g, "");
 }
 
-export function buildMatch(query: string): string | null {
+export interface Match {
+  match: string;
+  trigram: boolean;
+}
+
+// Emenda A8: terms of >= 3 characters run on the per-locale trigram index
+// (substring matching); shorter terms fall back to the prefix index.
+export function buildMatch(query: string): Match | null {
   const terms = normalizeLabel(query).split(/\s+/).filter(Boolean);
   if (terms.length === 0) return null;
-  return terms.map((term) => `"${escapeFtsTerm(term)}"*`).join(" AND ");
+  const trigram = terms.every((term) => term.length >= 3);
+  const suffix = trigram ? "" : "*";
+  return {
+    match: terms.map((term) => `"${escapeFtsTerm(term)}"${suffix}`).join(" AND "),
+    trigram,
+  };
 }

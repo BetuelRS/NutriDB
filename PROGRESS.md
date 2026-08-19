@@ -120,3 +120,35 @@
 | F5.8 Fecho | pending | CI `f5/**` (ja adicionado ao ci.yml); commits atomicos `(f5)`; PLAN/PROGRESS; merge `--no-ff` em `f0/fundacoes` + push; CI verde |
 
 **Entregaveis da fase**: ADR-0007; source_priority.csv; overrides.csv; 4 tabelas de fatores; merge stage; derive stage; CLI; package schema 3; 19 testes unit novos. **Artefacto real (2026-08-19)**: mv 391 101 linhas, divergence_flag 4 542, locales 5, derive 0 derivacoes (fatores vazios — report explicito), 236 380 160 bytes, integrity ok.
+
+## Estado atual (2026-08-19)
+
+**Fases 0-5: concluidas** (`f0/fundacoes`; F5 merge `4af00b7`).
+
+**Emenda A8 - Performance e escavabilidade: concluida** (branch `f5b/perf-busca`; ADR-0008).
+
+| Tarefa | Estado | Nota |
+|---|---|---|
+| A8.1 Investigar ULID | done | Perfil pyinstrument inflava `_to_crockford` 3x; formula translates byte-identica (100k seeds, 0 mismatches) verificada mas **mais lenta** (1,83 vs 1,67 s/600k); modulo revertido ao loop original (alteracao liquida zero) |
+| A8.2 Golden ULIDs | done | `test_ulid_golden_values`: `ciqual:food:24999` → `5CGDNX7JVCE01C6NZFGNC5GPFJ`; ananas `13002` → `nfx_5WAXNCVY3238REJ2NWP012390F`; courgette `20021` → `nfx_43XVY2CS429HC4KK3WZHM6R7H6` (seeds do artefacto real, P4) |
+| A8.3 VACUUM removido | done | No-op de ~9 s em ficheiro novo; build real 36,7 → 18,3-18,7 s; ANALYZE fica |
+| A8.4 Cache de estagios | done | `src/nutridb/cache.py`: fingerprint sha256 deterministico (version + registry + cache de fontes + codigo sources + intermediarios + mappings + vocab + identity); `build/cache/{extract,transform}/<fp>`; `refresh_from_cache` limpa e copia (P10); `--full` ignora; **determinismo P5 verificado**: artefacto full vs cached byte-identico exceto `build_metadata`; cached 18,4 s (poupa ~16 s por build) |
+| A8.5 Schema 4 trigram | done | `label_fts_<locale>_tri` (tokenize='trigram') por locale ativo, content='label'; user_version 4; artefacto 240 730 112 B; integrity ok |
+| A8.6 API alargada | done | `search(kind=, food_group=)` (trigram quando todos os termos >= 3 chars, senao prefixo); `foods_for_nutrient()` ranking por valor; real: "polpa" pt-PT → Ananas/Curgete; "vitamina c" pt-PT → VITC; top VITC fr = acerola 2850 mg |
+| A8.7 Explorer | done | IndexedDB (chave `<artefacto>@v<schema>` — schema novo invalida); modo nutrientes (pesquisa + ranking com abertura do alimento); chips de grupo (faceta); trigramas espelhados; `npm run build` verde; dev server: pagina/artefacto(240 730 112 B)/wasm 200 |
+| A8.8 ADR-0008 | done | Aprovado: contexto (36,7 s, so-prefixo, re-descarga explorer), opcoes com evidencia (VACUUM, ULID translate vs loop, cache, trigram vs LIKE, IDB), decisao, consequencias |
+| A8.9 Fecho | done | 176 testes verdes; ruff/mypy limpos; commits atomicos `(f5b)` (7); merge `--no-ff` pendente em `f0/fundacoes` + push + CI |
+
+**Entregaveis da emenda**: ADR-0008; cache.py + testes (6); CLI `build --full`; schema 4 (16 tabelas FTS = 8 prefixo + 8 trigram); API kind/food_group/foods_for_nutrient (+9 testes integracao); explorer F2/A8; golden ULID.
+
+## Decisoes em aberto
+
+- Nenhuma.
+
+## Bloqueios / pendencia
+
+- Nenhum. f5b fechada — falta merge `--no-ff` em `f0/fundacoes`, push e confirmar CI.
+
+## Historico de sessoes
+
+- **2026-08-19**: emenda A8 (f5b). Investigacao ULID: paridade byte-identica (100k seeds) com formula translates, mas mais lenta que o loop (1,83 vs 1,67 s/600k — pyinstrument inflava 3x) → **modulo revertido**, golden P4 como regressao. VACUUM removido do package (36,7 → 18,3 s). `cache.py` content-addressed (fingerprint sha256; hit → copia; fail-high) + `build --full`; determinismo full vs cached provado (todas as tabelas iguais exceto build_metadata). Schema 4: FTS trigram por locale; API `kind`/`food_group`/`foods_for_nutrient` (trigram quando >= 3 chars, senao prefixo). Explorer: IndexedDB (chave com schema_version), modo nutrientes, chips de grupo. **176 testes verdes**; ruff/mypy limpos; artefacto real 240 730 112 B (user_version 4, integrity ok); ADR-0008 aprovado; 7 commits `(f5b)` (perf VACUUM, test ULIDs golden, ci f5b/**, test cache, perf cache, feat schema 4, feat explorer, docs ADR).

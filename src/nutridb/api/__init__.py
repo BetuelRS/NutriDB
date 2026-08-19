@@ -11,6 +11,13 @@ through the query locale's chain — writing "chicken" in locale `es` finds
 the concept whose display label resolves to the English name — and hits
 are deduplicated by concept.
 
+Emenda A8 (schema 4, searchability): each locale also has a trigram FTS
+index (``label_fts_<locale>_tri``) for substring matching — queries whose
+terms are all >= 3 characters run on the trigram index, shorter terms
+fall back to the prefix index; ``search`` can restrict ``kind`` (food /
+nutrient) and ``food_group`` (facet filter); ``foods_for_nutrient`` ranks
+the foods carrying a nutrient by value.
+
 Everything here is read-only and immutable: the artefact never changes
 after packaging (P5), so the API is a thin, deterministic lens.
 """
@@ -27,11 +34,13 @@ from nutridb.i18n import load_locales, normalize_label
 if TYPE_CHECKING:
     from pathlib import Path
 
-__all__ = ["ApiError", "SearchResult", "search"]
+__all__ = ["ApiError", "FoodValue", "SearchResult", "foods_for_nutrient", "search"]
 
 _MAX_LIMIT = 100
 
 _FFS5_ESCAPE = re.compile(r"[\"*]")
+
+_TRIGRAM_MIN_TERM = 3
 
 
 class ApiError(Exception):
@@ -50,18 +59,21 @@ class SearchResult:
     score: float
 
 
-def search(
-    db_path: Path | str,
-    query: str,
-    locale: str,
-    limit: int = 20,
-    locales_file: Path | None = None,
-) -> list[SearchResult]:
-    """Full-text search over labels; accent-insensitive, fallback-resolved."""
-    if not query.strip():
-        return []
-    if limit <= 0 or limit > _MAX_LIMIT:
-        raise ApiError(f"limit must be in 1..{_MAX_LIMIT}, got {limit}")
+@dataclass(frozen=True)
+class FoodValue:
+    """One preferred value cell from ``mv_food_value`` (schema 3/4)."""
+
+    concept_id: str
+    label: str
+    locale: str
+    food_group: str
+    nutrient_id: str
+    value: float | None
+    unit: str | None
+    basis: str
+
+
+def _chain(locale: str, locales_file: Path | None) -> tuple[str, ...]:
     if locales_file is None:
         from nutridb.paths import project_root
 
@@ -70,27 +82,66 @@ def search(
     chains = locales["chains"]
     if locale not in chains:
         raise ApiError(f"unknown locale {locale!r}")
+    return (locale, *chains[locale])
+
+
+def search(
+    db_path: Path | str,
+    query: str,
+    locale: str,
+    limit: int = 20,
+    locales_file: Path | None = None,
+    kind: str | None = None,
+    food_group: str | None = None,
+) -> list[SearchResult]:
+    """Full-text search over labels; accent-insensitive, fallback-resolved.
+
+    ``kind`` restricts to ``food`` or ``nutrient`` labels; ``food_group``
+    facets on the concept's food group (only meaningful for foods). Terms
+    of >= 3 characters run on the per-locale trigram index (substring
+    matching); shorter terms fall back to the prefix index.
+    """
+    if not query.strip():
+        return []
+    if limit <= 0 or limit > _MAX_LIMIT:
+        raise ApiError(f"limit must be in 1..{_MAX_LIMIT}, got {limit}")
+    if kind is not None and kind not in ("food", "nutrient"):
+        raise ApiError(f"kind must be 'food' or 'nutrient', got {kind!r}")
     terms = normalize_label(query).split()
     if not terms:
         return []
-    match = " AND ".join(f'"{term}"*' for term in (_FFS5_ESCAPE.sub("", term) for term in terms))
+    if all(len(term) >= _TRIGRAM_MIN_TERM for term in terms):
+        suffix = ""
+        trigram = True
+    else:
+        suffix = "*"
+        trigram = False
+    match = " AND ".join(f'"{_FFS5_ESCAPE.sub("", term)}"{suffix}' for term in terms)
 
     conn = sqlite3.connect(db_path)
     try:
+        chain = _chain(locale, locales_file)
         results: list[SearchResult] = []
-        for candidate in (locale, *chains[locale]):
+        for candidate in chain:
             table = f"label_fts_{candidate.replace('-', '_')}"
+            if trigram:
+                table += "_tri"
             exists = conn.execute(
                 "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)
             ).fetchone()
             if not exists:
                 continue
-            rows = conn.execute(
+            sql = (
                 f"SELECT l.ref_kind, l.ref, l.locale, l.status, l.text, f.rank "
                 f"FROM {table} f JOIN label l ON l.rowid = f.rowid "
-                f"WHERE {table} MATCH ? ORDER BY f.rank LIMIT ?",
-                (match, limit),
-            ).fetchall()
+                f"WHERE {table} MATCH ? "
+                f"AND (? IS NULL OR l.ref_kind = ?) "
+                f"AND (? IS NULL OR EXISTS (SELECT 1 FROM concept c "
+                f"WHERE c.concept_id = l.ref AND c.food_group = ?)) "
+                f"ORDER BY f.rank LIMIT ?"
+            )
+            params: tuple[object, ...] = (match, kind, kind, food_group, food_group, limit)
+            rows = conn.execute(sql, params).fetchall()
             results += [
                 SearchResult(
                     ref_kind=r[0], ref=r[1], locale=r[2], status=r[3], text=r[4], score=r[5]
@@ -99,9 +150,59 @@ def search(
             ]
             if results:
                 break  # first locale with hits wins; chain is consulted only on empty
-        return _resolve_labels(conn, results, (locale, *chains[locale]), limit)
+        return _resolve_labels(conn, results, chain, limit)
     except sqlite3.OperationalError as exc:
         raise ApiError(f"FTS query failed: {exc}") from exc
+    finally:
+        conn.close()
+
+
+def foods_for_nutrient(
+    db_path: Path | str,
+    nutrient_id: str,
+    locale: str,
+    limit: int = 20,
+    locales_file: Path | None = None,
+    food_group: str | None = None,
+) -> list[FoodValue]:
+    """Foods carrying a nutrient, ranked by value (per-100 g basis, schema 3).
+
+    Walks the locale chain over the materialised ``mv_food_value`` rows
+    (which exist in the source locales); the first locale with rows wins.
+    """
+    if limit <= 0 or limit > _MAX_LIMIT:
+        raise ApiError(f"limit must be in 1..{_MAX_LIMIT}, got {limit}")
+    conn = sqlite3.connect(db_path)
+    try:
+        chain = _chain(locale, locales_file)
+        for candidate in chain:
+            sql = (
+                "SELECT concept_id, label, locale, food_group, nutrient_id, "
+                "value, unit, basis FROM mv_food_value "
+                "WHERE nutrient_id = ? AND locale = ? AND value IS NOT NULL "
+                "AND (? IS NULL OR food_group = ?) "
+                "ORDER BY value DESC LIMIT ?"
+            )
+            rows = conn.execute(
+                sql, (nutrient_id, candidate, food_group, food_group, limit)
+            ).fetchall()
+            if rows:
+                return [
+                    FoodValue(
+                        concept_id=r[0],
+                        label=r[1],
+                        locale=r[2],
+                        food_group=r[3],
+                        nutrient_id=r[4],
+                        value=r[5],
+                        unit=r[6],
+                        basis=r[7],
+                    )
+                    for r in rows
+                ]
+        return []
+    except sqlite3.OperationalError as exc:
+        raise ApiError(f"mv_food_value query failed: {exc}") from exc
     finally:
         conn.close()
 

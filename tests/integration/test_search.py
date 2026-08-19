@@ -168,15 +168,69 @@ def test_package_fts_visible_from_sqlite(db_path: str) -> None:
         frames = conn.execute(
             "SELECT name FROM sqlite_master WHERE sql LIKE 'CREATE VIRTUAL TABLE%' ORDER BY name"
         ).fetchall()
-        assert [f[0] for f in frames] == [
-            "label_fts_de",
-            "label_fts_en",
-            "label_fts_es",
-            "label_fts_fr",
-            "label_fts_it",
-            "label_fts_pt",
-            "label_fts_pt_BR",
-            "label_fts_pt_PT",
-        ]
+        expected = sorted(
+            f"label_fts_{loc}" + suffix
+            for loc in ("de", "en", "es", "fr", "it", "pt", "pt_BR", "pt_PT")
+            for suffix in ("", "_tri")
+        )
+        assert [f[0] for f in frames] == expected
     finally:
         conn.close()
+
+
+def test_search_trigram_substring(db_path: str) -> None:
+    # "vie" is a substring of "Eau de vie de fruits": the prefix index
+    # ("vie"*) misses it, the trigram index finds it (emenda A8).
+    hits = search(db_path, "vie", "fr")
+    assert "Eau de vie de fruits" in _texts(hits)
+    brandy = search(db_path, "brandy", "en")
+    assert "Fruit brandy or eau-de-vie" in _texts(brandy)
+
+
+def test_search_short_term_falls_back_to_prefix(db_path: str) -> None:
+    # 2-char terms have no trigrams; the API falls back to the prefix index.
+    hits = search(db_path, "gi", "fr")
+    assert "Gin" in _texts(hits)
+
+
+def test_search_kind_nutrient(db_path: str) -> None:
+    hits = search(db_path, "energ", "pt-PT", kind="nutrient")
+    assert all(r.ref_kind == "nutrient" for r in hits)
+    assert {r.ref for r in hits} == {"ENERC_KCAL", "ENERC_KJ"}
+
+
+def test_search_kind_food_excludes_nutrients(db_path: str) -> None:
+    hits = search(db_path, "energ", "pt-PT", kind="food")
+    assert all(r.ref_kind == "food" for r in hits)
+
+
+def test_search_invalid_kind_fails(db_path: str) -> None:
+    with pytest.raises(ApiError, match="kind"):
+        search(db_path, "eau", "fr", kind="category")
+
+
+def test_search_food_group_filter(db_path: str) -> None:
+    beverages = search(db_path, "eau", "fr", food_group="alcoholic_beverages")
+    assert beverages
+    assert all(r.ref_kind == "food" for r in beverages)
+    assert search(db_path, "eau", "fr", food_group="dairy") == []
+
+
+def test_foods_for_nutrient_ranks_by_value(db_path: str) -> None:
+    from nutridb.api import foods_for_nutrient
+
+    foods = foods_for_nutrient(db_path, "WATER", "fr")
+    assert foods
+    assert all(f.nutrient_id == "WATER" and f.value is not None for f in foods)
+    values = [v for v in (f.value for f in foods) if v is not None]
+    assert values == sorted(values, reverse=True)
+    assert foods[0].basis == "per_100g_edible"
+    assert foods[0].food_group == "alcoholic_beverages"
+
+
+def test_foods_for_nutrient_group_filter_and_limit(db_path: str) -> None:
+    from nutridb.api import ApiError, foods_for_nutrient
+
+    assert foods_for_nutrient(db_path, "WATER", "fr", food_group="dairy") == []
+    with pytest.raises(ApiError, match="limit"):
+        foods_for_nutrient(db_path, "WATER", "fr", limit=0)

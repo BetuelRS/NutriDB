@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, f0/fundacoes, f1/**, f2/**, f3/**, f4/**, f5/**]
+    branches: [main, f0/fundacoes, f1/**, f2/**, f3/**, f4/**, f5/**, f5b/**]
   pull_request:
 
 jobs:

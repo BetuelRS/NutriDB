@@ -69,7 +69,7 @@ def test_package_builds_artifact(tmp_path: Path, sandbox_root: Path) -> None:
     try:
         assert conn.execute("PRAGMA page_size").fetchone()[0] == 8192
         assert conn.execute("PRAGMA journal_mode").fetchone()[0] != "wal"
-        assert conn.execute("PRAGMA user_version").fetchone()[0] == 3
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 4
     finally:
         conn.close()
 
@@ -224,7 +224,7 @@ def test_build_metadata_isolated(tmp_path: Path, sandbox_root: Path) -> None:
     for iso in (meta_a["built_at"], meta_b["built_at"]):
         assert iso.endswith("+00:00")
         datetime.fromisoformat(iso)
-    assert meta_a["schema_version"] == meta_b["schema_version"] == "3"
+    assert meta_a["schema_version"] == meta_b["schema_version"] == "4"
     assert meta_a["profile"] == "core"
 
 
