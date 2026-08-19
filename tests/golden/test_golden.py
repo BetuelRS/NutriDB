@@ -64,7 +64,7 @@ def _values_from_sqlite() -> dict[tuple[str, str], float]:
             (row[0], row[1]): row[2]
             for row in conn.execute(
                 "SELECT label, nutrient_id, value FROM mv_food_value "
-                "WHERE value IS NOT NULL AND locale = 'fr'"
+                "WHERE value IS NOT NULL AND locale = 'fr' AND basis = 'per_100g_edible'"
             )
         }
     finally:
@@ -144,7 +144,8 @@ def test_golden_provenance_walk_on_sqlite() -> None:
         }
         rows = conn.execute(
             "SELECT concept_id, nutrient_id, source_record_id, value "
-            "FROM mv_food_value WHERE value IS NOT NULL AND locale = 'fr'"
+            "FROM mv_food_value "
+            "WHERE value IS NOT NULL AND locale = 'fr' AND basis = 'per_100g_edible'"
         ).fetchall()
         by_food = {(id_by_name[r[0]], r[1]): (r[2], r[3]) for r in rows if r[0] in id_by_name}
         records = {
@@ -207,7 +208,7 @@ def test_insa_golden_file_shape_and_evidence() -> None:
         assert mapping[row["key"]]["unit"] == row["unit"] or row["key"] == "acidos_gordos_trans_g"
 
 
-def _insa_mv_from_sqlite() -> dict[tuple[str, str], tuple[float | None, str, str | None]]:
+def _insa_mv_from_sqlite() -> dict[tuple[str, str, str], tuple[float | None, str | None]]:
     import sqlite3
 
     conn = sqlite3.connect(SQLITE)
@@ -217,9 +218,9 @@ def _insa_mv_from_sqlite() -> dict[tuple[str, str], tuple[float | None, str, str
             for row in conn.execute("SELECT concept_id, nutrient_id, analytical_method FROM value")
         }
         return {
-            (row[0], row[1]): (row[2], row[3], methods.get((row[4], row[1])))
+            (row[0], row[1], row[2]): (row[3], methods.get((row[4], row[1])))
             for row in conn.execute(
-                "SELECT label, nutrient_id, value, basis, concept_id "
+                "SELECT label, nutrient_id, basis, value, concept_id "
                 "FROM mv_food_value WHERE locale = 'pt'"
             )
         }
@@ -236,7 +237,8 @@ def test_insa_golden_values_match_the_artefact() -> None:
     for row in _insa_rows():
         tag = mapping[row["key"]]["tagname"]
         factor = float(mapping[row["key"]]["factor"])
-        got = actual.get((row["food_pt"], tag))
+        want_basis = "per_100ml" if row["alim_code"] in {"250014", "250015"} else "per_100g_edible"
+        got = actual.get((row["food_pt"], tag, want_basis))
         expected = float(str(row["expected"]))
         if (
             got is None
@@ -250,11 +252,8 @@ def test_insa_golden_values_match_the_artefact() -> None:
         ):
             mismatches.append(f"{row['food_pt']} | {tag}: expected {expected * factor} got {got}")
             continue
-        want_basis = "per_100ml" if row["alim_code"] in {"250014", "250015"} else "per_100g_edible"
-        if got[1] != want_basis:
-            mismatches.append(f"{row['food_pt']} | {tag}: basis {got[1]} != {want_basis}")
-        if tag == "ENERC_KCAL" and got[2] is not None:
-            mismatches.append(f"{row['food_pt']} | {tag}: energy method published ({got[2]})")
+        if tag == "ENERC_KCAL" and got[1] is not None:
+            mismatches.append(f"{row['food_pt']} | {tag}: energy method published ({got[1]})")
     assert not mismatches, "INSA golden mismatches:\n" + "\n".join(mismatches)
 
 
@@ -299,10 +298,10 @@ def test_insa_golden_provenance_walk_on_sqlite() -> None:
             )
         }
         rows = conn.execute(
-            "SELECT concept_id, nutrient_id, source_record_id, value "
+            "SELECT concept_id, nutrient_id, source_record_id, value, basis "
             "FROM mv_food_value WHERE locale = 'pt'"
         ).fetchall()
-        by_food = {(id_by_name[r[0]], r[1]): (r[2], r[3]) for r in rows if r[0] in id_by_name}
+        by_food = {(id_by_name[r[0]], r[1], r[4]): (r[2], r[3]) for r in rows if r[0] in id_by_name}
         records = {
             r[0]: r[1] for r in conn.execute("SELECT source_record_id, record FROM source_record")
         }
@@ -313,7 +312,8 @@ def test_insa_golden_provenance_walk_on_sqlite() -> None:
     missing = []
     for row in _insa_rows():
         tag = mapping[row["key"]]["tagname"]
-        hit = by_food.get((row["food_pt"], tag))
+        want_basis = "per_100ml" if row["alim_code"] in {"250014", "250015"} else "per_100g_edible"
+        hit = by_food.get((row["food_pt"], tag, want_basis))
         if hit is None:
             missing.append(f"{row['food_pt']} | {tag}: no mv row")
             continue

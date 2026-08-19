@@ -14,7 +14,9 @@ from typing import TYPE_CHECKING
 import pytest
 
 from nutridb.api import ApiError, SearchResult, search
+from nutridb.derive import derive as run_derive
 from nutridb.i18n import build as build_labels
+from nutridb.merge import merge as run_merge
 from nutridb.package import package
 from nutridb.paths import project_root
 from nutridb.sources.ciqual import extract
@@ -49,6 +51,8 @@ def db_path(tmp_path_factory: pytest.TempPathFactory) -> str:
     canonical = base / "c"
     transform(base / "i", canonical, root)
     build_labels(canonical, root)
+    run_derive(canonical, root)
+    run_merge(canonical, root)
     info = package(canonical, root / "vocab", base / "out", root)
     return str(info["path"])
 
@@ -126,6 +130,8 @@ def test_search_reviewed_override_searches_and_dedupes(db_path: str, tmp_path: P
     canonical = base / "c"
     transform(base / "i", canonical, root)
     build_labels(canonical, root)
+    run_derive(canonical, root)
+    run_merge(canonical, root)
     info = package(canonical, root / "vocab", base / "out", root)
     hits = search(str(info["path"]), "h2o", "pt-PT")
     water = [h for h in hits if h.ref == "WATER"]
