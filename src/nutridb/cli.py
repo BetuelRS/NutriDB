@@ -172,6 +172,27 @@ def _register_extractors() -> None:
 _register_extractors()
 
 
+def _extract_inputs(base: dict[str, Path], source_id: str) -> list[Path]:
+    """Every input the extract stage for `source_id` depends on."""
+    files: list[Path] = [base["registry"], base["cache"] / source_id]
+    files.extend(sorted((project_root() / "src" / "nutridb" / "sources").glob("*.py")))
+    return files
+
+
+def _transform_inputs(base: dict[str, Path]) -> list[Path]:
+    """Every input the transform stage depends on."""
+    files: list[Path] = [base["build"] / "intermediates", base["mappings"], base["vocab"]]
+    root = project_root()
+    files.extend(
+        [
+            root / "src" / "nutridb" / "transform.py",
+            root / "src" / "nutridb" / "identity" / "__init__.py",
+            root / "src" / "nutridb" / "identity" / "matching.py",
+        ]
+    )
+    return files
+
+
 @app.command("transform")
 def transform(
     source: str | None = typer.Option(
@@ -480,13 +501,22 @@ def package(
 
 
 @app.command("build")
-def build() -> None:
+def build(
+    full: bool = typer.Option(
+        False, "--full", help="Ignore the stage cache and recompute extract + transform."
+    ),
+) -> None:
     """Run the full deterministic pipeline (SPEC §16, P10).
 
     Chains extract -> transform -> derive -> i18n build -> merge ->
     package core; any stage failure aborts the build (fail high, P9).
-    Requires the source cache: run `uv run nutridb sources sync` first.
+    Extract and transform are content-addressed in ``build/cache``: an
+    unchanged run reuses the previous stage output (byte-identical, P5)
+    and only re-runs derive/i18n/merge/package. Requires the source
+    cache: run `uv run nutridb sources sync` first.
     """
+    from nutridb.cache import CacheError, populate_cache, refresh_from_cache, stage_cache_path
+    from nutridb.cache import fingerprint as stage_fingerprint
     from nutridb.derive import DeriveError
     from nutridb.derive import derive as run_derive
     from nutridb.i18n import I18nError
@@ -502,20 +532,43 @@ def build() -> None:
 
     base = paths()
     registry = load_registry()
+    cache_dir = base["build"] / "cache"
     try:
         extract_reports: dict[str, dict[str, int]] = {}
         for source_id in sorted(registry.sources):
             extractor = _EXTRACTORS.get(source_id)
             if extractor is None:
                 continue  # registered sources without an extractor are not built
-            extract_reports[source_id] = extractor(
-                base["cache"] / source_id, base["build"] / "intermediates" / source_id
+            source_intermediates = base["build"] / "intermediates" / source_id
+            cached: dict[str, int] | None = None
+            if not full:
+                value = stage_fingerprint(__version__, _extract_inputs(base, source_id))
+                cached = (
+                    {"cached": 1}
+                    if stage_cache_path(cache_dir, "extract", value).is_dir()
+                    else None
+                )
+            if cached is not None:
+                refresh_from_cache(cache_dir, source_intermediates, "extract", value)
+                extract_reports[source_id] = cached
+                continue
+            extract_reports[source_id] = extractor(base["cache"] / source_id, source_intermediates)
+            if not full:
+                populate_cache(cache_dir, "extract", value, source_intermediates)
+        transform_report: dict[str, int] = {}
+        if not full:
+            value = stage_fingerprint(__version__, _transform_inputs(base))
+            if stage_cache_path(cache_dir, "transform", value).is_dir():
+                refresh_from_cache(cache_dir, base["build"] / "canonical", "transform", value)
+                transform_report = {"cached": 1}
+        if not transform_report:
+            transform_report = run_transform(
+                base["build"] / "intermediates",
+                base["build"] / "canonical",
+                base["root"],
             )
-        transform_report = run_transform(
-            base["build"] / "intermediates",
-            base["build"] / "canonical",
-            base["root"],
-        )
+            if not full:
+                populate_cache(cache_dir, "transform", value, base["build"] / "canonical")
         derive_report = run_derive(base["build"] / "canonical", base["root"])
         build_labels(base["build"] / "canonical", base["root"])
         merge_report = run_merge(base["build"] / "canonical", base["root"])
@@ -525,7 +578,7 @@ def build() -> None:
             base["build"] / "artifacts",
             base["root"],
         )
-    except (TransformError, DeriveError, I18nError, MergeError, PackageError) as exc:
+    except (CacheError, TransformError, DeriveError, I18nError, MergeError, PackageError) as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
     except Exception as exc:
