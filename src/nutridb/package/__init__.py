@@ -5,9 +5,9 @@ The artefact is a single immutable SQLite file: every §8 central table
 table), one external-content FTS5 index per locale with labels, a
 pre-computed denormalised read table (`mv_food_value`) for the explorer,
 covering indexes for the read patterns, ``page_size`` tuned for
-byte-range downloads, and ``VACUUM``/``ANALYZE`` at the end (P5:
-deterministic — the only temporal block is `build_metadata`; no WAL,
-journal OFF; the file is treated as immutable after build).
+byte-range downloads, and ``ANALYZE`` at the end (P5: deterministic —
+the only temporal block is `build_metadata`; no WAL, journal OFF; the
+file is treated as immutable after build).
 
 The ``rowid`` of `label` is the stable insertion order of the sorted
 canonical table, so FTS rowids line up deterministically.
@@ -211,7 +211,6 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
             conn.execute(ddl)
         _write_build_metadata(conn)
         conn.commit()
-        conn.execute("VACUUM")
         conn.execute("ANALYZE")
         conn.commit()
         conn.execute("PRAGMA user_version = 3")
