@@ -16,7 +16,9 @@ from shutil import copyfile
 
 import pytest
 
+from nutridb.derive import derive as run_derive
 from nutridb.i18n import build as build_labels
+from nutridb.merge import merge as run_merge
 from nutridb.package import PackageError, package
 from nutridb.paths import project_root
 from nutridb.sources.ciqual import extract
@@ -42,6 +44,8 @@ def _prepare(base: Path, root: Path) -> tuple[Path, Path]:
     canonical = base / "c"
     transform(base / "i", canonical, root)
     build_labels(canonical, root)
+    run_derive(canonical, root)
+    run_merge(canonical, root)
     return canonical, root / "vocab"
 
 
@@ -65,7 +69,7 @@ def test_package_builds_artifact(tmp_path: Path, sandbox_root: Path) -> None:
     try:
         assert conn.execute("PRAGMA page_size").fetchone()[0] == 8192
         assert conn.execute("PRAGMA journal_mode").fetchone()[0] != "wal"
-        assert conn.execute("PRAGMA user_version").fetchone()[0] == 2
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 3
     finally:
         conn.close()
 
@@ -220,7 +224,7 @@ def test_build_metadata_isolated(tmp_path: Path, sandbox_root: Path) -> None:
     for iso in (meta_a["built_at"], meta_b["built_at"]):
         assert iso.endswith("+00:00")
         datetime.fromisoformat(iso)
-    assert meta_a["schema_version"] == meta_b["schema_version"] == "2"
+    assert meta_a["schema_version"] == meta_b["schema_version"] == "3"
     assert meta_a["profile"] == "core"
 
 

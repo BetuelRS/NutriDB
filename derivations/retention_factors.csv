@@ -1,0 +1,4 @@
+# Fatores de retencao de nutrientes por confeccao (SPEC §10, ADR-0007).
+# Aguardam fonte publicada verificada (regra 17.6: nao fabricar) — ex.: USDA
+# Nutrient Retention Factors (Release 6). Consumidos por `nutridb derive`.
+nutrient,cooking_method,retention_factor,evidence

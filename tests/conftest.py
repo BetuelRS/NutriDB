@@ -22,7 +22,7 @@ from nutridb.paths import project_root
 if TYPE_CHECKING:
     from pathlib import Path
 
-SANDBOX_DIRS = ("mappings", "sources", "vocab", "i18n")
+SANDBOX_DIRS = ("mappings", "sources", "vocab", "i18n", "derivations")
 
 
 def make_sandbox_root(base: Path) -> Path:

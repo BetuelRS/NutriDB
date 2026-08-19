@@ -14,7 +14,9 @@ from typing import TYPE_CHECKING, Any
 
 import pytest
 
+from nutridb.derive import derive as run_derive
 from nutridb.i18n import build as build_labels
+from nutridb.merge import merge as run_merge
 from nutridb.package import package
 from nutridb.paths import project_root
 from nutridb.sources.ciqual import extract
@@ -46,6 +48,8 @@ def two_packages(tmp_path: Path, sandbox_root: Path) -> tuple[str, str]:
     canonical = tmp_path / "c"
     transform(tmp_path / "i", canonical, sandbox_root)
     build_labels(canonical, sandbox_root)
+    run_derive(canonical, sandbox_root)
+    run_merge(canonical, sandbox_root)
     first = package(canonical, sandbox_root / "vocab", tmp_path / "a", sandbox_root)
     second = package(canonical, sandbox_root / "vocab", tmp_path / "b", sandbox_root)
     return str(first["path"]), str(second["path"])

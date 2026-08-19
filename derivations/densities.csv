@@ -1,0 +1,4 @@
+# Densidades de grupos alimentares (SPEC §10, ADR-0007): valor_100ml = valor_100g x densidade.
+# Aguardam fonte publicada verificada (regra 17.6) — ex.: Bucher et al. 2015
+# (Food density table), FNDDS. Consumidos por `nutridb derive`.
+food_group,density_g_per_ml,evidence

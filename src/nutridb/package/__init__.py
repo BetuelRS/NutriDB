@@ -102,12 +102,12 @@ _SCHEMA = {
         "basis TEXT NOT NULL, below_loq_threshold REAL)"
     ),
     "portion": (
-        "CREATE TABLE portion (concept_id TEXT NOT NULL, name TEXT NOT NULL, "
-        "grams REAL NOT NULL, source_id TEXT NOT NULL, status TEXT NOT NULL)"
+        "CREATE TABLE portion (concept_id TEXT NOT NULL, measure TEXT NOT NULL, "
+        "grams REAL NOT NULL, evidence TEXT NOT NULL)"
     ),
     "density": (
-        "CREATE TABLE density (concept_id TEXT NOT NULL, density REAL NOT NULL, "
-        "unit TEXT NOT NULL, source_id TEXT NOT NULL)"
+        "CREATE TABLE density (food_group TEXT NOT NULL, density_g_per_ml REAL NOT NULL, "
+        "evidence TEXT NOT NULL)"
     ),
     "derivation": (
         "CREATE TABLE derivation (derivation_id TEXT PRIMARY KEY, formula TEXT, "
@@ -122,17 +122,19 @@ _SCHEMA = {
         "CREATE TABLE tombstone (tombstone_id TEXT PRIMARY KEY, "
         "successor_id TEXT NOT NULL, reason TEXT NOT NULL)"
     ),
-    # Materialized read table (SPEC §8: denormalized convenience, built,
-    # never edited): the explorer's one-stop join for food value cells.
-    # One row per (concept, nutrient, locale) with the native label (D7:
-    # fallback chains are resolved at query time, never frozen here).
+    # Materialized read table (SPEC §8/§9, ADR-0007): denormalized
+    # convenience, built by the merge stage, never edited. One row per
+    # (concept, nutrient, locale, basis) with the preferred value by
+    # priority, the non-preferred sources kept as alternatives, and the
+    # divergence signal for measured pairs rel >= 0.30.
     "mv_food_value": (
         "CREATE TABLE mv_food_value (concept_id TEXT NOT NULL, locale TEXT NOT NULL, "
         "label TEXT NOT NULL, food_group TEXT NOT NULL, nutrient_id TEXT NOT NULL, "
-        "value REAL, unit TEXT NOT NULL, value_type TEXT NOT NULL, "
-        "confidence_code TEXT, source_id TEXT NOT NULL, "
-        "source_record_id TEXT NOT NULL, below_loq_threshold REAL, "
-        "basis TEXT NOT NULL)"
+        "value REAL, unit TEXT, value_type TEXT NOT NULL, "
+        "confidence_code TEXT, acquisition_type TEXT, source_id TEXT, "
+        "source_record_id TEXT, below_loq_threshold REAL, "
+        "basis TEXT NOT NULL, alternatives TEXT, divergence_flag INTEGER NOT NULL, "
+        "divergence_max REAL, derivation_id TEXT, override_justification TEXT)"
     ),
     "build_metadata": ("CREATE TABLE build_metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)"),
 }
@@ -157,7 +159,7 @@ _INDEXES = {
     ),
 }
 
-_SCHEMA_VERSION = "2"
+_SCHEMA_VERSION = "3"
 
 
 class PackageError(Exception):
@@ -176,6 +178,8 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
             "concept_link",
             "value",
             "derivation",
+            "portion",
+            "density",
             "tombstone",
         )
     }
@@ -183,7 +187,10 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
     if not label_path.is_file():
         raise PackageError("label.parquet missing; run `uv run nutridb i18n build` first")
     tables["label"] = pl.read_parquet(label_path)
-    default_codes = _default_nutrient_codes(root)
+    mv_path = canonical_dir / "mv_food_value.parquet"
+    if not mv_path.is_file():
+        raise PackageError("mv_food_value.parquet missing; run `uv run nutridb merge` first")
+    tables["mv_food_value"] = pl.read_parquet(mv_path)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     artifact = out_dir / f"nutridb-core-{__version__}.sqlite"
@@ -199,9 +206,6 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
             conn.execute(ddl)
         _load(conn, tables)
         _load_vocabulary(conn, vocab_dir)
-        mv_rows = _build_mv_food_value(
-            conn, tables["value"], tables["concept"], tables["label"], default_codes
-        )
         _build_fts(conn, tables["label"])
         for _name, ddl in _INDEXES.items():
             conn.execute(ddl)
@@ -210,7 +214,7 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
         conn.execute("VACUUM")
         conn.execute("ANALYZE")
         conn.commit()
-        conn.execute("PRAGMA user_version = 2")
+        conn.execute("PRAGMA user_version = 3")
         conn.commit()
     finally:
         conn.close()
@@ -222,7 +226,6 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
         conn.close()
 
     counts = {name: frame.height for name, frame in tables.items()}
-    counts["mv_food_value"] = mv_rows
     return {
         "artifact": artifact.name,
         "path": str(artifact),
@@ -283,92 +286,6 @@ def _load_vocabulary(conn: sqlite3.Connection, vocab_dir: Path) -> None:
         "INSERT INTO analytical_method (id, name_en, description) VALUES (?, ?, ?)",
         [tuple(row.values()) for row in methods],
     )
-
-
-def _default_nutrient_codes(root: Path) -> set[str]:
-    """Source nutrient codes that are the read-table default for their tagname.
-
-    The canonical ``value`` table keeps every method with its registered
-    ``analytical_method`` (P1); the materialized read table presents one
-    value per (concept, nutrient), chosen by ``is_default`` in the mapping
-    (P8). 327/328 (Reg. UE 1169/2011) win over 332/333 (Jones); 25000
-    (N x facteur de Jones) wins over 25003 (N x 6.25).
-    """
-    from nutridb.mappings import load_nutrient_mapping
-
-    codes: set[str] = set()
-    for source in _registry_sources(root):
-        codes |= {
-            row["nutrient_code"]
-            for row in load_nutrient_mapping(root, source)
-            if row["is_default"] == "true"
-        }
-    if not codes:
-        raise PackageError("no default nutrient codes in the mappings")
-    return codes
-
-
-def _registry_sources(root: Path) -> list[str]:
-    """Source ids with a mapping CSV (i.e. loadable sources)."""
-    from nutridb.sources.registry import load_registry
-
-    registry = load_registry(root / "sources" / "registry.toml")
-    return sorted(s.id for s in registry.sources.values())
-
-
-def _build_mv_food_value(
-    conn: sqlite3.Connection,
-    values: pl.DataFrame,
-    concepts: pl.DataFrame,
-    labels: pl.DataFrame,
-    default_codes: set[str],
-) -> int:
-    """Pre-computed denormalised read table (SPEC §8) for the explorer.
-
-    One row per (concept, nutrient, locale): the label is the native label
-    of that locale (D7); locale fallback happens in the client at query
-    time. Filtered to the default methods per tagname (``is_default``).
-    """
-    values = values.filter(pl.col("source_nutrient_code").is_in(list(default_codes)))
-    food_labels = (
-        labels.filter(pl.col("ref_kind") == "food")
-        .select(
-            pl.col("ref").alias("concept_id"),
-            pl.col("locale").alias("locale"),
-            pl.col("text").alias("label"),
-        )
-        .unique(subset=["concept_id", "locale"])
-    )
-    frame = (
-        values.join(concepts, on="concept_id")
-        .join(food_labels, on="concept_id")
-        .sort(["concept_id", "nutrient_id", "locale", "source_id", "source_record_id"])
-        .unique(subset=["concept_id", "nutrient_id", "locale"], keep="first")
-        .sort(["concept_id", "nutrient_id", "locale"])
-    )
-    rows = frame.select(
-        "concept_id",
-        "locale",
-        "label",
-        "food_group",
-        "nutrient_id",
-        "value",
-        "unit",
-        "value_type",
-        "confidence_code",
-        "source_id",
-        "source_record_id",
-        "below_loq_threshold",
-        "basis",
-    ).rows()
-    conn.executemany(
-        "INSERT INTO mv_food_value (concept_id, locale, label, food_group, "
-        "nutrient_id, value, unit, value_type, confidence_code, source_id, "
-        "source_record_id, below_loq_threshold, basis) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        rows,
-    )
-    return len(rows)
 
 
 def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:

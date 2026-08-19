@@ -396,14 +396,46 @@ def i18n_review(
 
 @app.command("merge")
 def merge() -> None:
-    """Merge values per concept with priorities (F5)."""
-    _not_implemented("F5", "source priority merge")
+    """Merge values per concept with priorities (SPEC §9, F5)."""
+    from nutridb.merge import MergeError
+    from nutridb.merge import merge as run_merge
+    from nutridb.paths import paths
+
+    base = paths()
+    try:
+        report = run_merge(base["build"] / "canonical", base["root"])
+    except MergeError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="merge (SPEC §9)", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    for name, count in report.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("merge OK")
 
 
 @app.command("derive")
 def derive() -> None:
-    """Apply derivations: retention, yield, densities, portions (F5)."""
-    _not_implemented("F5", "derivations")
+    """Apply derivations: retention, yield, densities, portions (SPEC §10, F5)."""
+    from nutridb.derive import DeriveError
+    from nutridb.derive import derive as run_derive
+    from nutridb.paths import paths
+
+    base = paths()
+    try:
+        report = run_derive(base["build"] / "canonical", base["root"])
+    except DeriveError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="derive (SPEC §10)", title_justify="left")
+    table.add_column("item")
+    table.add_column("count", justify="right")
+    for name, count in report.items():
+        table.add_row(name, str(count))
+    rich.console.Console().print(table)
+    typer.echo("derive OK")
 
 
 @app.command("qa")
@@ -451,12 +483,16 @@ def package(
 def build() -> None:
     """Run the full deterministic pipeline (SPEC §16, P10).
 
-    Chains extract -> transform -> i18n build -> package core; any stage
-    failure aborts the build (fail high, P9). Requires the source cache:
-    run `uv run nutridb sources sync` first.
+    Chains extract -> transform -> derive -> i18n build -> merge ->
+    package core; any stage failure aborts the build (fail high, P9).
+    Requires the source cache: run `uv run nutridb sources sync` first.
     """
+    from nutridb.derive import DeriveError
+    from nutridb.derive import derive as run_derive
     from nutridb.i18n import I18nError
     from nutridb.i18n import build as build_labels
+    from nutridb.merge import MergeError
+    from nutridb.merge import merge as run_merge
     from nutridb.package import PackageError
     from nutridb.package import package as run_package
     from nutridb.paths import paths
@@ -480,14 +516,16 @@ def build() -> None:
             base["build"] / "canonical",
             base["root"],
         )
+        derive_report = run_derive(base["build"] / "canonical", base["root"])
         build_labels(base["build"] / "canonical", base["root"])
+        merge_report = run_merge(base["build"] / "canonical", base["root"])
         package_info = run_package(
             base["build"] / "canonical",
             base["vocab"],
             base["build"] / "artifacts",
             base["root"],
         )
-    except (TransformError, I18nError, PackageError) as exc:
+    except (TransformError, DeriveError, I18nError, MergeError, PackageError) as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
     except Exception as exc:
@@ -501,6 +539,10 @@ def build() -> None:
             table.add_row(f"extract {source_id} {name}", str(count))
     for name, count in transform_report.items():
         table.add_row(f"transform {name}", str(count))
+    for name, count in derive_report.items():
+        table.add_row(f"derive {name}", str(count))
+    for name, count in merge_report.items():
+        table.add_row(f"merge {name}", str(count))
     table.add_row("artifact", package_info["artifact"])
     table.add_row("size_bytes", f"{package_info['size_bytes']:,}")
     table.add_row("integrity", package_info["integrity"])
