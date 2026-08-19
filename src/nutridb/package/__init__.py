@@ -2,7 +2,8 @@
 
 The artefact is a single immutable SQLite file: every §8 central table
 (plus the frozen vocabulary reference tables and the F1 `coverage`
-table), one external-content FTS5 index per locale with labels, a
+table), one external-content FTS5 index per locale with labels (plus a
+trigram variant for substring search, schema 4, emenda A8), a
 pre-computed denormalised read table (`mv_food_value`) for the explorer,
 covering indexes for the read patterns, ``page_size`` tuned for
 byte-range downloads, and ``ANALYZE`` at the end (P5: deterministic —
@@ -159,7 +160,7 @@ _INDEXES = {
     ),
 }
 
-_SCHEMA_VERSION = "3"
+_SCHEMA_VERSION = "4"
 
 
 class PackageError(Exception):
@@ -213,7 +214,7 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
         conn.commit()
         conn.execute("ANALYZE")
         conn.commit()
-        conn.execute("PRAGMA user_version = 3")
+        conn.execute("PRAGMA user_version = 4")
         conn.commit()
     finally:
         conn.close()
@@ -292,15 +293,30 @@ def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:
     if not locales:
         raise PackageError("label table has no locales")
     for locale in locales:
+        name = "label_fts_" + locale.replace("-", "_")
         conn.execute(
-            "CREATE VIRTUAL TABLE label_fts_"
-            + locale.replace("-", "_")
+            "CREATE VIRTUAL TABLE "
+            + name
             + " USING fts5(text, text_normalized, content='label', content_rowid='rowid')"
         )
         conn.execute(
-            "INSERT INTO label_fts_"
-            + locale.replace("-", "_")
+            "INSERT INTO "
+            + name
             + " (rowid, text, text_normalized) "
+            + "SELECT rowid, text, text_normalized FROM label "
+            + "WHERE locale = ? ORDER BY rowid",
+            (locale,),
+        )
+        conn.execute(
+            "CREATE VIRTUAL TABLE "
+            + name
+            + "_tri USING fts5(text, text_normalized, tokenize='trigram', "
+            "content='label', content_rowid='rowid')"
+        )
+        conn.execute(
+            "INSERT INTO "
+            + name
+            + "_tri (rowid, text, text_normalized) "
             + "SELECT rowid, text, text_normalized FROM label "
             + "WHERE locale = ? ORDER BY rowid",
             (locale,),
