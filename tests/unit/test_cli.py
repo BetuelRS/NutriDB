@@ -70,10 +70,17 @@ def test_sources_audit_reports_ciqual() -> None:
 
 
 def test_unimplemented_commands_fail_high() -> None:
-    for command in (("merge",), ("qa",)):
+    for command in (("qa",),):
         result = runner.invoke(app, [*command])
         assert result.exit_code == 2
         assert "not implemented" in result.output
+
+
+def test_merge_is_implemented() -> None:
+    """merge is implemented (F5); its exit code depends on the canonical
+    dataset on disk (0 with data, 1 without), never 2 (not implemented)."""
+    result = runner.invoke(app, ["merge"])
+    assert result.exit_code in (0, 1)
 
 
 def test_sources_fetch_unknown_id_fails() -> None:
