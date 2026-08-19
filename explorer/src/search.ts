@@ -27,6 +27,23 @@ export interface FoodValue {
   nutrientNameEn: string;
 }
 
+export interface FoodGroup {
+  id: string;
+  namePt: string;
+  nameEn: string;
+}
+
+export interface NutrientRank {
+  conceptId: string;
+  label: string;
+  locale: string;
+  foodGroup: string;
+  nutrientId: string;
+  value: number | null;
+  unit: string | null;
+  basis: string;
+}
+
 export interface Provenance {
   sourceName: string;
   sourceVersion: string;
@@ -56,13 +73,20 @@ const VALUE_LOCALE_FALLBACK: Record<string, string[]> = {
   "pt-PT": ["pt", "en", "fr"],
 };
 
-export function search(queryText: string, locale: string, limit: number): SearchResult[] {
-  const match = buildMatch(queryText);
-  if (match === null) return [];
+export function search(
+  queryText: string,
+  locale: string,
+  limit: number,
+  kind?: "food" | "nutrient",
+  foodGroup?: string | null,
+): SearchResult[] {
+  const built = buildMatch(queryText);
+  if (built === null) return [];
   const chain = [locale, ...(LOCALE_CHAINS[locale] ?? [])];
   const collected: SearchResult[] = [];
   for (const candidate of chain) {
-    const table = `label_fts_${candidate.replaceAll("-", "_")}`;
+    const table =
+      `label_fts_${candidate.replaceAll("-", "_")}` + (built.trigram ? "_tri" : "");
     const exists =
       query(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
@@ -72,8 +96,12 @@ export function search(queryText: string, locale: string, limit: number): Search
     const rows = query(
       `SELECT l.ref_kind, l.ref, l.locale, l.status, l.text, f.rank
        FROM ${table} f JOIN label l ON l.rowid = f.rowid
-       WHERE ${table} MATCH ? ORDER BY f.rank LIMIT ?`,
-      [match, limit],
+       WHERE ${table} MATCH ?
+         AND (? IS NULL OR l.ref_kind = ?)
+         AND (? IS NULL OR EXISTS (
+           SELECT 1 FROM concept c WHERE c.concept_id = l.ref AND c.food_group = ?))
+       ORDER BY f.rank LIMIT ?`,
+      [built.match, kind ?? null, kind ?? null, foodGroup ?? null, foodGroup ?? null, limit],
     );
     for (const row of rows) {
       collected.push({
@@ -153,4 +181,47 @@ export function buildMetadata(): Record<string, string> {
     out[row.values[0]?.toString() ?? ""] = row.values[1]?.toString() ?? "";
   }
   return out;
+}
+
+export function foodGroups(): FoodGroup[] {
+  const rows = query(
+    "SELECT DISTINCT c.food_group, fg.name_pt, fg.name_en FROM concept c " +
+      "JOIN food_group fg ON fg.id = c.food_group ORDER BY c.food_group",
+  );
+  return rows.map((row) => ({
+    id: row.values[0]?.toString() ?? "",
+    namePt: row.values[1]?.toString() ?? "",
+    nameEn: row.values[2]?.toString() ?? "",
+  }));
+}
+
+export function foodsForNutrient(
+  nutrientId: string,
+  locale: string,
+  limit: number,
+  foodGroup?: string | null,
+): NutrientRank[] {
+  const chain = [locale, ...(VALUE_LOCALE_FALLBACK[locale] ?? [])];
+  for (const candidate of chain) {
+    const rows = query(
+      `SELECT concept_id, label, locale, food_group, nutrient_id, value, unit, basis
+       FROM mv_food_value
+       WHERE nutrient_id = ? AND locale = ? AND value IS NOT NULL
+         AND (? IS NULL OR food_group = ?)
+       ORDER BY value DESC LIMIT ?`,
+      [nutrientId, candidate, foodGroup ?? null, foodGroup ?? null, limit],
+    );
+    if (rows.length === 0) continue;
+    return rows.map((row) => ({
+      conceptId: row.values[0]?.toString() ?? "",
+      label: row.values[1]?.toString() ?? "",
+      locale: row.values[2]?.toString() ?? "",
+      foodGroup: row.values[3]?.toString() ?? "",
+      nutrientId: row.values[4]?.toString() ?? "",
+      value: typeof row.values[5] === "number" ? row.values[5] : null,
+      unit: row.values[6]?.toString() ?? null,
+      basis: row.values[7]?.toString() ?? "",
+    }));
+  }
+  return [];
 }
