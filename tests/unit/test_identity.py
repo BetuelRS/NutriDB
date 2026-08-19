@@ -84,6 +84,12 @@ def test_no_forbidden_chars() -> None:
     assert all("I" not in s and "L" not in s and "O" not in s and "U" not in s for s in sample)
 
 
+def test_ulid_golden_values() -> None:
+    assert ulid("ciqual:food:24999") == "5CGDNX7JVCE01C6NZFGNC5GPFJ"
+    assert canonical_id("concept", "ciqual", "food", "13002") == "nfx_5WAXNCVY3238REJ2NWP012390F"
+    assert canonical_id("concept", "ciqual", "food", "20021") == "nfx_43XVY2CS429HC4KK3WZHM6R7H6"
+
+
 def test_status_thresholds_and_flags() -> None:
     assert _status(_proposal("1", "2", score=0.90)) == "automatic"
     assert _status(_proposal("1", "2", score=0.49)) is None
