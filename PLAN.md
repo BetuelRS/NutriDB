@@ -189,6 +189,26 @@ Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Ap
 | F5.5 | Tabelas de fatores: `derivations/{retention_factors,yield_factors,densities,portions}.csv` headers + README (dados aguardam fonte publicada verificada, regra 17.6) | 4 ficheiros + README | leitura |
 | F5.6 | Package schema 3: mv_food_value com basis/alternatives/divergence_flag/divergence_max/derivation_id; tabelas portion, density, derivation; user_version 3 | SQLite real com schema 3 (integrity ok) | `uv run nutridb package` |
 | F5.7 | Testes: prioridades (wildcards/especificidade/falha alta), merge (tie-break, alternatives, divergencias 0/0, overrides gate), derive (formula registada, sem fatores falha), package schema 3, golden reais (preferred por locale, flags) | Suite verde (155); lint/mypy limpos (37 ficheiros) | `uv run pytest`; `uv run ruff check .`; `uv run mypy .` |
-| F5.8 | Fecho: CI `f5/**`, PLAN/PROGRESS, commits atomicos `(f5)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | P10 real (build completo com merge+derive: 236 380 160 B, integrity ok) | `gh run watch` |
+| F5.8 | Fecho: CI `f5/**`, PLAN/PROGRESS, commits atomicos `(f5)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | ✅ 2026-08-19 — P10 real (build completo com merge+derive: 236 380 160 B, integrity ok); merge `4af00b7` | `gh run watch` |
 
 **Entregaveis da fase**: ADR-0007; source_priority.csv; CLI `merge` + `derive`; mv_food_value schema 3 (alternatives/divergencias/basis); overrides.csv com gate; derivations/ com headers; testes + golden F5.
+
+---
+
+## Emenda A8 — Performance de producao e escavabilidade (branch `f5b/perf-busca`)
+
+**Objetivo**: otimizar o build (36,7 s → 18,4 s) e a escavabilidade do artefacto (trigramas, pesquisa de nutrientes, facetas, explorer com IndexedDB). Decisoes em ADR-0008 (2026-08-19).
+
+| # | Tarefa | Estado | Nota |
+|---|---|---|---|
+| A8.1 | Investigar ULID (perfil pyinstrument) | ✅ | Loop original e o mais rapido na pratica (1,67 s vs 1,83 s por 600k na formula translates byte-identica — o profiler inflava 3x); **sem alteracao ao modulo**; regressao via golden |
+| A8.2 | Teste golden ULIDs (P4) | ✅ | `tests/unit/test_identity.py::test_ulid_golden_values` (3 ULIDs reais do artefacto: `ciqual:food:24999`, ananas 13002, courgette 20021) |
+| A8.3 | Remover VACUUM do package | ✅ | Build real 36,7 s → 18,7 s (ANALYZE fica; VACUUM era no-op de ~9 s em ficheiro novo) |
+| A8.4 | Cache content-addressed por estagio | ✅ | `src/nutridb/cache.py` (fingerprint sha256 dos inputs, hit → copia, fail-high); `build --full` ignora; cached 18,4 s; artefacto byte-identico full vs cached (P5 verificado) |
+| A8.5 | Schema 4: FTS trigram por locale | ✅ | `label_fts_<locale>_tri` (tokenize='trigram', content='label'); termos >= 3 chars → trigram (substring), senao prefixo; user_version 4 |
+| A8.6 | API: kind, food_group, foods_for_nutrient | ✅ | `search(..., kind, food_group)`; `foods_for_nutrient` ordena por valor (mv, per 100 g); real: "polpa" → Ananas/Curgete; "vitamina c" pt-PT → VITC |
+| A8.7 | Explorer: IndexedDB + nutrientes + facetas | ✅ | Artefacto persistido em IDB (chave `<artefacto>@v<schema>`); modo nutrientes (pesquisa + ranking); chips de grupo; espelho das queries da API |
+| A8.8 | ADR-0008 | ✅ | Aprovado (contexto, opcoes com evidencia, decisao, consequencias) |
+| A8.9 | Testes e fecho | ✅ | 176 testes verdes; ruff/mypy limpos; `npm run build` verde; dev server verificado (pagina/artefacto/wasm 200) |
+
+**Entregaveis da emenda**: ADR-0008; cache.py; CLI `build --full`; schema 4 (trigramas); API alargada; explorer F2/A8; 176 testes.
