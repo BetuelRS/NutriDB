@@ -1,0 +1,4 @@
+# Fatores de rendimento por confeccao (SPEC §10, ADR-0007).
+# Aguardam fonte publicada verificada (regra 17.6) — ex.: USDA Food Yields
+# ou EuroFIR yield tables. Consumidos por `nutridb derive`.
+food_group,cooking_method,yield_factor,evidence

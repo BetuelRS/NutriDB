@@ -1,0 +1,4 @@
+# Medidas caseiras (SPEC §10, ADR-0007): pesos por conceito, fonte FNDDS +
+# tabela curada pt-PT (nenhuma fonte internacional cobre bem). Aguardam
+# verificacao (regra 17.6). Validados por `nutridb derive`.
+concept_id,measure,grams,evidence

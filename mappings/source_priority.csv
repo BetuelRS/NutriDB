@@ -1,0 +1,12 @@
+# Prioridade de fontes por (locale, grupo alimentar, nutriente) — SPEC §9, ADR-0007.
+# Resolucao por especificidade: (l,g,n) > (l,g,*) > (l,*,n) > (l,*,*); sem regra = falha alta.
+# source_order: fontes do registry, da mais preferida para a menos, separadas por '>'.
+locale,food_group,nutrient,source_order
+pt,*,*,insa>ciqual
+pt-PT,*,*,insa>ciqual
+pt-BR,*,*,insa>ciqual
+fr,*,*,ciqual>insa
+en,*,*,ciqual>insa
+es,*,*,ciqual>insa
+de,*,*,ciqual>insa
+it,*,*,ciqual>insa
