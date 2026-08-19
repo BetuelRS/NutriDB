@@ -461,8 +461,64 @@ def derive() -> None:
 
 @app.command("qa")
 def qa() -> None:
-    """Run the quality suite and emit an HTML report (F6)."""
-    _not_implemented("F6", "quality suite")
+    """Run the quality suite and emit an HTML report (SPEC §11, F6)."""
+    import io
+    import sys
+    import time
+
+    from nutridb.paths import paths
+    from nutridb.quality import QualityError, run_quality, write_report
+
+    if isinstance(sys.stdout, io.TextIOWrapper):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    base = paths()
+    artifact = base["build"] / "artifacts" / "nutridb-core-0.1.0.sqlite"
+    started = time.perf_counter()
+    try:
+        findings = run_quality(
+            base["build"] / "canonical",
+            base["vocab"],
+            base["root"],
+            artifact if artifact.is_file() else None,
+        )
+    except QualityError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    duration = time.perf_counter() - started
+    report_dir = base["build"] / "qa"
+    write_report(report_dir, findings, artifact if artifact.is_file() else None, duration)
+
+    console = rich.console.Console()
+    table = rich.table.Table(title="qa (SPEC §11)", title_justify="left")
+    table.add_column("severidade")
+    table.add_column("check")
+    table.add_column("detalhe")
+    table.add_column("n", justify="right")
+    colors = {"error": "red", "warning": "yellow", "info": "blue"}
+    for finding in findings:
+        table.add_row(
+            f"[{colors[finding.severity]}]{finding.severity}",
+            finding.check,
+            finding.detail,
+            str(finding.count),
+        )
+    console.print(table)
+    counts = {"error": 0, "warning": 0, "info": 0}
+    for finding in findings:
+        counts[finding.severity] += 1
+    typer.echo(
+        "qa report: "
+        f"{report_dir / 'report.html'} ({(report_dir / 'report.html').stat().st_size:,} B)"
+    )
+    typer.echo(f"qa metrics: {report_dir / 'metrics.json'}")
+    if counts["error"]:
+        typer.secho(
+            f"qa: {counts['error']} error(s) — release bloqueado (SPEC §11)",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(code=1)
+    typer.echo("qa OK")
 
 
 @app.command("package")

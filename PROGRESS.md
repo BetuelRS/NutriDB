@@ -152,3 +152,31 @@
 ## Historico de sessoes
 
 - **2026-08-19**: emenda A8 (f5b). Investigacao ULID: paridade byte-identica (100k seeds) com formula translates, mas mais lenta que o loop (1,83 vs 1,67 s/600k — pyinstrument inflava 3x) → **modulo revertido**, golden P4 como regressao. VACUUM removido do package (36,7 → 18,3 s). `cache.py` content-addressed (fingerprint sha256; hit → copia; fail-high) + `build --full`; determinismo full vs cached provado (todas as tabelas iguais exceto build_metadata). Schema 4: FTS trigram por locale; API `kind`/`food_group`/`foods_for_nutrient` (trigram quando >= 3 chars, senao prefixo). Explorer: IndexedDB (chave com schema_version), modo nutrientes, chips de grupo. **176 testes verdes**; ruff/mypy limpos; artefacto real 240 730 112 B (user_version 4, integrity ok); ADR-0008 aprovado; 7 commits `(f5b)` (perf VACUUM, test ULIDs golden, ci f5b/**, test cache, perf cache, feat schema 4, feat explorer, docs ADR).
+
+## Estado atual (2026-08-19)
+
+**Fases 0-5 + emenda A8: concluidas** (`f0/fundacoes`).
+
+**Fase 6 - Qualidade: em curso** (branch `f6/qualidade`; F6.0-F6.4 done, F6.5-F6.8 pendentes).
+
+| Tarefa | Estado | Nota |
+|---|---|---|
+| F6.0 ADR-0009 | done | Severidades por origem da incoerencia (fonte → warning/revisao; contrato do pipeline → error); energia Atwater UE 1169/2011 (POLYL opcional 2,4) ±5% com piso absoluto 5 kcal; divergencia em pares nao ordenados >= 30% (info); coerencia por (conceito, fonte) |
+| F6.1 Suite quality | done | `src/nutridb/quality/` 20 checks (SPEC §11); `_per_source_g` normaliza mg/ug → g; energia so com metodo registado (1485 sem metodo contados, P2); z-score |z|>4 n>=10 por (nutriente, grupo); integridade/órfaos/derivation/unmapped/mt_unreviewed como error |
+| F6.2 CLI qa | done | Tabela rich + `build/qa/report.html` + `metrics.json` (schema qa-1); exit 1 com erros; stdout UTF-8 (isinstance guard) |
+| F6.3 Testes unit 22 | done | Sinteticos por check; per-source (mistura nao dispara), FATRN 16500 mg→g, NA 200 mg, POLYL opcional, z-score n>=10, órfaos FK, mt_unreviewed; ruff/mypy limpos; **198 testes verdes** (22 novos) |
+| F6.4 Triagem real | done | `nutridb qa` real: **0 erros**; warnings proximados 222 (3702 completos, mediana 99,99; Isolat de soja 107,64 CIQUAL, Farine de seigle T85 110,80 INSA), energia 33, AG 44, açucares 2, sal 937 (4259 pares, mediana 1,00 exato; vinhos), RAE 2, z-score 1893; info: divergencia 1200 pares >= 30%, resto 0 |
+| F6.5 Golden 200 | pending | Estratificado ~18/grupo CIQUAL (11 grupos, seed fixa); celulas ENERC_KCAL/PROCNT/FAT/CHOAVL/WATER; skip ausentes; tolerancia 1e-9; script efemero dos XMLs oficiais |
+| F6.6 Property tests | pending | Hypothesis: shuffle invariante (merge/transform), roundtrip conversao, propriedades da divergencia |
+| F6.7 CI f6 | pending | Trigger `f6/**` + job `qa` (fixtures → suite → upload-artifact do relatorio) |
+| F6.8 Fecho | pending | PLAN/PROGRESS; commits atomicos `(f6)`; merge `--no-ff` em `f0/fundacoes`; push; CI verde |
+
+**Entregaveis da fase (em curso)**: ADR-0009; suite quality 20 checks; CLI qa + relatorio; 22 testes; triagem real documentada.
+
+## Decisoes em aberto
+
+- Nenhuma.
+
+## Bloqueios / pendencia
+
+- Nenhum. F6 em curso: golden 200, property tests, CI, fecho.
