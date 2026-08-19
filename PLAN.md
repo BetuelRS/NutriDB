@@ -167,3 +167,28 @@ Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Ap
 | F4.9 | Fecho: CI `f4/**`, PLAN/PROGRESS, commits atomicos `(f4)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | P10 real (build completo com 8 locales) | `gh run watch` |
 
 **Entregaveis da fase**: ADR-0006; glossarios 7 locales (1127 rotulos); facetas 8 locales; divergences.csv + gate; i18n build F4 (gates P7/95%); FTS 8 locales; pesquisa cruzada; CLI `i18n review`; testes + golden i18n.
+
+---
+
+## Fase 5 - Fusao e derivacoes (branch `f5/fusao`)
+
+**Objetivo**: prioridades puramente dados (SPEC §9: por (locale, grupo, nutriente)); valores alternativos que permanecem; divergencias >= 30% sinalizadas; overrides com justificacao obrigatoria; derivacoes com cadeia registada em `derivation` (SPEC §10: retencao, rendimento, densidades, porcoes); schema do artefacto 3 (ADR-0007).
+
+**Criterios de aceitacao da spec (§16 F5)**:
+1. Prioridades sao puramente dados -> `mappings/source_priority.csv` + resolucao deterministica; sem regra = falha alta
+2. Toda derivacao tem cadeia registada -> `derive` grava `derivation` (formula, inputs, factors) + `derivation_id` no valor; derivacao pedida sem fatores = falha alta; real: 0 derivacoes (fontes medem 100g e 100ml; P2: so calcular sem medicao direta)
+3. Divergencias sinalizadas, nunca resolvidas em silencio -> divergence_flag rel >= 0.30 no mv_food_value
+
+| # | Tarefa | DoD | Verificacao |
+|---|---|---|---|
+| F5.0 | ADR-0007 (ambito F5: prioridades como dados, alternativas, divergencias, overrides, derivacoes com cadeia) | Aprovado | leitura do ADR |
+| F5.1 | `mappings/source_priority.csv`: regras por (locale, grupo, nutriente) com wildcards; resolucao por especificidade; fonte desconhecida/locale sem regra = falha alta | 8 regras reais (pt/pt-PT/pt-BR: insa>ciqual; fr/en/es/de/it: ciqual>insa) | `pytest tests/unit/test_merge.py` |
+| F5.2 | `nutridb merge`: `mv_food_value.parquet` por (concept, nutrient, locale, basis); preferred por prioridade (tie-break measured>trace>below_loq, source_record_id); alternatives JSON; divergence_flag/divergence_max (rel >= 0.30, measured vs measured, 0/0=0); sem medias | Real: 391 101 linhas, 4 542 flags | `uv run nutridb merge` |
+| F5.3 | `mappings/overrides.csv` + gate: sem justificacao ou ref desconhecido = falha alta; override = declarado, registado no mv | Header; 0 overrides reais | `pytest tests/unit/test_merge.py` |
+| F5.4 | `nutridb derive`: confeccao (retencao x rendimento), por volume (densidade), validacao de porcoes; `derivation` com formula/inputs/factors; `calculated` + acquisition calculated + derivation_id; sem fatores = falha alta; receitas/base seca adiadas | Maquinaria + testes sinteticos; real: 0 derivacoes (reportado) | `uv run nutridb derive` |
+| F5.5 | Tabelas de fatores: `derivations/{retention_factors,yield_factors,densities,portions}.csv` headers + README (dados aguardam fonte publicada verificada, regra 17.6) | 4 ficheiros + README | leitura |
+| F5.6 | Package schema 3: mv_food_value com basis/alternatives/divergence_flag/divergence_max/derivation_id; tabelas portion, density, derivation; user_version 3 | SQLite real com schema 3 (integrity ok) | `uv run nutridb package` |
+| F5.7 | Testes: prioridades (wildcards/especificidade/falha alta), merge (tie-break, alternatives, divergencias 0/0, overrides gate), derive (formula registada, sem fatores falha), package schema 3, golden reais (preferred por locale, flags) | Suite verde (155); lint/mypy limpos (37 ficheiros) | `uv run pytest`; `uv run ruff check .`; `uv run mypy .` |
+| F5.8 | Fecho: CI `f5/**`, PLAN/PROGRESS, commits atomicos `(f5)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | P10 real (build completo com merge+derive: 236 380 160 B, integrity ok) | `gh run watch` |
+
+**Entregaveis da fase**: ADR-0007; source_priority.csv; CLI `merge` + `derive`; mv_food_value schema 3 (alternatives/divergencias/basis); overrides.csv com gate; derivations/ com headers; testes + golden F5.

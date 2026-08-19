@@ -93,10 +93,30 @@
 
 ## Bloqueios / pendencia
 
-- Nenhum. F4 fechada (merge 8649801, CI verde).
+- Nenhum. F5 em curso: F5.0-F5.7 done, F5.8 (fecho) pendente — commits atomicos, merge, push, CI.
 
 ## Historico de sessoes
 
 - **2026-08-18**: F4 (multilinguismo). ADR-0006 aprovado (ambito, gates, composicao honesta). Glossarios 7 locales x 161 tagnames autorados e validados (161/161). Facetas expandidas para 8 locales (139 linhas, 9 colunas) com mojibake reparado. `divergences.csv` 67 linhas (53 nutrientes + 14 alimentos). i18n build F4 reescrito: prioridade reviewed > native > glossario > divergences; gates P7 (mt_unreviewed aborta), cobertura 161 por locale com excecao pt (108: generic proibido nos 53 divergentes), >= 95% status, drift-check, conceito desconhecido falha; 1a corrida do build falhou no gate pt (53 tagnames divergentes) e foi corrigida; `locales.toml` com 8 ativas; `vocab_pt_PT.csv` apagado (substituido pelo glossario pt-PT). `api.search` F4: resolve rotulo pela cadeia do locale pedido + dedupe por conceito; CLI `i18n review` + `untranslatable.csv`. Testes: test_i18n reescrito (11 testes F4), sandbox com divergences sintetico, FTS 8 locales, pesquisa cruzada/dedupe, golden i18n real (labels por locale, gates, search "zucchini"->Curgete pt-PT no sqlite); 136 testes verdes; ruff/mypy limpos. Artefacto real reconstruido (P10): 9775 labels, 8 FTS, 231 243 776 bytes.
 
 - **2026-08-18**: F3 completa. Matcher afinado (0.84), golden 633 gerado e revisto (42 FALSE, 15 FN colaterais 1:1, food_recall 0.9956), `nutridb link` + transform/i18n/package integrados, sandbox root nos testes (correcao de mojibake via `git checkout` + reaplicacao com edit tool), suite 119 testes verdes, lint/mypy limpos, pipeline real verificado ponta a ponta (123 tombstones, 390 323 mv rows, 0 duplicados).
+
+## Estado atual (2026-08-19)
+
+**Fases 0-4: concluidas** (`f0/fundacoes`).
+
+**Fase 5 - Fusao e derivacoes: em curso** (branch `f5/fusao`; F5.0-F5.7 em progresso, F5.8 fecho pendente).
+
+| Tarefa | Estado | Nota |
+|---|---|---|
+| F5.0 ADR-0007 | done | Prioridades como dados (`mappings/source_priority.csv`, 8 regras: pt/pt-PT/pt-BR -> insa>ciqual; fr/en/es/de/it -> ciqual>insa); resolucao por especificidade (l,g,n) > (l,g,*) > (l,*,n) > (l,*,*); nunca medias entre fontes (SPEC §9/P2); divergencia rel = \|a-b\|/max(\|a\|,\|b\|) >= 0.30 so measured vs measured; overrides com justificacao obrigatoria (acquisition declared); derivacoes reais = 0 (fontes ja medem 100g/100ml); tabelas de fatores com headers a aguardar fonte publicada; schema 2 -> 3 |
+| F5.1 Sondagens | done | 123 conceitos 2+ fontes; 4090 pares medidos por ambas; 1597 pares rel >= 0.30 (36 nutrientes, 122 conceitos); INSA 1461 linhas per_100ml (84 bebidas); basis per_100g_edible/per_100ml; measured 208012/trace 2514/below_loq 20075 |
+| F5.2 Merge stage | done | `src/nutridb/merge/` — `mv_food_value.parquet` por (concept, nutrient, locale, basis) com preferred por prioridade (tie-break measured > trace > below_loq > source_record_id), alternatives JSON, divergence_flag/divergence_max, acquisition_type, derivation_id, override_justification; filtro `is_default` dos codigos movido do package para o merge; falla alto: locale sem regra, fonte desconhecida, override sem justificacao/conceito desconhecido; 10 testes unit |
+| F5.3 Dados | done | `mappings/source_priority.csv` (8 regras), `mappings/overrides.csv` (header), `derivations/{retention_factors,yield_factors,densities,portions}.csv` (headers + evidencias a preencher) + README |
+| F5.4 Derive stage | done | `src/nutridb/derive/` — por-volume (100ml = 100g x densidade), confeccao (x retencao x rendimento, helpers testados), tabelas validadas (header, chave unica, fator numerico, evidencia obrigatoria, conceito/grupo/nutriente conhecidos); sem fatores = falha alta; cada valor calculado com derivation_id + formula + inputs + fatores (chain registada, P2); escreve portion.parquet/density.parquet; 9 testes unit |
+| F5.5 CLI | done | `nutridb merge`/`nutridb derive` reais (substituem _not_implemented); `nutridb build` encadeia transform -> derive -> i18n -> merge -> package |
+| F5.6 Package schema 3 | done | mv_food_value +7 colunas (acquisition_type, alternatives, divergence_flag, divergence_max, derivation_id, override_justification); portion/density com evidence; PRAGMA user_version 3; package carrega mv_food_value.parquet (removido `_build_mv_food_value`); sandbox com `derivations/` |
+| F5.7 Testes | done | test_merge (10) + test_derive (9) + test_cli + test_package schema 3 + golden com basis na chave; fixes empiricos: `resolve_priority` wildcard generico `(*,*)`, nutrients.csv lido via csv.DictReader (polars falha no ficheiro), derive com schema explicito + `vertical_relaxed` (Null-type das fixtures); **155 testes verdes**; ruff/mypy limpos (37 ficheiros) |
+| F5.8 Fecho | pending | CI `f5/**` (ja adicionado ao ci.yml); commits atomicos `(f5)`; PLAN/PROGRESS; merge `--no-ff` em `f0/fundacoes` + push; CI verde |
+
+**Entregaveis da fase**: ADR-0007; source_priority.csv; overrides.csv; 4 tabelas de fatores; merge stage; derive stage; CLI; package schema 3; 19 testes unit novos. **Artefacto real (2026-08-19)**: mv 391 101 linhas, divergence_flag 4 542, locales 5, derive 0 derivacoes (fatores vazios — report explicito), 236 380 160 bytes, integrity ok.
