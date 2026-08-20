@@ -724,13 +724,9 @@ def evaluate(
         else 0.0
     )
     matcher_recall = (
-        (true_positives + len(review_golden_true)) / len(golden_true)
-        if golden_true
-        else 0.0
+        (true_positives + len(review_golden_true)) / len(golden_true) if golden_true else 0.0
     )
-    confirmed_recall = (
-        true_positives / len(golden_true) if golden_true else 0.0
-    )
+    confirmed_recall = true_positives / len(golden_true) if golden_true else 0.0
     golden_foods = {pair[0] for pair in golden_true}
     covered_foods = {pair[0] for pair in (finals | review_golden_true) & golden_true}
     food_recall = len(covered_foods) / len(golden_foods) if golden_foods else 0.0
