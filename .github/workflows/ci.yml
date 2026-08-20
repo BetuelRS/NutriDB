@@ -54,3 +54,32 @@ jobs:
       - name: Build (tsc + vite)
         run: npm run build
         working-directory: explorer
+
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Sync pinned sources
+        run: uv run nutridb sources sync
+
+      - name: Build full artefact
+        run: uv run nutridb build --full
+
+      - name: Run quality suite
+        run: uv run nutridb qa
+
+      - name: Upload quality report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nutridb-qa-report
+          path: build/qa/
+          if-no-files-found: warn
