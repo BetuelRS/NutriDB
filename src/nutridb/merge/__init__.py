@@ -255,7 +255,7 @@ def merge(canonical_dir: Path, root: Path) -> dict[str, Any]:
                 value, unit, acquisition, src, rec, justification = (
                     preferred["value"],
                     preferred["unit"],
-                    None,
+                    preferred["acquisition_type"],
                     preferred["source_id"],
                     preferred["source_record_id"],
                     None,

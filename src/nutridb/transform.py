@@ -367,7 +367,7 @@ def _load_source(
                 None if value_type == "below_loq" else _convert(r["value"], factor),
                 mapping["unit"],
                 value_type,
-                None,  # acquisition_type: sources do not classify acquisition
+                "declared",  # source publishes the cell; underlying acquisition is unclassified
                 source_id,
                 canonical_id(
                     "source_record",

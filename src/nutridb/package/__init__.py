@@ -192,6 +192,7 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
     if not mv_path.is_file():
         raise PackageError("mv_food_value.parquet missing; run `uv run nutridb merge` first")
     tables["mv_food_value"] = pl.read_parquet(mv_path)
+    _validate_acquisition_types(tables["value"], tables["mv_food_value"], vocab_dir)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     artifact = out_dir / f"nutridb-core-{__version__}.sqlite"
@@ -286,6 +287,29 @@ def _load_vocabulary(conn: sqlite3.Connection, vocab_dir: Path) -> None:
         "INSERT INTO analytical_method (id, name_en, description) VALUES (?, ?, ?)",
         [tuple(row.values()) for row in methods],
     )
+
+
+def _validate_acquisition_types(
+    values: pl.DataFrame, materialized: pl.DataFrame, vocab_dir: Path
+) -> None:
+    """Reject missing or uncontrolled acquisition types before release (P1/P9)."""
+    allowed = {
+        row["id"]
+        for row in load_csv(vocab_dir / "acquisition_types.csv", ("id", "name_en", "description"))
+    }
+    for name, frame in (("value", values), ("mv_food_value", materialized)):
+        nulls = frame.filter(pl.col("acquisition_type").is_null()).height
+        if nulls:
+            raise PackageError(f"{name}: {nulls} rows without acquisition_type (P1)")
+        invalid = (
+            frame.filter(~pl.col("acquisition_type").is_in(sorted(allowed)))
+            .select("acquisition_type")
+            .unique()
+            .to_series()
+            .to_list()
+        )
+        if invalid:
+            raise PackageError(f"{name}: unknown acquisition_type values {invalid!r}")
 
 
 def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:

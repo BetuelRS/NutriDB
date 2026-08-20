@@ -14,6 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from shutil import copyfile
 
+import polars as pl
 import pytest
 
 from nutridb.derive import derive as run_derive
@@ -232,4 +233,14 @@ def test_missing_label_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
     canonical, vocab = _prepare(tmp_path, sandbox_root)
     (canonical / "label.parquet").unlink()
     with pytest.raises(PackageError, match=r"label\.parquet missing"):
+        package(canonical, vocab, tmp_path / "out", sandbox_root)
+
+
+def test_invalid_acquisition_type_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
+    values = pl.read_parquet(canonical / "value.parquet").with_columns(
+        pl.lit("unknown").alias("acquisition_type")
+    )
+    values.write_parquet(canonical / "value.parquet")
+    with pytest.raises(PackageError, match="acquisition_type"):
         package(canonical, vocab, tmp_path / "out", sandbox_root)

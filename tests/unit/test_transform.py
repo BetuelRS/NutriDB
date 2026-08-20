@@ -86,6 +86,7 @@ def test_value_typing_and_unit_conversion(tmp_path: Path, sandbox_root: Path) ->
     assert row[values.columns.index("value")] == 0.5  # AG stay in g (INFOODS unit)
     assert row[values.columns.index("unit")] == "g"
     assert row[values.columns.index("value_type")] == "measured"
+    assert row[values.columns.index("acquisition_type")] == "declared"
     assert row[values.columns.index("min_value")] == 0.4
     assert row[values.columns.index("max_value")] == 0.6
 
@@ -106,7 +107,11 @@ def test_value_typing_and_unit_conversion(tmp_path: Path, sandbox_root: Path) ->
     loq = values.filter(pl.col("value_type") == "below_loq").row(0)
     assert loq[values.columns.index("value")] is None
     assert loq[values.columns.index("below_loq_threshold")] == 1.5
+    assert loq[values.columns.index("acquisition_type")] == "declared"
     assert values.filter(pl.col("value_type") == "trace").height == 1
+    assert values.filter(pl.col("value_type") == "trace")["acquisition_type"].to_list() == [
+        "declared"
+    ]
 
 
 def test_absence_via_coverage_never_cross_product(tmp_path: Path, sandbox_root: Path) -> None:
