@@ -49,8 +49,8 @@ ausências ou divergências. A direção está registada no
 - SBOM, atestação e assinatura de release ainda não estão implementados.
 - A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
 - O ledger persistente de IDs e a adjudicação humana completa ainda não estão fechados.
-- O build agora executa `vocab check` e QA; ainda faltam manifesto, checksums e os gates de release restantes.
 - O golden 200 automático existe; falta a revisão humana final das células selecionadas.
+- `links.csv` sem linhas `adjudicated`: 146 pares verdadeiros do golden aguardam adjudicação humana (recall confirmada hoje: 0.43).
 
 ### Progresso confirmado desde a auditoria
 
@@ -64,7 +64,10 @@ ausências ou divergências. A direção está registada no
 - CI `f6/**` executa checks, Explorer, build real, QA e upload do relatório.
 - `nutridb build --full` executa `vocab check` e QA internamente e falha com qualquer `error`.
 - O build gera manifesto `release-1` e `SHA256SUMS` ao lado do SQLite.
-- Suite atual: **202 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
+- CI: job `determinism` constrói duas vezes e prova byte-identidade (P5); `qa` faz upload do relatório e dos metadados de release.
+- Explorer deriva locales de `i18n/locales.toml` no build; `pt-PT` é o padrão; locales disponíveis descobertas do artefacto.
+- Métricas de identidade honestas: `recall` (cobertura do matcher 0.954) separada de `recall_confirmed` (0.434, sem adjudicação); `review_golden_true` = 146.
+- Suite atual: **203 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
 Não devem ser interpretadas como o estado oficial atual quando divergirem deste
