@@ -48,7 +48,7 @@ ausências ou divergências. A direção está registada no
 
 - A adjudicação inicial fechou 95 pares (73 golden-true + 22 exclusivos) e rejeitou 112 golden-false; permanecem 6 029 pares em review. 75 golden-true foram adiados por conflitos 1:1, sobretudo contra entradas compostas `aliment moyen`.
 - O golden 200 automático existe; falta a revisão humana final das células selecionadas.
-- A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
+- P3 está fechado por ADR-0016: `coverage` + ausência de linha, `trace`/`below_loq` quando publicados e nenhum motivo adicional inferido.
 - A chave privada Ed25519 está fora do repositório em `C:\Users\Betuel\.nutridb\signing\`; a chave pública está em `docs/keys/nutridb-signing.pub.pem`. Falta apenas a decisão operacional de custódia/backup para uma release pública.
 
 ### Progresso confirmado desde a auditoria
@@ -70,6 +70,9 @@ ausências ou divergências. A direção está registada no
 - Suite atual: **230 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
 - `nutridb link review`: fila de adjudicação humana com contexto (nomes, similaridade, score), `--apply` determinístico em `mappings/links.csv` (P8); após a primeira vaga restam 6 029 pares, com a restrição 1:1 preservada.
 - Explorer: vista de cobertura global do dataset (por fonte e por grupo) e interface com locale `pt`/`en` (toggle).
+- ADR-0016 fecha P3 com evidência CIQUAL/INSA e mantém razões de ausência não publicadas fora do modelo.
+- ADR-0017 regista USDA Retention Factors Release 6 como proposta; integração bloqueada até descarregar artefacto oficial, fixar SHA-256 e confirmar licença na fonte.
+- Análise da fila restante não encontrou aceites seguros: os 3 candidatos exclusivos colidem com links automáticos existentes; permanecem em review.
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
 Não devem ser interpretadas como o estado oficial atual quando divergirem deste

@@ -250,3 +250,6 @@ da data indicada, não ao estado oficial acima.
 - Adjudicação de identidade aplicada no commit `d431959`: 95 aceites, 112 rejeitados, 6 029 pares restantes; build real com 218 tombstones, 5 078 concept links e QA com 0 erros.
 - Os 75 golden-true adiados são conflitos 1:1, principalmente múltiplos alimentos específicos contra CIQUAL `aliment moyen`; não foram fabricadas fusões.
 - Chave Ed25519 gerada fora do repositório; `docs/keys/nutridb-signing.pub.pem` contém a pública. Build com `NUTRIDB_SIGNING_KEY` e `release verify --public-key` retornaram `signature: verified`.
+- ADR-0016 fecha P3: CIQUAL publica `-`, `<N` e `traces`; INSA não publica motivos por célula; razões adicionais não são inferidas.
+- ADR-0017 documenta USDA Retention Factors Release 6 como proposta não integrada; falta pin do artefacto, SHA-256 e confirmação de licença na fonte oficial.
+- Análise autónoma dos restantes 6 029 pares não aplicou novas decisões: os 3 candidatos exclusivos colidem com links automáticos existentes.
