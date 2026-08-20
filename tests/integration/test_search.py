@@ -146,6 +146,13 @@ def test_search_empty_and_unknown_locale(db_path: str) -> None:
         search(db_path, "pastis", "zz-ZZ")
 
 
+def test_search_never_creates_missing_database(tmp_path: Path) -> None:
+    missing = tmp_path / "missing.sqlite"
+    with pytest.raises(ApiError):
+        search(missing, "pastis", "fr")
+    assert not missing.exists()
+
+
 def test_search_limit_enforced(db_path: str) -> None:
     with pytest.raises(ApiError, match="limit"):
         search(db_path, "pastis", "fr", limit=0)
