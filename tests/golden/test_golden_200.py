@@ -75,9 +75,9 @@ def _actual_canonical() -> dict[tuple[str, str], tuple[float, str]]:
     labels = pl.read_parquet(ROOT / "build" / "canonical" / "label.parquet")
     label_by_concept = {
         row["ref"]: row["text"]
-        for row in labels.filter(
-            (pl.col("ref_kind") == "food") & (pl.col("locale") == "fr")
-        ).rows(named=True)
+        for row in labels.filter((pl.col("ref_kind") == "food") & (pl.col("locale") == "fr")).rows(
+            named=True
+        )
     }
     return {
         (label_by_concept[row["concept_id"]], row["nutrient_id"]): (
