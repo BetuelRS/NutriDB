@@ -2,8 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main, f0/fundacoes, f1/**, f2/**, f3/**, f4/**, f5/**, f5b/**]
+    branches: [main, f0/fundacoes, f1/**, f2/**, f3/**, f4/**, f5/**, f5b/**, f6/**]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   checks:
