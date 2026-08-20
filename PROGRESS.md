@@ -13,21 +13,21 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 |---|---|
 | Dataset | CIQUAL 2025 + INSA/TCA 7.1 integrados no canónico |
 | Artefacto | SQLite schema 4 + Parquet; integrity check OK |
-| Explorer | Build React/TypeScript funcional; comparação de valores por fonte; produto ainda inicial |
+| Explorer | Build React/TypeScript funcional; comparação por fonte, cobertura global e locale pt/en; produto ainda inicial |
 | Qualidade | QA real com 0 erros; warnings documentados |
 | P1/P6/P9/P10 | Aquisição, gate de licença, fail-high e sync no build implementados |
 | API | Artefactos read-only; rankings limitados a `per_100g_edible` |
 | Golden/propriedades | Golden automático: 200 alimentos/943 células; Hypothesis ativo + merge idempotente |
 | CI | `checks`, `explorer`, `qa` e `determinism` verdes; relatório QA e metadados de release publicados |
-| Produção | Não fechada: adjudicação humana (6 237 pares), revisão humana do golden, SBOM e atestação pendentes |
-| Testes | 208 testes verdes; ruff/mypy limpos |
-| Próxima prioridade | adjudicação humana, fecho F6 e release verificável |
+| Release verificável | Manifesto `release-1` + `SHA256SUMS` + SBOM CycloneDX 1.6 + atestação `attestation-1` (Ed25519) + `release verify` (ADR-0015) |
+| Produção | Não fechada: adjudicação humana (6 237 pares — ferramenta `link review` pronta), revisão humana do golden, primeira chave de assinatura |
+| Testes | 230 testes verdes; ruff/mypy limpos |
+| Próxima prioridade | adjudicação humana, revisão do golden, primeira release assinada publicamente |
 
 ### Próximas ações
 
-- Adjudicar os 6 237 pares de review (146 golden-true) e rever o golden 200 humanamente.
-- Fechar F6 (merge `--no-ff` em `f0/fundacoes`) e o release verificável.
-- Construir Explorer v1 com `pt-PT` primeiro, `en` depois (vista de cobertura pendente).
+- Adjudicar os 6 237 pares de review (146 golden-true) com `nutridb link review --apply` e rever o golden 200 humanamente.
+- Decidir quem detém `NUTRIDB_SIGNING_KEY` e assinar a primeira release publicamente.
 - Só depois expandir fontes, API, bibliotecas e exports.
 
 ### Bloqueios
@@ -35,7 +35,7 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 - Adjudicação humana dos pares de review (requer decisor humano; regra 17.6).
 - Revisão humana do golden 200 (verificação à mão, critério 2 do F6).
 - P3 ausência individual por motivo — requer evidência das fontes.
-- SBOM, atestado e assinatura de release — fase posterior.
+- Chave de assinatura: decisão humana sobre o detentor (fora do repositório).
 
 As secções seguintes são o histórico detalhado das fases e sessões. Quando uma
 secção histórica disser “estado atual”, essa expressão refere-se ao snapshot
@@ -242,5 +242,8 @@ da data indicada, não ao estado oficial acima.
 - F6.5/F6.6/F6.7 fechados no PLAN: golden 200 automático; property tests (roundtrip, divergência simétrica/limitada, ordem de fontes invariante) + merge idempotente (re-run byte-idêntico, `test_merge.py`); CI com jobs `checks`/`explorer`/`qa`/`determinism`.
 - Explorer: vista "valores por fonte" — comparação lado a lado por nutriente/fonte com deteção de divergência >= 30% (espelho da regra de fusão), incluindo tipo, aquisição, confiança e licença (`b13157b`).
 - Explorer: chips de cobertura por fonte — nutrientes medidos vs vocabulário total (161 tagnames) por conceito (`coverageBySource`; real: 66/161 CIQUAL, 40/161 INSA).
-- **F6 fechado**: merge `--no-ff` `9457d52` em `f0/fundacoes`; CI verde (32409215939); pendências humanas e SBOM/atestado documentadas como pós-F6.
-- Suite: **208 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.
+- **F6 fechado**: merge `--no-ff` `9457d52` em `f0/fundacoes`; CI verde (32409215939); pendências humanas documentadas como pós-F6.
+- Explorer: vista de cobertura global por fonte e grupo (`coverageGlobal`; real: 4 860 conceitos, 230 601 células, ciqual 3 484/71, insa 1 376/48); interface com locale `pt`/`en` (`i18n.ts`, toggle no header; números formatados por locale).
+- `link review` (F6.9): grupo typer com `invoke_without_command` (typer 0.27.1 sem click), listagem com contexto dos proposals e `--apply` CSV determinístico; `_queue_index` corrigido para produto cartesiano por survivor — **listagem real corrigida de 1 719 para 6 237 pares** (1 008 survivors multi-par, 1 008 linhas partilhadas; regra: linha só sai quando todos os pares que a usam estão decididos; 2 testes de regressão).
+- **Release verificável (ADR-0015, F7)**: `sbom.py` (CycloneDX 1.6, UUID5 do hash, sem timestamp, licenças honestas); `signing.py` (Ed25519 PEM/base64, fail-high); `write_attestation` (schema `attestation-1`, digests, bloco temporal, assinatura opcional); `nutridb release verify` (hashes + assinatura); `cryptography>=44` adicionado ao pyproject (decisão do ADR); SHA256SUMS cobre só determinísticos; gate de determinismo compara também manifesto/SBOM/checksums; CI faz upload dos novos ficheiros. **E2E real**: build com chave → `signature: verified`; 15 testes novos; suite **230 testes verdes**.
+- Suite: **230 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.
