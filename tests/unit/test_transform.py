@@ -7,6 +7,7 @@ explicit flags, never a Cartesian product), provenance and determinism.
 
 from __future__ import annotations
 
+import csv
 import json
 from shutil import copyfile
 from typing import TYPE_CHECKING
@@ -310,3 +311,75 @@ def test_identity_links_unknown_survivor_fails_high(tmp_path: Path) -> None:
     )
     with pytest.raises(TransformError, match="unknown survivor concept"):
         _apply_identity_links(links_csv, {"insa": {"25"}, "ciqual": set()}, [], [], [])
+
+
+def _ledger_path(sandbox_root: Path) -> Path:
+    return sandbox_root / "mappings" / "id_ledger.csv"
+
+
+def _ledger_map(path: Path) -> dict[tuple[str, str], tuple[str, str]]:
+    with path.open(encoding="utf-8") as fh:
+        return {
+            (row["source"], row["source_code"]): (row["concept_id"], row["seed_sha256"])
+            for row in csv.DictReader(fh)
+        }
+
+
+def _write_ledger(path: Path, rows: dict[tuple[str, str], tuple[str, str]]) -> None:
+    with path.open("w", encoding="utf-8", newline="") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["source", "source_code", "concept_id", "seed_sha256"])
+        for (source, code), (concept_id, seed) in sorted(rows.items()):
+            writer.writerow([source, code, concept_id, seed])
+
+
+def test_id_ledger_assigns_once_and_is_deterministic(tmp_path: Path, sandbox_root: Path) -> None:
+    report1 = _run(tmp_path, sandbox_root)
+    ledger_path = _ledger_path(sandbox_root)
+    assert ledger_path.is_file()
+    assert report1["identity_new"] == 3
+    rows1 = _ledger_map(ledger_path)
+    assert len(rows1) == 3
+    report2 = _run(tmp_path, sandbox_root)
+    assert report2["identity_new"] == 0
+    assert report2["identity_drift"] == 0
+    assert _ledger_map(ledger_path) == rows1
+
+
+def test_id_ledger_algorithm_change_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
+    ledger_path = _ledger_path(sandbox_root)
+    rows = _ledger_map(ledger_path)
+    (source, code), (_, seed) = next(iter(rows.items()))
+    rows[(source, code)] = (f"nfx_{'0' * 26}", seed)
+    _write_ledger(ledger_path, rows)
+    with pytest.raises(TransformError, match="identity"):
+        _run(tmp_path, sandbox_root)
+
+
+def test_id_ledger_drift_keeps_id_and_refreshes_seed(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
+    ledger_path = _ledger_path(sandbox_root)
+    rows = _ledger_map(ledger_path)
+    (source, code), (concept_id, _) = next(iter(rows.items()))
+    rows[(source, code)] = (concept_id, "0" * 64)
+    _write_ledger(ledger_path, rows)
+    report = _run(tmp_path, sandbox_root)
+    assert report["identity_drift"] == 1
+    assert report["identity_new"] == 0
+    after = _ledger_map(ledger_path)
+    assert after[(source, code)][0] == concept_id
+    assert after[(source, code)][1] != "0" * 64
+
+
+def test_id_ledger_restores_deleted_entries(tmp_path: Path, sandbox_root: Path) -> None:
+    _run(tmp_path, sandbox_root)
+    ledger_path = _ledger_path(sandbox_root)
+    original = _ledger_map(ledger_path)
+    dropped = next(iter(original.items()))
+    rows = dict(original)
+    del rows[dropped[0]]
+    _write_ledger(ledger_path, rows)
+    report = _run(tmp_path, sandbox_root)
+    assert report["identity_new"] == 1
+    assert _ledger_map(ledger_path) == original

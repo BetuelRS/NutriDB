@@ -33,6 +33,9 @@ def make_sandbox_root(base: Path) -> Path:
     links = root / "mappings" / "links.csv"
     if links.is_file():
         links.unlink()
+    ledger = root / "mappings" / "id_ledger.csv"
+    if ledger.is_file():
+        ledger.unlink()
 
     def _glossary(locale: str) -> dict[str, str]:
         path = root / "i18n" / "glossary" / f"{locale}.csv"
