@@ -539,6 +539,7 @@ def package(
             base["vocab"],
             base["build"] / "artifacts",
             base["root"],
+            profile=profile,
         )
     except PackageError as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
@@ -633,6 +634,7 @@ def build(
             base["vocab"],
             base["build"] / "artifacts",
             base["root"],
+            profile="core",
         )
     except (CacheError, TransformError, DeriveError, I18nError, MergeError, PackageError) as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)

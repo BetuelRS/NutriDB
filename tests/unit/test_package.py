@@ -244,3 +244,15 @@ def test_invalid_acquisition_type_fails_high(tmp_path: Path, sandbox_root: Path)
     values.write_parquet(canonical / "value.parquet")
     with pytest.raises(PackageError, match="acquisition_type"):
         package(canonical, vocab, tmp_path / "out", sandbox_root)
+
+
+def test_incompatible_source_fails_high(tmp_path: Path, sandbox_root: Path) -> None:
+    canonical, vocab = _prepare(tmp_path, sandbox_root)
+    registry = sandbox_root / "sources" / "registry.toml"
+    text = registry.read_text(encoding="utf-8").replace(
+        'artifacts = ["core", "extended", "lite"]',
+        'artifacts = ["extended", "lite"]',
+    )
+    registry.write_text(text, encoding="utf-8")
+    with pytest.raises(PackageError, match="incompatible with profile 'core'"):
+        package(canonical, vocab, tmp_path / "out", sandbox_root)
