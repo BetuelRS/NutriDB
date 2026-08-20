@@ -55,6 +55,22 @@ export interface Provenance {
   record: string;
 }
 
+export interface SourceValue {
+  nutrientId: string;
+  nutrientNameEn: string;
+  value: number | null;
+  unit: string;
+  valueType: string;
+  acquisitionType: string | null;
+  confidenceCode: string | null;
+  basis: string;
+  belowLoqThreshold: number | null;
+  sourceId: string;
+  sourceName: string;
+  sourceVersion: string;
+  licenseId: string;
+}
+
 // mv_food_value holds one row per (concept, nutrient, locale); labels are
 // native per source (INSA=pt, CIQUAL=fr/en). Display falls back through the
 // locales that exist in the mv: exact match first, then a stable order.
@@ -194,6 +210,34 @@ export function buildMetadata(): Record<string, string> {
     out[row.values[0]?.toString() ?? ""] = row.values[1]?.toString() ?? "";
   }
   return out;
+}
+
+export function foodValuesBySource(conceptId: string): SourceValue[] {
+  const rows = query(
+    `SELECT v.nutrient_id, n.name_en, v.value, v.unit, v.value_type,
+            v.acquisition_type, v.confidence_code, v.basis,
+            v.below_loq_threshold, v.source_id, s.name, s.version, s.license_id
+     FROM value v
+     JOIN nutrient n ON n.tagname = v.nutrient_id
+     JOIN source s ON s.source_id = v.source_id
+     WHERE v.concept_id = ? ORDER BY v.nutrient_id, v.source_id`,
+    [conceptId],
+  );
+  return rows.map((row) => ({
+    nutrientId: row.values[0]?.toString() ?? "",
+    nutrientNameEn: row.values[1]?.toString() ?? "",
+    value: typeof row.values[2] === "number" ? row.values[2] : null,
+    unit: row.values[3]?.toString() ?? "",
+    valueType: row.values[4]?.toString() ?? "",
+    acquisitionType: row.values[5]?.toString() ?? null,
+    confidenceCode: row.values[6]?.toString() ?? null,
+    basis: row.values[7]?.toString() ?? "",
+    belowLoqThreshold: typeof row.values[8] === "number" ? row.values[8] : null,
+    sourceId: row.values[9]?.toString() ?? "",
+    sourceName: row.values[10]?.toString() ?? "",
+    sourceVersion: row.values[11]?.toString() ?? "",
+    licenseId: row.values[12]?.toString() ?? "",
+  }));
 }
 
 export function foodGroups(): FoodGroup[] {

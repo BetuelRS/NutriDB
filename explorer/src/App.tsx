@@ -3,8 +3,9 @@ import {
   availableLocales,
   buildMetadata,
   foodGroups,
-  foodsForNutrient,
   foodValues,
+  foodValuesBySource,
+  foodsForNutrient,
   provenance,
   search,
   type FoodGroup,
@@ -12,6 +13,7 @@ import {
   type NutrientRank,
   type Provenance,
   type SearchResult,
+  type SourceValue,
 } from "./search";
 import { loadArtifact, sqliteVersion } from "./db";
 import "./App.css";
@@ -29,6 +31,24 @@ function formatValue(value: number | null): string {
   return value.toLocaleString("pt-PT", { maximumFractionDigits: 3 });
 }
 
+function divergentNutrients(rows: SourceValue[]): Set<string> {
+  const perNutrient = new Map<string, number[]>();
+  for (const row of rows) {
+    if (row.value === null) continue;
+    const list = perNutrient.get(row.nutrientId) ?? [];
+    list.push(row.value);
+    perNutrient.set(row.nutrientId, list);
+  }
+  const out = new Set<string>();
+  for (const [nutrientId, values] of perNutrient) {
+    if (values.length < 2) continue;
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+    if (max > 0 && min / max < 0.7) out.add(nutrientId);
+  }
+  return out;
+}
+
 function FoodDetail({
   conceptId,
   locale,
@@ -39,6 +59,8 @@ function FoodDetail({
   onClose: () => void;
 }) {
   const values: FoodValue[] = useMemo(() => foodValues(conceptId, locale), [conceptId, locale]);
+  const bySource: SourceValue[] = useMemo(() => foodValuesBySource(conceptId), [conceptId]);
+  const divergent = useMemo(() => divergentNutrients(bySource), [bySource]);
   const [openRecord, setOpenRecord] = useState<string | null>(null);
   const first = values[0];
   if (first === undefined) {
@@ -104,6 +126,46 @@ function FoodDetail({
             </details>
           );
         })()}
+      {bySource.length > 0 && (
+        <details className="provenance">
+          <summary>
+            valores por fonte ({bySource.length}) — comparação entre fontes
+          </summary>
+          <table className="values">
+            <thead>
+              <tr>
+                <th>nutriente</th>
+                <th>valor</th>
+                <th>un</th>
+                <th>tipo</th>
+                <th>aquis.</th>
+                <th>conf.</th>
+                <th>fonte</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bySource.map((v) => (
+                <tr key={`${v.nutrientId}-${v.sourceId}`}>
+                  <td>
+                    <span className="mono">{v.nutrientId}</span> {v.nutrientNameEn}
+                    {divergent.has(v.nutrientId) && (
+                      <span className="chip chip-score">divergente</span>
+                    )}
+                  </td>
+                  <td className="num">{formatValue(v.value)}</td>
+                  <td>{v.unit}</td>
+                  <td>{v.valueType}</td>
+                  <td>{v.acquisitionType ?? "—"}</td>
+                  <td>{v.confidenceCode ?? "—"}</td>
+                  <td>
+                    {v.sourceName} {v.sourceVersion} · {v.licenseId}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </details>
+      )}
     </aside>
   );
 }
