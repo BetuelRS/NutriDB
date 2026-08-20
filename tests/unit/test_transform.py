@@ -296,3 +296,17 @@ def test_identity_links_unknown_code_fails_high(tmp_path: Path, sandbox_root: Pa
     )
     with pytest.raises(TransformError, match="has no intermediates"):
         _apply_identity_links(links_csv, {"insa": {"25"}, "ciqual": set()}, [], [], [])
+
+
+def test_identity_links_unknown_survivor_fails_high(tmp_path: Path) -> None:
+    from nutridb.identity import canonical_id as cid
+    from nutridb.transform import _apply_identity_links
+
+    links_csv = tmp_path / "links.csv"
+    links_csv.write_text(
+        "concept_id,source,source_code,status\n"
+        f"{cid('concept', 'insa', 'food', 'missing')},insa,25,automatic\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(TransformError, match="unknown survivor concept"):
+        _apply_identity_links(links_csv, {"insa": {"25"}, "ciqual": set()}, [], [], [])

@@ -417,6 +417,11 @@ def _apply_identity_links(
     """
     consumed = {"automatic", "adjudicated"}
     absorbed_to: dict[str, tuple[str, str, str, str]] = {}
+    known_concepts = {
+        canonical_id("concept", source, "food", code)
+        for source, codes in food_codes.items()
+        for code in codes
+    }
     with links_csv.open(encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             if row["status"] is None or row["status"].lstrip().startswith("#"):
@@ -425,6 +430,8 @@ def _apply_identity_links(
             source = row["source"].strip()
             source_code = row["source_code"].strip()
             concept_id = row["concept_id"].strip()
+            if concept_id not in known_concepts:
+                raise TransformError(f"links.csv: unknown survivor concept {concept_id!r}")
             if status not in consumed | {"review"}:
                 raise TransformError(
                     f"links.csv: unknown status {status!r} (expected automatic|adjudicated|review)"
