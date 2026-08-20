@@ -335,9 +335,7 @@ def _validate_profile_sources(source_table: pl.DataFrame, root: Path, profile: s
     compatible = {source.id for source in registry.compatible_with(profile)}
     incompatible = sorted(source_ids - compatible)
     if incompatible:
-        raise PackageError(
-            f"sources {incompatible!r} are incompatible with profile {profile!r}"
-        )
+        raise PackageError(f"sources {incompatible!r} are incompatible with profile {profile!r}")
 
 
 def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:
