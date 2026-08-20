@@ -304,6 +304,6 @@ Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Ap
 | F6.5 | Golden 200 alimentos (estratificado ~18/grupo, células ENERC_KCAL/PROCNT/FAT/CHOAVL/WATER, skip de ausentes, tolerância 1e-9) | ✅ script efémero + `tests/golden/ciqual_200.csv` + `test_golden_200.py`; revisão humana do critério 2 pendente | `pytest tests/golden/` |
 | F6.6 | Property tests (Hypothesis): shuffle invariante (merge/transform), roundtrip de conversão, propriedades da divergência | ✅ `tests/property/` (roundtrip, divergência simétrica/limitada, ordem de fontes invariante) + merge idempotente (re-run byte-idêntico, `test_merge.py`) | `pytest tests/property/ tests/unit/test_merge.py` |
 | F6.7 | CI: trigger `f6/**` + job `qa` (pipeline de fixtures → suite → upload-artifact do relatório) | ✅ `.github/workflows/ci.yml` (jobs checks/explorer/qa/determinism; qa sobe relatório + metadados de release) | `gh run watch` |
-| F6.8 | Fecho: PLAN/PROGRESS, commits atómicos `(f6)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | [ ] | `gh run watch` |
+| F6.8 | Fecho: PLAN/PROGRESS, commits atómicos `(f6)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | ✅ 2026-08-20 — merge `--no-ff`; CI verde; pendências humanas (adjudicação, golden à mão) e SBOM/atestado documentadas como pós-F6 | `gh run watch` |
 
 **Entregáveis da fase**: ADR-0009; `src/nutridb/quality/`; CLI `qa` + relatório HTML/métricas; 22 testes; golden 200; property tests; job CI com artefacto do relatório.
