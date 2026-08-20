@@ -589,6 +589,7 @@ def build(
     from nutridb.package import package as run_package
     from nutridb.paths import paths
     from nutridb.quality import QualityError, run_quality, write_report
+    from nutridb.release import ReleaseError, write_release_metadata
     from nutridb.sources.registry import load_registry
     from nutridb.transform import TransformError
     from nutridb.transform import transform as run_transform
@@ -657,6 +658,12 @@ def build(
         qa_warnings = sum(finding.severity == "warning" for finding in findings)
         if qa_errors:
             raise PackageError(f"QA blocked release with {qa_errors} error(s)")
+        release_info = write_release_metadata(
+            artifact,
+            base["root"],
+            "core",
+            base["build"] / "qa" / "metrics.json",
+        )
     except (
         CacheError,
         TransformError,
@@ -665,6 +672,7 @@ def build(
         MergeError,
         PackageError,
         QualityError,
+        ReleaseError,
     ) as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
@@ -688,6 +696,8 @@ def build(
     table.add_row("integrity", package_info["integrity"])
     table.add_row("qa_errors", str(qa_errors))
     table.add_row("qa_warnings", str(qa_warnings))
+    table.add_row("manifest", release_info["manifest"])
+    table.add_row("checksums", release_info["checksums"])
     rich.console.Console().print(table)
     typer.echo("build OK")
 
