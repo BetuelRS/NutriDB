@@ -86,3 +86,11 @@ def test_sources_fetch_unknown_id_fails() -> None:
     result = runner.invoke(app, ["sources", "fetch", "does-not-exist"])
     assert result.exit_code != 0
     assert "does-not-exist" in result.output
+
+
+def test_transform_cache_inputs_include_registry() -> None:
+    from nutridb.cli import _transform_inputs
+    from nutridb.paths import paths
+
+    base = paths()
+    assert base["registry"] in _transform_inputs(base)

@@ -181,7 +181,12 @@ def _extract_inputs(base: dict[str, Path], source_id: str) -> list[Path]:
 
 def _transform_inputs(base: dict[str, Path]) -> list[Path]:
     """Every input the transform stage depends on."""
-    files: list[Path] = [base["build"] / "intermediates", base["mappings"], base["vocab"]]
+    files: list[Path] = [
+        base["registry"],
+        base["build"] / "intermediates",
+        base["mappings"],
+        base["vocab"],
+    ]
     root = project_root()
     files.extend(
         [
@@ -569,8 +574,8 @@ def build(
     package core; any stage failure aborts the build (fail high, P9).
     Extract and transform are content-addressed in ``build/cache``: an
     unchanged run reuses the previous stage output (byte-identical, P5)
-    and only re-runs derive/i18n/merge/package. Requires the source
-    cache: run `uv run nutridb sources sync` first.
+    and only re-runs derive/i18n/merge/package. Source files are verified
+    against the registry before extraction.
     """
     from nutridb.cache import CacheError, populate_cache, refresh_from_cache, stage_cache_path
     from nutridb.cache import fingerprint as stage_fingerprint
@@ -591,6 +596,7 @@ def build(
     registry = load_registry()
     cache_dir = base["build"] / "cache"
     try:
+        sync_sources(registry)
         extract_reports: dict[str, dict[str, int]] = {}
         for source_id in sorted(registry.sources):
             extractor = _EXTRACTORS.get(source_id)
