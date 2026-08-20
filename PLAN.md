@@ -46,11 +46,10 @@ ausências ou divergências. A direção está registada no
 
 ### Bloqueadores atuais
 
-- SBOM, atestação e assinatura de release ainda não estão implementados.
-- A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
-- A adjudicação humana completa dos 6 237 pares de review ainda não está fechada.
+- A adjudicação inicial fechou 95 pares (73 golden-true + 22 exclusivos) e rejeitou 112 golden-false; permanecem 6 029 pares em review. 75 golden-true foram adiados por conflitos 1:1, sobretudo contra entradas compostas `aliment moyen`.
 - O golden 200 automático existe; falta a revisão humana final das células selecionadas.
-- `links.csv` sem linhas `adjudicated`: 146 pares verdadeiros do golden aguardam adjudicação humana (recall confirmada hoje: 0.43).
+- P3 está fechado por ADR-0016: `coverage` + ausência de linha, `trace`/`below_loq` quando publicados e nenhum motivo adicional inferido.
+- A chave privada Ed25519 está fora do repositório em `C:\Users\Betuel\.nutridb\signing\`; a chave pública está em `docs/keys/nutridb-signing.pub.pem`. Falta apenas a decisão operacional de custódia/backup para uma release pública.
 
 ### Progresso confirmado desde a auditoria
 
@@ -63,12 +62,17 @@ ausências ou divergências. A direção está registada no
 - Hypothesis cobre conversões, divergência e ordem determinística de identidade.
 - CI `f6/**` executa checks, Explorer, build real, QA e upload do relatório.
 - `nutridb build --full` executa `vocab check` e QA internamente e falha com qualquer `error`.
-- O build gera manifesto `release-1` e `SHA256SUMS` ao lado do SQLite.
-- CI: job `determinism` constrói duas vezes e prova byte-identidade (P5); `qa` faz upload do relatório e dos metadados de release.
+- O build gera manifesto `release-1`, `SHA256SUMS`, SBOM CycloneDX 1.6 e atestação `attestation-1` (Ed25519 se `NUTRIDB_SIGNING_KEY`; ADR-0015); `nutridb release verify` valida tudo, incluindo a assinatura.
+- CI: job `determinism` constrói duas vezes e prova byte-identidade (P5) — agora compara também manifesto, SBOM e `SHA256SUMS`; `qa` faz upload do relatório e dos metadados de release.
 - Explorer deriva locales de `i18n/locales.toml` no build; `pt-PT` é o padrão; locales disponíveis descobertas do artefacto.
-- Métricas de identidade honestas: `recall` (cobertura do matcher 0.954) separada de `recall_confirmed` (0.434, sem adjudicação); `review_golden_true` = 146.
+- Métricas de identidade honestas: `recall` (cobertura do matcher 0.954) separada de `recall_confirmed` (0.434, antes da adjudicação); 95 links adjudicados estão aplicados e 6 029 pares continuam em review.
 - Ledger de IDs (ADR-0014): `mappings/id_ledger.csv` com 4 860 atribuições; mudança de algoritmo falha alto, `identity_drift` sinaliza edições da fonte sem trocar o ID.
-- Suite atual: **207 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
+- Suite atual: **230 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
+- `nutridb link review`: fila de adjudicação humana com contexto (nomes, similaridade, score), `--apply` determinístico em `mappings/links.csv` (P8); após a primeira vaga restam 6 029 pares, com a restrição 1:1 preservada.
+- Explorer: vista de cobertura global do dataset (por fonte e por grupo) e interface com locale `pt`/`en` (toggle).
+- ADR-0016 fecha P3 com evidência CIQUAL/INSA e mantém razões de ausência não publicadas fora do modelo.
+- ADR-0017 regista USDA Retention Factors Release 6 como proposta; integração bloqueada até descarregar artefacto oficial, fixar SHA-256 e confirmar licença na fonte.
+- Análise da fila restante não encontrou aceites seguros: os 3 candidatos exclusivos colidem com links automáticos existentes; permanecem em review.
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
 Não devem ser interpretadas como o estado oficial atual quando divergirem deste
@@ -304,6 +308,24 @@ Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Ap
 | F6.5 | Golden 200 alimentos (estratificado ~18/grupo, células ENERC_KCAL/PROCNT/FAT/CHOAVL/WATER, skip de ausentes, tolerância 1e-9) | ✅ script efémero + `tests/golden/ciqual_200.csv` + `test_golden_200.py`; revisão humana do critério 2 pendente | `pytest tests/golden/` |
 | F6.6 | Property tests (Hypothesis): shuffle invariante (merge/transform), roundtrip de conversão, propriedades da divergência | ✅ `tests/property/` (roundtrip, divergência simétrica/limitada, ordem de fontes invariante) + merge idempotente (re-run byte-idêntico, `test_merge.py`) | `pytest tests/property/ tests/unit/test_merge.py` |
 | F6.7 | CI: trigger `f6/**` + job `qa` (pipeline de fixtures → suite → upload-artifact do relatório) | ✅ `.github/workflows/ci.yml` (jobs checks/explorer/qa/determinism; qa sobe relatório + metadados de release) | `gh run watch` |
-| F6.8 | Fecho: PLAN/PROGRESS, commits atómicos `(f6)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | ✅ 2026-08-20 — merge `--no-ff`; CI verde; pendências humanas (adjudicação, golden à mão) e SBOM/atestado documentadas como pós-F6 | `gh run watch` |
+| F6.8 | Fecho: PLAN/PROGRESS, commits atómicos `(f6)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | ✅ 2026-08-20 — merge `--no-ff`; CI verde; pendências humanas (adjudicação, golden à mão) documentadas como pós-F6 | `gh run watch` |
+| F6.9 | Adjudicação com ferramenta: `link review` (listagem com contexto + apply determinístico) | ✅ 2026-08-20 — `matching.py` (`LinkError`, `_queue_index` com produto cartesiano por survivor, `apply_link_decisions` com regra de linhas partilhadas), `cli.py` grupo `link` + `review --apply`; 6 237 pares reais listados; fix de colapso de pares partilhados | `uv run nutridb link review --limit 5` |
 
 **Entregáveis da fase**: ADR-0009; `src/nutridb/quality/`; CLI `qa` + relatório HTML/métricas; 22 testes; golden 200; property tests; job CI com artefacto do relatório.
+
+---
+
+## Fase 7 — Release verificável (branch `f6/qualidade`, pós-F6)
+
+**Objetivo**: consumidor externo valida composição legal, origem e autenticidade do artefacto sem abrir código (P2). Decisão em ADR-0015 (2026-08-20).
+
+| # | Tarefa | Estado | Nota |
+|---|---|---|---|
+| F7.0 | ADR-0015 (SBOM + atestação + assinatura; `cryptography` como dependência) | ✅ | Aprovado 2026-08-20 |
+| F7.1 | SBOM CycloneDX 1.6 determinístico (`<artefacto>.sbom.json`; UUID5 do hash; sem timestamp; componente por fonte com licenças SPDX/`UNKNOWN` e hashes dos dumps) | ✅ | `src/nutridb/sbom.py`; byte-idêntico em 2 builds (teste) |
+| F7.2 | Atestação `attestation-1` (`<artefacto>.attestation.json`): subject, digests internos, bloco temporal (commit/branch git, uv, host, CI, timestamp), `signature: null` ou Ed25519 | ✅ | `write_attestation`; fail-high com chave inválida; SHA256SUMS cobre só os ficheiros determinísticos |
+| F7.3 | `nutridb release verify <artefacto>` — hashes vs manifesto/SBOM/checksums/digests; assinatura com `--public-key` ou `NUTRIDB_PUBLIC_KEY`; assinada sem chave → `unverified` | ✅ | e2e real: `signature: verified` |
+| F7.4 | CI: upload de sbom/atestado; determinism gate compara manifesto+SBOM+checksums | ✅ | `.github/workflows/ci.yml`; `scripts/check_determinism.py` |
+| F7.5 | Testes | ✅ | 15 novos (sbom determinístico, atestação assinada/verificada, fail-high, tamper, signing unit) |
+
+**Entregáveis**: ADR-0015; sbom.py; signing.py; atestação no release.py; CLI `release verify`; testes; gate de determinismo alargado; `cryptography` no lock.

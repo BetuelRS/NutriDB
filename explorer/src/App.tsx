@@ -2,20 +2,26 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   availableLocales,
   buildMetadata,
+  coverageBySource,
+  coverageGlobal,
   foodGroups,
   foodValues,
   foodValuesBySource,
   foodsForNutrient,
   provenance,
   search,
+  type CoverageGroupRow,
+  type CoverageRow,
   type FoodGroup,
   type FoodValue,
   type NutrientRank,
   type Provenance,
   type SearchResult,
+  type SourceCoverage,
   type SourceValue,
 } from "./search";
 import { loadArtifact, sqliteVersion } from "./db";
+import { numberLocale, t, type UiLang } from "./i18n";
 import "./App.css";
 
 type Status =
@@ -23,12 +29,14 @@ type Status =
   | { kind: "ready"; version: string; builtAt: string }
   | { kind: "error"; message: string };
 
-type Mode = "food" | "nutrient";
+type Mode = "food" | "nutrient" | "coverage";
 
-function formatValue(value: number | null): string {
+type Tr = (key: string, params?: Record<string, string | number>) => string;
+
+function formatValue(value: number | null, lang: UiLang): string {
   if (value === null) return "";
   if (Number.isInteger(value)) return value.toFixed(0);
-  return value.toLocaleString("pt-PT", { maximumFractionDigits: 3 });
+  return value.toLocaleString(numberLocale(lang), { maximumFractionDigits: 3 });
 }
 
 function divergentNutrients(rows: SourceValue[]): Set<string> {
@@ -52,22 +60,27 @@ function divergentNutrients(rows: SourceValue[]): Set<string> {
 function FoodDetail({
   conceptId,
   locale,
+  lang,
+  tr,
   onClose,
 }: {
   conceptId: string;
   locale: string;
+  lang: UiLang;
+  tr: Tr;
   onClose: () => void;
 }) {
   const values: FoodValue[] = useMemo(() => foodValues(conceptId, locale), [conceptId, locale]);
   const bySource: SourceValue[] = useMemo(() => foodValuesBySource(conceptId), [conceptId]);
+  const coverage: SourceCoverage[] = useMemo(() => coverageBySource(conceptId), [conceptId]);
   const divergent = useMemo(() => divergentNutrients(bySource), [bySource]);
   const [openRecord, setOpenRecord] = useState<string | null>(null);
   const first = values[0];
   if (first === undefined) {
     return (
       <aside className="detail">
-        <button onClick={onClose}>fechar</button>
-        <p>sem valores para {conceptId}</p>
+        <button onClick={onClose}>{tr("close")}</button>
+        <p>{tr("noValuesFor", { id: conceptId })}</p>
       </aside>
     );
   }
@@ -75,19 +88,23 @@ function FoodDetail({
     <aside className="detail">
       <div className="detail-head">
         <h2>{first.label}</h2>
-        <button onClick={onClose}>fechar</button>
+        <button onClick={onClose}>{tr("close")}</button>
       </div>
       <p className="detail-sub">
-        grupo {first.foodGroup} · {values.length} nutrientes · rótulo em {first.locale}
+        {tr("detailSub", {
+          group: first.foodGroup,
+          n: values.length,
+          locale: first.locale,
+        })}
       </p>
       <table className="values">
         <thead>
           <tr>
-            <th>nutriente</th>
-            <th>valor</th>
-            <th>un</th>
-            <th>tipo</th>
-            <th>conf.</th>
+            <th>{tr("nutrient")}</th>
+            <th>{tr("value")}</th>
+            <th>{tr("unit")}</th>
+            <th>{tr("type")}</th>
+            <th>{tr("conf")}</th>
           </tr>
         </thead>
         <tbody>
@@ -96,7 +113,7 @@ function FoodDetail({
               <td>
                 <span className="mono">{v.nutrientId}</span> {v.nutrientNameEn}
               </td>
-              <td className="num">{formatValue(v.value)}</td>
+              <td className="num">{formatValue(v.value, lang)}</td>
               <td>{v.unit}</td>
               <td>{v.valueType}</td>
               <td>{v.confidenceCode ?? "—"}</td>
@@ -105,7 +122,7 @@ function FoodDetail({
                   className="link"
                   onClick={() => setOpenRecord(openRecord === v.nutrientId ? null : v.nutrientId)}
                 >
-                  proveniência
+                  {tr("provenance")}
                 </button>
               </td>
             </tr>
@@ -126,21 +143,29 @@ function FoodDetail({
             </details>
           );
         })()}
+      {coverage.length > 0 && (
+        <div className="chips">
+          {coverage.map((c) => (
+            <span key={c.sourceId} className="chip">
+              {c.sourceName} {c.sourceVersion}:{" "}
+              {tr("nutrientsCovered", { covered: c.covered, total: c.total })}
+            </span>
+          ))}
+        </div>
+      )}
       {bySource.length > 0 && (
         <details className="provenance">
-          <summary>
-            valores por fonte ({bySource.length}) — comparação entre fontes
-          </summary>
+          <summary>{tr("valuesBySource", { n: bySource.length })}</summary>
           <table className="values">
             <thead>
               <tr>
-                <th>nutriente</th>
-                <th>valor</th>
-                <th>un</th>
-                <th>tipo</th>
-                <th>aquis.</th>
-                <th>conf.</th>
-                <th>fonte</th>
+                <th>{tr("nutrient")}</th>
+                <th>{tr("value")}</th>
+                <th>{tr("unit")}</th>
+                <th>{tr("type")}</th>
+                <th>{tr("acq")}</th>
+                <th>{tr("conf")}</th>
+                <th>{tr("source")}</th>
               </tr>
             </thead>
             <tbody>
@@ -149,10 +174,10 @@ function FoodDetail({
                   <td>
                     <span className="mono">{v.nutrientId}</span> {v.nutrientNameEn}
                     {divergent.has(v.nutrientId) && (
-                      <span className="chip chip-score">divergente</span>
+                      <span className="chip chip-score">{tr("divergent")}</span>
                     )}
                   </td>
-                  <td className="num">{formatValue(v.value)}</td>
+                  <td className="num">{formatValue(v.value, lang)}</td>
                   <td>{v.unit}</td>
                   <td>{v.valueType}</td>
                   <td>{v.acquisitionType ?? "—"}</td>
@@ -173,12 +198,16 @@ function FoodDetail({
 function NutrientDetail({
   nutrientId,
   locale,
+  lang,
+  tr,
   foodGroup,
   onOpenFood,
   onClose,
 }: {
   nutrientId: string;
   locale: string;
+  lang: UiLang;
+  tr: Tr;
   foodGroup: string | null;
   onOpenFood: (conceptId: string) => void;
   onClose: () => void;
@@ -192,20 +221,23 @@ function NutrientDetail({
     <aside className="detail">
       <div className="detail-head">
         <h2>
-          <span className="mono">{nutrientId}</span> — alimentos por teor
+          <span className="mono">{nutrientId}</span> — {tr("byContent")}
         </h2>
-        <button onClick={onClose}>fechar</button>
+        <button onClick={onClose}>{tr("close")}</button>
       </div>
       <p className="detail-sub">
-        {foods.length} alimentos · por 100 g · {foodGroup ?? "todos os grupos"}
+        {tr("rankSub", {
+          n: foods.length,
+          group: foodGroup ?? tr("allGroupsLower"),
+        })}
       </p>
       <table className="values">
         <thead>
           <tr>
-            <th>alimento</th>
-            <th>valor</th>
-            <th>un</th>
-            <th>grupo</th>
+            <th>{tr("food")}</th>
+            <th>{tr("value")}</th>
+            <th>{tr("unit")}</th>
+            <th>{tr("group")}</th>
           </tr>
         </thead>
         <tbody>
@@ -216,7 +248,7 @@ function NutrientDetail({
                   {f.label}
                 </button>
               </td>
-              <td className="num">{formatValue(f.value)}</td>
+              <td className="num">{formatValue(f.value, lang)}</td>
               <td>{f.unit}</td>
               <td>{f.foodGroup}</td>
             </tr>
@@ -225,13 +257,13 @@ function NutrientDetail({
       </table>
       <div className="search">
         <select
-          aria-label="número de alimentos"
+          aria-label={tr("foodsLabel")}
           value={limit}
           onChange={(event) => setLimit(Number(event.target.value))}
         >
           {[10, 25, 50, 100].map((n) => (
             <option key={n} value={n}>
-              {n} alimentos
+              {tr("foodsCount", { n })}
             </option>
           ))}
         </select>
@@ -240,8 +272,63 @@ function NutrientDetail({
   );
 }
 
+function CoverageView({ lang, tr }: { lang: UiLang; tr: Tr }) {
+  const data = useMemo(() => coverageGlobal(), []);
+  return (
+    <section className="coverage">
+      <p className="muted">
+        {tr("datasetSummary", {
+          foods: data.summary.foods.toLocaleString(numberLocale(lang)),
+          cells: data.summary.cells.toLocaleString(numberLocale(lang)),
+        })}
+      </p>
+      <table className="values">
+        <thead>
+          <tr>
+            <th>{tr("source")}</th>
+            <th>{tr("foods")}</th>
+            <th>{tr("nutrients")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.bySource.map((row: CoverageRow) => (
+            <tr key={row.sourceId}>
+              <td>
+                {row.sourceName} {row.sourceVersion} · {row.sourceId}
+              </td>
+              <td className="num">{row.foods}</td>
+              <td className="num">{row.nutrients}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <table className="values">
+        <thead>
+          <tr>
+            <th>{tr("group")}</th>
+            <th>{tr("source")}</th>
+            <th>{tr("foods")}</th>
+            <th>{tr("nutrients")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.byGroup.map((row: CoverageGroupRow) => (
+            <tr key={`${row.sourceId}-${row.foodGroup}`}>
+              <td>{row.foodGroup}</td>
+              <td>{row.sourceId}</td>
+              <td className="num">{row.foods}</td>
+              <td className="num">{row.nutrients}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  );
+}
+
 export default function App() {
   const [status, setStatus] = useState<Status>({ kind: "loading" });
+  const [uiLang, setUiLang] = useState<UiLang>("pt");
   const [queryText, setQueryText] = useState("");
   const [locales, setLocales] = useState<string[]>([]);
   const [locale, setLocale] = useState("pt-PT");
@@ -254,6 +341,10 @@ export default function App() {
   const [selectedNutrient, setSelectedNutrient] = useState<string | null>(null);
   const [selectedFood, setSelectedFood] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const tr = useCallback(
+    (key: string, params?: Record<string, string | number>) => t(uiLang, key, params),
+    [uiLang],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -286,7 +377,7 @@ export default function App() {
       setSelectedFood(null);
       setSelectedNutrient(null);
       try {
-        setResults(search(text, locale, limit, mode, foodGroup));
+        setResults(search(text, locale, limit, mode === "coverage" ? "food" : mode, foodGroup));
       } catch (err) {
         setError(String(err));
         setResults([]);
@@ -318,7 +409,7 @@ export default function App() {
     return (
       <main className="app">
         <h1>NUTRIDB Explorer</h1>
-        <p className="muted">a carregar o artefacto SQLite (≈241 MB) via WASM…</p>
+        <p className="muted">{tr("loading")}</p>
       </main>
     );
   }
@@ -337,9 +428,17 @@ export default function App() {
         <h1>
           NUTRIDB Explorer <span className="tag">F2 · A8</span>
         </h1>
+        <select
+          className="lang"
+          aria-label={tr("language")}
+          value={uiLang}
+          onChange={(event) => setUiLang(event.target.value as UiLang)}
+        >
+          <option value="pt">pt</option>
+          <option value="en">en</option>
+        </select>
         <p className="muted">
-          SQLite {status.version} (WASM) · artefacto de {status.builtAt} · pesquisa FTS5
-          acentos-insensível, trigramas e facetas
+          {tr("readyHeader", { version: status.version, builtAt: status.builtAt })}
         </p>
       </header>
 
@@ -355,56 +454,73 @@ export default function App() {
           className={mode === "food" ? "result selected" : "result"}
           onClick={() => changeMode("food")}
         >
-          alimentos
+          {tr("foods")}
         </button>
         <button
           type="button"
           className={mode === "nutrient" ? "result selected" : "result"}
           onClick={() => changeMode("nutrient")}
         >
-          nutrientes
+          {tr("nutrients")}
         </button>
-        <input
-          aria-label="termo de pesquisa"
-          type="search"
-          placeholder={mode === "food" ? "ex.: pomme, lait, água, noix…" : "ex.: vitamina c, fibra…"}
-          value={queryText}
-          onChange={(event) => setQueryText(event.target.value)}
-        />
-        <select
-          aria-label="idioma"
-          value={locale}
-          onChange={(event) => setLocale(event.target.value)}
+        <button
+          type="button"
+          className={mode === "coverage" ? "result selected" : "result"}
+          onClick={() => changeMode("coverage")}
         >
-          {locales.map((l) => (
-            <option key={l} value={l}>
-              {l}
-            </option>
-          ))}
-        </select>
-        <select
-          aria-label="número de resultados"
-          value={limit}
-          onChange={(event) => setLimit(Number(event.target.value))}
-        >
-          {[10, 25, 50, 100].map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
-        <button type="submit">pesquisar</button>
+          {tr("coverage")}
+        </button>
+        {mode !== "coverage" && (
+          <>
+            <input
+              aria-label={tr("searchTerm")}
+              type="search"
+              placeholder={
+                mode === "food" ? tr("placeholderFood") : tr("placeholderNutrient")
+              }
+              value={queryText}
+              onChange={(event) => setQueryText(event.target.value)}
+            />
+            <select
+              aria-label={tr("language")}
+              value={locale}
+              onChange={(event) => setLocale(event.target.value)}
+            >
+              {locales.map((l) => (
+                <option key={l} value={l}>
+                  {l}
+                </option>
+              ))}
+            </select>
+            <select
+              aria-label={tr("resultsCount")}
+              value={limit}
+              onChange={(event) => setLimit(Number(event.target.value))}
+            >
+              {[10, 25, 50, 100].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+            <button type="submit">{tr("search")}</button>
+          </>
+        )}
       </form>
 
-      {groups.length > 0 && (
+      {mode === "coverage" ? (
+        <CoverageView lang={uiLang} tr={tr} />
+      ) : (
+        <>
+          {groups.length > 0 && (
         <div className="search">
-          <span className="muted">grupo:</span>
+          <span className="muted">{tr("group")}</span>
           <button
             type="button"
             className={`chip ${foodGroup === null ? "chip-score" : ""}`}
             onClick={() => changeGroup(null)}
           >
-            todos
+            {tr("allGroups")}
           </button>
           {groups.map((g) => (
             <button
@@ -425,7 +541,7 @@ export default function App() {
       <div className="columns">
         <section className="results">
           {searched && results.length === 0 && (
-            <p className="muted">sem resultados para “{queryText}”</p>
+            <p className="muted">{tr("noResults", { query: queryText })}</p>
           )}
           <ul>
             {results.map((r) => (
@@ -462,12 +578,16 @@ export default function App() {
           <FoodDetail
             conceptId={selectedFood}
             locale={locale}
+            lang={uiLang}
+            tr={tr}
             onClose={() => setSelectedFood(null)}
           />
         ) : selectedNutrient !== null ? (
           <NutrientDetail
             nutrientId={selectedNutrient}
             locale={locale}
+            lang={uiLang}
+            tr={tr}
             foodGroup={foodGroup}
             onOpenFood={(conceptId) => {
               setSelectedNutrient(null);
@@ -477,11 +597,10 @@ export default function App() {
           />
         ) : null}
       </div>
+        </>
+      )}
 
-      <footer className="muted">
-        Dados: CIQUAL 2025 (etalab-2.0) · INSA/TCA 7.1 (insa-tca-7.1) · artefacto em IndexedDB
-        (sem HTTP-range) · motor F1/F2 (emendas A7/A8)
-      </footer>
+      <footer className="muted">{tr("footer")}</footer>
     </main>
   );
 }

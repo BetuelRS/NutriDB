@@ -1,6 +1,6 @@
 # NUTRIDB
 
-[![status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-b45309)](PROGRESS.md)
+[![status: release-candidate](https://img.shields.io/badge/status-release--candidate-1f883d)](PROGRESS.md)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-3776ab)](pyproject.toml)
 [![Apache-2.0](https://img.shields.io/badge/code-Apache--2.0-2ea44f)](LICENSE)
 
@@ -57,8 +57,8 @@ Depois de o dataset cumprir os gates de produção:
 
 ## Estado atual
 
-O projeto está em **pre-alpha**, com uma implementação real do pipeline para a
-base europeia inicial:
+O projeto está em **release candidate** para o perfil `core`, com uma
+implementação real e reproduzível do pipeline para a base europeia inicial:
 
 | Área | Estado atual |
 | --- | --- |
@@ -66,14 +66,15 @@ base europeia inicial:
 | INSA/TCA 7.1 | Integrada, extraída e mapeada |
 | Modelo canónico | Parquet com source records e valores tipados |
 | Artefacto de leitura | SQLite schema 4 com FTS5 e pesquisa trigram |
-| Explorer | Build React/TypeScript funcional; cobertura de produto ainda inicial |
-| Qualidade | Suite QA e relatório HTML; hardening de produção em curso |
-| Release metadata | Manifesto `release-1` e `SHA256SUMS` gerados pelo build |
-| Golden/property/CI de release | Golden automático e QA CI ativos; revisão de release em curso |
+| Explorer | Build React/TypeScript funcional; pesquisa, proveniência, comparação e cobertura |
+| Qualidade | Suite QA e relatório HTML; último build real com 0 erros e 7 warnings documentados |
+| Release metadata | Manifesto `release-1`, `SHA256SUMS`, SBOM e atestação `attestation-1` |
+| Golden/property/CI de release | Golden 200, Hypothesis, QA, determinismo e verificação de assinatura |
 
 O artefacto local atual contém 4 860 conceitos, 230 601 valores canónicos e
-391 101 linhas materializadas. Estes números descrevem o build de
-desenvolvimento, não uma promessa de release estável.
+395 797 linhas materializadas. O build é determinístico fora do bloco temporal
+e pode ser autenticado com a chave pública em
+[`docs/keys/nutridb-signing.pub.pem`](docs/keys/nutridb-signing.pub.pem).
 
 ## Arquitetura
 
@@ -123,6 +124,8 @@ uv run nutridb sources audit
 uv run nutridb sources sync
 uv run nutridb build --full
 uv run nutridb qa
+uv run nutridb release verify build/artifacts/nutridb-core-0.1.0.sqlite \
+  --public-key docs/keys/nutridb-signing.pub.pem
 uv run nutridb explorer dev
 ```
 
@@ -158,8 +161,8 @@ obrigações de atribuição estão em [`sources/registry.toml`](sources/registr
 
 - **P0 - Contrato do produto:** dataset como núcleo, Explorer como interface e workspace neutro sem aconselhamento.
 - **P1 - Confiabilidade:** fechar proveniência, ausência, IDs, licenças, determinismo e build externo.
-- **P2 - Release de dados:** golden 200, propriedades, QA no CI, manifesto e checksums.
-- **P3 - Explorer v1:** `pt-PT` primeiro, `en` depois, pesquisa, ficha, proveniência, comparação e cobertura.
+- **P2 - Release de dados:** concluído para o perfil `core`; permanece review humano de identidade e golden.
+- **P3 - Explorer v1:** concluído para o escopo atual; evolução visual e integrações continuam.
 - **P4 - Expansão:** mais fontes europeias, USDA, porções, estados e valores de referência com evidência.
 - **P5 - Integração:** API, clientes e exports adicionais.
 

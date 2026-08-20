@@ -9,6 +9,7 @@ authors = [
     { name = "BetuelRS", email = "betuel801@gmail.com" }
 ]
 dependencies = [
+    "cryptography>=44.0.0",
     "duckdb>=1.5.5",
     "polars>=1.43.2",
     "pydantic>=2.13.4",

@@ -48,7 +48,9 @@ if TYPE_CHECKING:
 __all__ = [
     "AUTO_THRESHOLD",
     "REVIEW_THRESHOLD",
+    "LinkError",
     "LinkProposal",
+    "apply_link_decisions",
     "block_candidates",
     "evaluate",
     "load_terms",
@@ -63,6 +65,11 @@ MATCH_SOURCES = ("ciqual", "insa")
 
 AUTO_THRESHOLD = 0.84
 REVIEW_THRESHOLD = 0.50
+
+
+class LinkError(ValueError):
+    """Invalid adjudication input or state (fail high, P9)."""
+
 
 # Nutrient veto (SPEC §6.2): core vector, veto if >= 2 of these diverge.
 CORE_NUTRIENTS = ("ENERC_KCAL", "PROCNT", "FAT", "CHOAVL", "WATER", "FIBTG")
@@ -656,14 +663,18 @@ def _survivor(insa_code: str, ciqual_code: str) -> str:
     return min(ids)
 
 
-def write_links_csv(proposals: Iterable[LinkProposal], path: Path) -> int:
+def write_links_csv(
+    proposals: Iterable[LinkProposal], path: Path, preserve: Path | None = None
+) -> int:
     """Write adjudicated links to ``mappings/links.csv`` (P8 gate).
 
     Each automatic 1:1 winner and each review pair writes two rows — one
     per source record, both pointing at the deterministic survivor concept
     (ADR-0006). Rows with status ``automatic`` are merged by the
     transform; ``review`` rows wait for human adjudication; ``None``
-    proposals are not written.
+    proposals are not written. Rows with status ``adjudicated`` already in
+    ``preserve`` (the existing file) are carried over untouched: human
+    decisions survive re-runs of the matcher.
     """
     auto = [p for p in proposals if _status(p) == "automatic"]
     rows: list[tuple[str, str, str, str]] = []
@@ -677,6 +688,15 @@ def write_links_csv(proposals: Iterable[LinkProposal], path: Path) -> int:
         survivor = _survivor(proposal.insa_code, proposal.ciqual_code)
         rows.append((survivor, "insa", proposal.insa_code, "review"))
         rows.append((survivor, "ciqual", proposal.ciqual_code, "review"))
+    if preserve is not None and preserve.is_file():
+        kept: dict[tuple[str, str, str], str] = {}
+        with preserve.open(encoding="utf-8") as fh:
+            for row in csv.DictReader(fh):
+                if (row["status"] or "").strip() != "adjudicated":
+                    continue
+                key = (row["concept_id"].strip(), row["source"].strip(), row["source_code"].strip())
+                kept[key] = "adjudicated"
+        rows.extend((*key, status) for key, status in kept.items())
     rows.sort(key=lambda r: (r[0], r[1], r[2]))
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="\n") as fh:
@@ -684,6 +704,114 @@ def write_links_csv(proposals: Iterable[LinkProposal], path: Path) -> int:
         writer.writerow(("concept_id", "source", "source_code", "status"))
         writer.writerows(rows)
     return len(rows)
+
+
+def _queue_index(
+    links_csv: Path,
+) -> tuple[dict[tuple[str, str], str], dict[tuple[str, str, str], set[tuple[str, str]]]]:
+    """Index of pending review rows: pair -> survivor and row -> pairs.
+
+    Each review pair writes two rows sharing the survivor concept
+    (ADR-0006). A survivor may host several pairs (one food proposed
+    against several counterparts), in which case a row is shared by all
+    the pairs of its side at that survivor; the index keeps the full
+    cross product so no pair is lost.
+    """
+    by_survivor: dict[str, dict[str, set[str]]] = {}
+    with links_csv.open(encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            if (row["status"] or "").strip() != "review":
+                continue
+            concept_id = row["concept_id"].strip()
+            by_survivor.setdefault(concept_id, {}).setdefault(row["source"].strip(), set()).add(
+                row["source_code"].strip()
+            )
+    pairs: dict[tuple[str, str], str] = {}
+    row_pairs: dict[tuple[str, str, str], set[tuple[str, str]]] = {}
+    for survivor in sorted(by_survivor):
+        insa_codes = sorted(by_survivor[survivor].get("insa", ()))
+        ciqual_codes = sorted(by_survivor[survivor].get("ciqual", ()))
+        for insa in insa_codes:
+            for ciqual in ciqual_codes:
+                pair = (insa, ciqual)
+                pairs[pair] = survivor
+                row_pairs.setdefault((survivor, "insa", insa), set()).add(pair)
+                row_pairs.setdefault((survivor, "ciqual", ciqual), set()).add(pair)
+    return pairs, row_pairs
+
+
+def review_pairs(links_csv: Path) -> list[tuple[str, str]]:
+    """Pending adjudication pairs from ``mappings/links.csv`` (status review)."""
+    pairs, _ = _queue_index(links_csv)
+    return sorted(pairs)
+
+
+def apply_link_decisions(
+    links_csv: Path,
+    decisions: list[tuple[str, str, str, str]],
+) -> dict[str, int]:
+    """Apply human decisions to the adjudication record (P8, SPEC §6.3).
+
+    ``decisions`` rows: ``(insa_code, ciqual_code, decision, justification)``
+    with decision ``accepted`` | ``rejected``. Every pair must exist in the
+    current review queue or the call fails high (P9): the queue is the
+    authority and silent edits are never invented. Accepted pairs become
+    status ``adjudicated`` (merged by the transform), rejected pairs are
+    removed. A row shared by several pairs (one food proposed against
+    several counterparts at the same survivor) is only removed once every
+    pair using it has been decided. All other rows are preserved verbatim.
+    """
+    queue, row_pairs = _queue_index(links_csv)
+    seen: set[tuple[str, str]] = set()
+    accepted: set[tuple[str, str]] = set()
+    rejected: set[tuple[str, str]] = set()
+    for insa_code, ciqual_code, decision, justification in decisions:
+        pair = (insa_code, ciqual_code)
+        if pair in seen:
+            raise LinkError(f"duplicate decision for pair {pair!r}")
+        seen.add(pair)
+        if decision not in ("accepted", "rejected"):
+            raise LinkError(
+                f"pair {pair!r}: unknown decision {decision!r} (expected accepted|rejected)"
+            )
+        if pair not in queue:
+            raise LinkError(f"pair {pair!r} is not in the review queue")
+        if decision == "accepted":
+            if not justification.strip():
+                raise LinkError(f"pair {pair!r}: accepted requires a justification (SPEC §6.3)")
+            accepted.add(pair)
+        else:
+            rejected.add(pair)
+    decided = accepted | rejected
+
+    rows: list[tuple[str, str, str, str]] = []
+    with links_csv.open(encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            status = (row["status"] or "").strip()
+            concept_id = row["concept_id"].strip()
+            source = row["source"].strip()
+            source_code = row["source_code"].strip()
+            if status != "review":
+                rows.append((concept_id, source, source_code, status))
+                continue
+            my_pairs = row_pairs.get((concept_id, source, source_code), set())
+            if my_pairs and my_pairs <= decided:
+                continue
+            rows.append((concept_id, source, source_code, status))
+    for insa_code, ciqual_code in accepted:
+        survivor = queue[(insa_code, ciqual_code)]
+        rows.append((survivor, "insa", insa_code, "adjudicated"))
+        rows.append((survivor, "ciqual", ciqual_code, "adjudicated"))
+    rows.sort(key=lambda r: (r[0], r[1], r[2]))
+    with links_csv.open("w", encoding="utf-8", newline="\n") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(("concept_id", "source", "source_code", "status"))
+        writer.writerows(rows)
+    return {
+        "accepted": len(accepted),
+        "rejected": len(decisions) - len(accepted),
+        "remaining_review": sum(1 for r in rows if r[3] == "review"),
+    }
 
 
 def evaluate(
