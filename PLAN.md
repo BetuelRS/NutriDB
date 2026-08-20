@@ -1,7 +1,7 @@
 # PLAN.md — plano vivo do NUTRIDB
 
 > Plano atualizado a cada sessão. Nunca dependas do contexto sobreviver (regra §17.1).
-> Estado atual: **Fase 1 concluída (2026-08-16)** — CIQUAL ponta a ponta, golden 61/61, explorer mínimo, merge com CI verde. **Próximo: Fase 2** (multi-fonte: INSA/TCA integrado no esquema comum), em curso no branch `f2/multi-fonte`.
+> **Estado oficial:** direção de produto aprovada em 2026-08-19. O dataset é o produto principal; o Explorer é a interface de inspeção; integrações e expansão de fontes seguem depois dos gates de produção.
 
 ## Convenções
 
@@ -10,6 +10,76 @@
 - Qualquer decisão cara de reverter → ADR numerado (contexto, opções, decisão, consequências).
 - Testes primeiro em tudo o que envolve correção numérica.
 - Legendas: `[ ]` pendente · `[x]` feito · DoD = definição de feito · Verificação = comando concreto que prova o DoD.
+
+## Direção confirmada
+
+O NutriDB será uma plataforma aberta e versionada de dados de composição
+alimentar para desenvolvedores, investigadores e consulta pública. O núcleo é
+o dataset; o Explorer torna a informação intuitiva sem esconder proveniência,
+ausências ou divergências. A direção está registada no
+[`ADR-0010`](docs/adr/0010-direcao-produto.md).
+
+### Produto
+
+- Dataset canónico, auditável e reutilizável como primeira prioridade.
+- Explorer web com pesquisa, fichas, comparação de fontes, proveniência e cobertura.
+- Workspace neutro futuro para selecionar alimentos/quantidades e calcular totais com inputs visíveis; sem aconselhamento clínico.
+- API, bibliotecas e exports adicionais apenas depois da release confiável do dataset.
+
+### Escopo inicial
+
+- Fontes: CIQUAL 2025 + INSA/TCA 7.1.
+- Idiomas: `pt-PT` primeiro, `en` depois; outras variantes por prioridade e cobertura.
+- Saídas: SQLite + Parquet + Explorer.
+- Fora do core: diário, tracking, contas, recomendações clínicas e imputação de valores.
+
+### Plano atual orientado à produção
+
+| Prioridade | Objetivo | Critério verificável |
+|---|---|---|
+| P0 | Fechar o contrato do produto e emendar a SPEC sobre o workspace neutro | ADR-0010 aprovado; fronteiras documentadas |
+| P1 | Fechar P1/P3/P4/P6/P9/P10 | aquisição e ausência tipadas; IDs auditáveis; gate de licenças; build único; CI sem falhas |
+| P2 | Publicar um dataset verificável | golden 200; Hypothesis; QA no CI; manifesto e checksums; rebuild externo |
+| P3 | Explorer v1 | `pt-PT`/`en`, pesquisa, ficha, proveniência, comparação e cobertura testadas |
+| P4 | Expandir catálogo com segurança | cada fonte com ADR, hash, extractor, mapping, golden e QA |
+| P5 | Integrar consumidores | API, bibliotecas, exports e publicação só após P2/P3 |
+
+### Bloqueadores atuais
+
+- SBOM, atestação e assinatura de release ainda não estão implementados.
+- A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
+- A adjudicação humana completa dos 6 237 pares de review ainda não está fechada.
+- O golden 200 automático existe; falta a revisão humana final das células selecionadas.
+- `links.csv` sem linhas `adjudicated`: 146 pares verdadeiros do golden aguardam adjudicação humana (recall confirmada hoje: 0.43).
+
+### Progresso confirmado desde a auditoria
+
+- `acquisition_type` controlado: fontes publicadas usam `declared`, cálculos usam `calculated` e o package falha em nulos/tipos desconhecidos.
+- Gate de compatibilidade de licença aplicado no package por perfil.
+- `build` verifica a registry e os hashes antes de extrair; a registry entra no fingerprint do transform.
+- Fonte registada sem extractor, survivor de identidade desconhecido e SQLite inválido falham alto.
+- API abre artefactos existentes em modo somente leitura e rankings filtram `per_100g_edible`.
+- Golden automático CIQUAL: 200 alimentos e 943 células do XML primário.
+- Hypothesis cobre conversões, divergência e ordem determinística de identidade.
+- CI `f6/**` executa checks, Explorer, build real, QA e upload do relatório.
+- `nutridb build --full` executa `vocab check` e QA internamente e falha com qualquer `error`.
+- O build gera manifesto `release-1` e `SHA256SUMS` ao lado do SQLite.
+- CI: job `determinism` constrói duas vezes e prova byte-identidade (P5); `qa` faz upload do relatório e dos metadados de release.
+- Explorer deriva locales de `i18n/locales.toml` no build; `pt-PT` é o padrão; locales disponíveis descobertas do artefacto.
+- Métricas de identidade honestas: `recall` (cobertura do matcher 0.954) separada de `recall_confirmed` (0.434, sem adjudicação); `review_golden_true` = 146.
+- Ledger de IDs (ADR-0014): `mappings/id_ledger.csv` com 4 860 atribuições; mudança de algoritmo falha alto, `identity_drift` sinaliza edições da fonte sem trocar o ID.
+- Suite atual: **207 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
+
+As secções seguintes preservam o histórico detalhado das fases já executadas.
+Não devem ser interpretadas como o estado oficial atual quando divergirem deste
+bloco.
+
+---
+
+## Histórico detalhado de implementação
+
+As tabelas abaixo registam decisões e entregáveis por fase. O estado oficial e
+as próximas ações estão na secção anterior.
 
 ---
 
@@ -105,7 +175,7 @@
 
 ---
 
-## Próximas fases (referência — só desdobradas quando F2 fechar)
+## Registo histórico: fases previstas após F2
 
 - **F2** Multi-fonte: USDA (4 sub-conjuntos), INSA (autorização!), CoFID, Frida, Fineli + 3 à escolha; 1 ADR de licença por fonte. **Ponto de paragem obrigatório: contacto humano para INSA (§17.6).**
 - **F3** Identidade: blocking, sinais, adjudicação, dourado de 500 pares (precisão ≥ 0,98 / recall ≥ 0,90).
@@ -113,7 +183,7 @@
 - **F5** Fusão e derivações. **F6** Qualidade (suite + 200 dourados). **F7** Empacotamento (gate de licenças automático; lite < 25 MB).
 - **F8** Explorador (13 vistas). **F9** API e clientes. **F10** 1.0 (reprodutibilidade externa).
 
-## Decisões em aberto (pendentes de aprovação)
+## Registo histórico: decisões resolvidas
 
 Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Apache-2.0, pt-PT/EN, CIQUAL 2025 em `core`, XLS+fallback XML, página mínima de pesquisa em F1, cobertura+flags, método de energia, INFOODS + i18n mínimo, dourados/Fixtures, esquema fino, semver 0.1.0, links 1:1, `_unmapped`/READMEs, registry oficial+Zenodo, divergences só F4. Sem decisões em aberto para arrancar F0.
 ---
@@ -212,3 +282,28 @@ Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Ap
 | A8.9 | Testes e fecho | ✅ | 176 testes verdes; ruff/mypy limpos; `npm run build` verde; dev server verificado (pagina/artefacto/wasm 200) |
 
 **Entregaveis da emenda**: ADR-0008; cache.py; CLI `build --full`; schema 4 (trigramas); API alargada; explorer F2/A8; 176 testes.
+
+---
+
+## Fase 6 — Qualidade (branch `f6/qualidade`)
+
+**Objetivo**: suite de qualidade do SPEC §11 (checks com severidades, relatório HTML + métricas), 200 alimentos dourados, propriedades de conjuntos (Hypothesis), job CI com upload do relatório. Decisões em ADR-0009 (2026-08-19).
+
+**Critérios de aceitação da spec (§16 F6)**:
+1. Suite executa com o artefacto real — ✅ 0 erros / warnings de revisão (proximados 222, energia 33, AG 44, açúcares 2, sal 937, RAE 2, z-score 1893)
+2. 200 alimentos verificados à mão passam — [ ] (golden automatizado pronto; revisão humana pendente)
+3. Propriedades: conversões reversíveis, fusão idempotente, ordem de fontes não altera resultado — ✅ (roundtrip, divergência simétrica/limitada, ordem invariante, merge byte-idêntico em re-run)
+
+| # | Tarefa | Estado | Nota |
+|---|---|---|---|
+| F6.0 | ADR-0009 (severidades por origem da incoerência, energia Atwater UE 1169/2011 com POLYL opcional, piso absoluto 5 kcal, divergência em pares não ordenados) | ✅ | Aprovado 2026-08-19 |
+| F6.1 | Suite `src/nutridb/quality/` (20 checks, SPEC §11) | ✅ | `proximates_sum`/`energy_recalc`/`fatty_acids_le_fat`/`sugars_individual_le_total`/`sugars_total_le_carbs`/`amino_acids_vs_protein`/`salt_vs_sodium`/`vita_rae_consistent`/`no_negative_values`/`unit_domain_g`/`unit_domain_vocab`/`zscore_group`/`cross_source_divergence`/`integrity_check`/`fk_orphans`/`label_nutrient_refs`/`derivation_chain`/`no_mt_unreviewed`/`unmapped_empty`; coerência **por (conceito, fonte)** com normalização mg/ug→g (mv mistura fontes por nutriente, ADR-0001) |
+| F6.2 | CLI `nutridb qa` + relatório | ✅ | Tabela rich + `build/qa/report.html` + `metrics.json` (schema `qa-1`); exit 1 com erros; stdout UTF-8 (reconfigure guardado por isinstance) |
+| F6.3 | Testes unitários da suite (22) | ✅ | Violações sintéticas por check; inclui per-source (não dispara com mistura), mg→g (FATRN 16500 mg, NA 200 mg), POLYL opcional, z-score n≥10, órfãos FK, mt_unreviewed; ruff/mypy limpos |
+| F6.4 | Triagem dos dados reais | ✅ | 3702 proximados completos (mediana 99,99; 222 fora de [97,103] — Isolat de soja 107,64 CIQUAL, Farine de seigle T85 110,80 INSA); energia: fibra entra (p95 3,14% vs 18,35% sem fibra), 1485 sem método (P2, não verificados); sal: mediana rácio 1,00 exato (Sel blanc NACL 97,8 g / NA 39 100 mg), 937 fora de ±10% (vinhos); AG 44; açúcares 2; RAE 2; z-score 1893; AA 0 completos (nenhuma fonte mapeia AA — honesto); divergência entre fontes 1200 pares ≥30% |
+| F6.5 | Golden 200 alimentos (estratificado ~18/grupo, células ENERC_KCAL/PROCNT/FAT/CHOAVL/WATER, skip de ausentes, tolerância 1e-9) | ✅ script efémero + `tests/golden/ciqual_200.csv` + `test_golden_200.py`; revisão humana do critério 2 pendente | `pytest tests/golden/` |
+| F6.6 | Property tests (Hypothesis): shuffle invariante (merge/transform), roundtrip de conversão, propriedades da divergência | ✅ `tests/property/` (roundtrip, divergência simétrica/limitada, ordem de fontes invariante) + merge idempotente (re-run byte-idêntico, `test_merge.py`) | `pytest tests/property/ tests/unit/test_merge.py` |
+| F6.7 | CI: trigger `f6/**` + job `qa` (pipeline de fixtures → suite → upload-artifact do relatório) | ✅ `.github/workflows/ci.yml` (jobs checks/explorer/qa/determinism; qa sobe relatório + metadados de release) | `gh run watch` |
+| F6.8 | Fecho: PLAN/PROGRESS, commits atómicos `(f6)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | ✅ 2026-08-20 — merge `--no-ff`; CI verde; pendências humanas (adjudicação, golden à mão) e SBOM/atestado documentadas como pós-F6 | `gh run watch` |
+
+**Entregáveis da fase**: ADR-0009; `src/nutridb/quality/`; CLI `qa` + relatório HTML/métricas; 22 testes; golden 200; property tests; job CI com artefacto do relatório.

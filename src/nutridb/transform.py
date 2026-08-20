@@ -42,6 +42,7 @@ live in the mapping CSVs and in the registry, never in code.
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 from typing import TYPE_CHECKING, Any
 
@@ -133,6 +134,12 @@ def transform(intermediates_dir: Path, out_dir: Path, root: Path) -> dict[str, i
         "identity_links": 0,
     }
 
+    # -- id ledger: eternal assignments with drift detection (P4, ADR-0014) --
+    ledger_path = root / "mappings" / "id_ledger.csv"
+    ledger = _load_id_ledger(ledger_path) if ledger_path.is_file() else {}
+    totals["identity_new"] = 0
+    totals["identity_drift"] = 0
+
     for source_id in source_ids:
         source_dir = intermediates_dir / source_id
         _load_source(
@@ -147,6 +154,7 @@ def transform(intermediates_dir: Path, out_dir: Path, root: Path) -> dict[str, i
             link_rows,
             value_rows,
             totals,
+            ledger,
         )
 
     # -- identity links: consume the P8 adjudication record (F3) --------------
@@ -242,7 +250,30 @@ def transform(intermediates_dir: Path, out_dir: Path, root: Path) -> dict[str, i
     )
 
     totals["sources"] = len(source_ids)
+    _write_id_ledger(ledger_path, ledger)
     return totals
+
+
+def _load_id_ledger(path: Path) -> dict[tuple[str, str], tuple[str, str]]:
+    """Read ``mappings/id_ledger.csv`` as {(source, code): (id, seed)}."""
+    ledger: dict[tuple[str, str], tuple[str, str]] = {}
+    with path.open(encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            ledger[(row["source"], row["source_code"])] = (
+                row["concept_id"],
+                row["seed_sha256"],
+            )
+    return ledger
+
+
+def _write_id_ledger(path: Path, ledger: dict[tuple[str, str], tuple[str, str]]) -> None:
+    """Write the ledger deterministically sorted by (source, code), LF only."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="\n") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["source", "source_code", "concept_id", "seed_sha256"])
+        for (source, code), (concept_id, seed) in sorted(ledger.items()):
+            writer.writerow([source, code, concept_id, seed])
 
 
 def _load_source(
@@ -257,6 +288,7 @@ def _load_source(
     link_rows: list[tuple[str, str, str]],
     value_rows: list[tuple[object, ...]],
     totals: dict[str, int],
+    ledger: dict[tuple[str, str], tuple[str, str]],
 ) -> None:
     """Load one source's intermediates into the canonical row accumulators."""
     foods = pl.read_parquet(source_dir / "food.parquet")
@@ -327,6 +359,22 @@ def _load_source(
     concept_by_food: dict[str, str] = {}
     for r in foods.sort("food_code").rows(named=True):
         concept_id = canonical_id("concept", source_id, "food", r["food_code"])
+        seed = hashlib.sha256(r["record"].encode("utf-8")).hexdigest()
+        key = (source_id, r["food_code"])
+        if key in ledger:
+            assigned_id, assigned_seed = ledger[key]
+            if assigned_id != concept_id:
+                raise TransformError(
+                    f"{source_id}: food {r['food_code']}: identity changed "
+                    f"from {assigned_id} to {concept_id}; regenerate "
+                    f"mappings/id_ledger.csv deliberately"
+                )
+            if assigned_seed != seed:
+                totals["identity_drift"] += 1
+                ledger[key] = (concept_id, seed)
+        else:
+            totals["identity_new"] += 1
+            ledger[key] = (concept_id, seed)
         concept_by_food[r["food_code"]] = concept_id
         group_path = json.loads(r["group_path"])
         food_group = resolve_food_group(food_groups, group_path)
@@ -367,7 +415,7 @@ def _load_source(
                 None if value_type == "below_loq" else _convert(r["value"], factor),
                 mapping["unit"],
                 value_type,
-                None,  # acquisition_type: sources do not classify acquisition
+                "declared",  # source publishes the cell; underlying acquisition is unclassified
                 source_id,
                 canonical_id(
                     "source_record",
@@ -417,6 +465,11 @@ def _apply_identity_links(
     """
     consumed = {"automatic", "adjudicated"}
     absorbed_to: dict[str, tuple[str, str, str, str]] = {}
+    known_concepts = {
+        canonical_id("concept", source, "food", code)
+        for source, codes in food_codes.items()
+        for code in codes
+    }
     with links_csv.open(encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             if row["status"] is None or row["status"].lstrip().startswith("#"):
@@ -425,6 +478,8 @@ def _apply_identity_links(
             source = row["source"].strip()
             source_code = row["source_code"].strip()
             concept_id = row["concept_id"].strip()
+            if concept_id not in known_concepts:
+                raise TransformError(f"links.csv: unknown survivor concept {concept_id!r}")
             if status not in consumed | {"review"}:
                 raise TransformError(
                     f"links.csv: unknown status {status!r} (expected automatic|adjudicated|review)"

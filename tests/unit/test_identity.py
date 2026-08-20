@@ -148,9 +148,10 @@ def test_evaluate_precision_recall_and_food_level(tmp_path: Path) -> None:
     ]
     metrics = evaluate(proposals, golden)
     assert metrics["precision"] == pytest.approx(1 / 2)  # 1-11 true; 3-31 golden-false
-    assert metrics["recall"] == pytest.approx(1 / 3)  # found 1-11; 2-22, 5-51 adjudicated
+    assert metrics["recall"] == pytest.approx(3 / 5)  # coverage: 1-11 final; 2-22, 5-51 review
+    assert metrics["recall_confirmed"] == pytest.approx(1 / 5)  # only automatic final 1-11
     assert metrics["auto_finals"] == 3
-    assert metrics["review_adjudicated"] == 2  # 2-22 and 5-51 are golden-true
+    assert metrics["review_golden_true"] == 2  # 2-22 and 5-51 found but unconfirmed
     assert metrics["golden_foods"] == 4  # insa 1, 2, 4, 5
     assert metrics["covered_foods"] == 3  # 1, 2 and 5
     assert metrics["food_recall"] == pytest.approx(3 / 4)

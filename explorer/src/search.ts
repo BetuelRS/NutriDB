@@ -1,3 +1,4 @@
+import { LOCALE_CHAINS } from "./generated/locales";
 import { buildMatch } from "./fts";
 import { query } from "./db";
 
@@ -54,14 +55,21 @@ export interface Provenance {
   record: string;
 }
 
-const LOCALE_CHAINS: Record<string, string[]> = {
-  fr: [],
-  en: [],
-  "pt-PT": ["pt", "en"],
-  "pt-BR": ["pt-PT", "pt", "en"],
-};
-
-export const ACTIVE_LOCALES = Object.keys(LOCALE_CHAINS);
+export interface SourceValue {
+  nutrientId: string;
+  nutrientNameEn: string;
+  value: number | null;
+  unit: string;
+  valueType: string;
+  acquisitionType: string | null;
+  confidenceCode: string | null;
+  basis: string;
+  belowLoqThreshold: number | null;
+  sourceId: string;
+  sourceName: string;
+  sourceVersion: string;
+  licenseId: string;
+}
 
 // mv_food_value holds one row per (concept, nutrient, locale); labels are
 // native per source (INSA=pt, CIQUAL=fr/en). Display falls back through the
@@ -71,7 +79,28 @@ const VALUE_LOCALE_FALLBACK: Record<string, string[]> = {
   en: ["fr", "pt"],
   pt: ["en", "fr"],
   "pt-PT": ["pt", "en", "fr"],
+  "pt-BR": ["pt", "en", "fr"],
 };
+
+function valueChain(locale: string): string[] {
+  return [locale, ...(VALUE_LOCALE_FALLBACK[locale] ?? LOCALE_CHAINS[locale] ?? [])];
+}
+
+export function availableLocales(): string[] {
+  const rows = query(
+    "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'label_fts_%'",
+  );
+  const seen = new Set<string>();
+  for (const row of rows) {
+    const name = row.values[0]?.toString() ?? "";
+    const locale = name
+      .replace(/^label_fts_/, "")
+      .replace(/_tri$/, "")
+      .replaceAll("_", "-");
+    seen.add(locale);
+  }
+  return [...seen].sort();
+}
 
 export function search(
   queryText: string,
@@ -119,7 +148,7 @@ export function search(
 }
 
 export function foodValues(conceptId: string, locale: string): FoodValue[] {
-  const chain = [locale, ...(VALUE_LOCALE_FALLBACK[locale] ?? [])];
+  const chain = valueChain(locale);
   const collected: FoodValue[] = [];
   for (const candidate of chain) {
     const rows = query(
@@ -183,6 +212,34 @@ export function buildMetadata(): Record<string, string> {
   return out;
 }
 
+export function foodValuesBySource(conceptId: string): SourceValue[] {
+  const rows = query(
+    `SELECT v.nutrient_id, n.name_en, v.value, v.unit, v.value_type,
+            v.acquisition_type, v.confidence_code, v.basis,
+            v.below_loq_threshold, v.source_id, s.name, s.version, s.license_id
+     FROM value v
+     JOIN nutrient n ON n.tagname = v.nutrient_id
+     JOIN source s ON s.source_id = v.source_id
+     WHERE v.concept_id = ? ORDER BY v.nutrient_id, v.source_id`,
+    [conceptId],
+  );
+  return rows.map((row) => ({
+    nutrientId: row.values[0]?.toString() ?? "",
+    nutrientNameEn: row.values[1]?.toString() ?? "",
+    value: typeof row.values[2] === "number" ? row.values[2] : null,
+    unit: row.values[3]?.toString() ?? "",
+    valueType: row.values[4]?.toString() ?? "",
+    acquisitionType: row.values[5]?.toString() ?? null,
+    confidenceCode: row.values[6]?.toString() ?? null,
+    basis: row.values[7]?.toString() ?? "",
+    belowLoqThreshold: typeof row.values[8] === "number" ? row.values[8] : null,
+    sourceId: row.values[9]?.toString() ?? "",
+    sourceName: row.values[10]?.toString() ?? "",
+    sourceVersion: row.values[11]?.toString() ?? "",
+    licenseId: row.values[12]?.toString() ?? "",
+  }));
+}
+
 export function foodGroups(): FoodGroup[] {
   const rows = query(
     "SELECT DISTINCT c.food_group, fg.name_pt, fg.name_en FROM concept c " +
@@ -201,12 +258,13 @@ export function foodsForNutrient(
   limit: number,
   foodGroup?: string | null,
 ): NutrientRank[] {
-  const chain = [locale, ...(VALUE_LOCALE_FALLBACK[locale] ?? [])];
+  const chain = valueChain(locale);
   for (const candidate of chain) {
     const rows = query(
       `SELECT concept_id, label, locale, food_group, nutrient_id, value, unit, basis
        FROM mv_food_value
        WHERE nutrient_id = ? AND locale = ? AND value IS NOT NULL
+         AND basis = 'per_100g_edible'
          AND (? IS NULL OR food_group = ?)
        ORDER BY value DESC LIMIT ?`,
       [nutrientId, candidate, foodGroup ?? null, foodGroup ?? null, limit],

@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Any
 import polars as pl
 
 from nutridb import __version__
+from nutridb.sources.registry import ArtifactProfile, load_registry
 from nutridb.vocab import load_csv
 
 if TYPE_CHECKING:
@@ -167,8 +168,14 @@ class PackageError(Exception):
     """Fatal input inconsistency while packaging (fail high, P9)."""
 
 
-def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> dict[str, Any]:
-    """Build ``nutridb-core-<version>.sqlite``; return artefact information."""
+def package(
+    canonical_dir: Path,
+    vocab_dir: Path,
+    out_dir: Path,
+    root: Path,
+    profile: str = ArtifactProfile.CORE,
+) -> dict[str, Any]:
+    """Build a licensed SQLite profile; return artefact information."""
     tables: dict[str, pl.DataFrame] = {
         name: pl.read_parquet(canonical_dir / f"{name}.parquet")
         for name in (
@@ -192,9 +199,11 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
     if not mv_path.is_file():
         raise PackageError("mv_food_value.parquet missing; run `uv run nutridb merge` first")
     tables["mv_food_value"] = pl.read_parquet(mv_path)
+    _validate_profile_sources(tables["source"], root, profile)
+    _validate_acquisition_types(tables["value"], tables["mv_food_value"], vocab_dir)
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    artifact = out_dir / f"nutridb-core-{__version__}.sqlite"
+    artifact = out_dir / f"nutridb-{profile}-{__version__}.sqlite"
     if artifact.is_file():
         artifact.unlink()  # fresh build: no state leaks between runs (P10)
 
@@ -210,7 +219,7 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
         _build_fts(conn, tables["label"])
         for _name, ddl in _INDEXES.items():
             conn.execute(ddl)
-        _write_build_metadata(conn)
+        _write_build_metadata(conn, profile)
         conn.commit()
         conn.execute("ANALYZE")
         conn.commit()
@@ -224,6 +233,8 @@ def package(canonical_dir: Path, vocab_dir: Path, out_dir: Path, root: Path) -> 
         integrity = conn.execute("PRAGMA integrity_check").fetchone()[0]
     finally:
         conn.close()
+    if integrity != "ok":
+        raise PackageError(f"SQLite integrity_check failed: {integrity}")
 
     counts = {name: frame.height for name, frame in tables.items()}
     return {
@@ -288,6 +299,45 @@ def _load_vocabulary(conn: sqlite3.Connection, vocab_dir: Path) -> None:
     )
 
 
+def _validate_acquisition_types(
+    values: pl.DataFrame, materialized: pl.DataFrame, vocab_dir: Path
+) -> None:
+    """Reject missing or uncontrolled acquisition types before release (P1/P9)."""
+    allowed = {
+        row["id"]
+        for row in load_csv(vocab_dir / "acquisition_types.csv", ("id", "name_en", "description"))
+    }
+    for name, frame in (("value", values), ("mv_food_value", materialized)):
+        nulls = frame.filter(pl.col("acquisition_type").is_null()).height
+        if nulls:
+            raise PackageError(f"{name}: {nulls} rows without acquisition_type (P1)")
+        invalid = (
+            frame.filter(~pl.col("acquisition_type").is_in(sorted(allowed)))
+            .select("acquisition_type")
+            .unique()
+            .to_series()
+            .to_list()
+        )
+        if invalid:
+            raise PackageError(f"{name}: unknown acquisition_type values {invalid!r}")
+
+
+def _validate_profile_sources(source_table: pl.DataFrame, root: Path, profile: str) -> None:
+    """Apply the registry's per-artifact license gate before packaging (P6)."""
+    if profile not in (
+        ArtifactProfile.CORE,
+        ArtifactProfile.EXTENDED,
+        ArtifactProfile.LITE,
+    ):
+        raise PackageError(f"unknown artifact profile {profile!r}")
+    registry = load_registry(root / "sources" / "registry.toml")
+    source_ids = set(source_table["source_id"].to_list())
+    compatible = {source.id for source in registry.compatible_with(profile)}
+    incompatible = sorted(source_ids - compatible)
+    if incompatible:
+        raise PackageError(f"sources {incompatible!r} are incompatible with profile {profile!r}")
+
+
 def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:
     locales = sorted(labels["locale"].unique().to_list())
     if not locales:
@@ -323,14 +373,14 @@ def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:
         )
 
 
-def _write_build_metadata(conn: sqlite3.Connection) -> None:
+def _write_build_metadata(conn: sqlite3.Connection, profile: str) -> None:
     metadata = {
         "built_at": _dt.datetime.now(_dt.UTC).isoformat(timespec="seconds"),
         "nutridb_version": __version__,
         "python_version": platform.python_version(),
         "polars_version": pl.__version__,
         "schema_version": _SCHEMA_VERSION,
-        "profile": "core",
+        "profile": profile,
         "page_size": str(PAGE_SIZE),
     }
     conn.executemany(

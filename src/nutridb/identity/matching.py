@@ -679,7 +679,7 @@ def write_links_csv(proposals: Iterable[LinkProposal], path: Path) -> int:
         rows.append((survivor, "ciqual", proposal.ciqual_code, "review"))
     rows.sort(key=lambda r: (r[0], r[1], r[2]))
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="") as fh:
+    with path.open("w", encoding="utf-8", newline="\n") as fh:
         writer = csv.writer(fh)
         writer.writerow(("concept_id", "source", "source_code", "status"))
         writer.writerows(rows)
@@ -694,10 +694,11 @@ def evaluate(
 
     Golden rows: ``insa_code,ciqual_code,label`` with label true|false.
     Precision is measured on the automatic 1:1 final links only (SPEC
-    F3: >= 0.98); recall counts both automatic finals and golden-true
-    pairs sitting in the review queue (they are found via adjudication,
-    the human-in-the-loop step). Golden-true pairs with no candidate at
-    all are the unreachable misses of the matcher itself.
+    F3: >= 0.98). ``recall`` is the matcher coverage: automatic finals plus
+    golden-true pairs sitting in the review queue (found but unconfirmed);
+    ``recall_confirmed`` counts only automatic finals — what a consumer can
+    trust before human adjudication of the review queue. Golden-true pairs
+    with no candidate at all are the unreachable misses of the matcher.
     """
     golden_true: set[tuple[str, str]] = set()
     golden_false: set[tuple[str, str]] = set()
@@ -711,23 +712,23 @@ def evaluate(
 
     auto_proposals = [p for p in proposals if _status(p) == "automatic"]
     finals = {(p.insa_code, p.ciqual_code) for p in resolve_one_to_one(auto_proposals)}
-    review_pairs = {(p.insa_code, p.ciqual_code) for p in proposals if _status(p) == "review"}
-    adjudicated = finals | (golden_true & review_pairs)
+    review_golden_true = {
+        (p.insa_code, p.ciqual_code) for p in proposals if _status(p) == "review"
+    } & golden_true
     true_positives = len(finals & golden_true)
     false_positives = len(finals & golden_false)
-    false_negatives = len(golden_true - adjudicated)
+    false_negatives = len(golden_true - finals - review_golden_true)
     precision = (
         true_positives / (true_positives + false_positives)
         if (true_positives + false_positives)
         else 0.0
     )
-    recall = (
-        true_positives / (true_positives + false_negatives)
-        if (true_positives + false_negatives)
-        else 0.0
+    matcher_recall = (
+        (true_positives + len(review_golden_true)) / len(golden_true) if golden_true else 0.0
     )
+    confirmed_recall = true_positives / len(golden_true) if golden_true else 0.0
     golden_foods = {pair[0] for pair in golden_true}
-    covered_foods = {pair[0] for pair in adjudicated & golden_true}
+    covered_foods = {pair[0] for pair in (finals | review_golden_true) & golden_true}
     food_recall = len(covered_foods) / len(golden_foods) if golden_foods else 0.0
     return {
         "golden_true": len(golden_true),
@@ -736,10 +737,11 @@ def evaluate(
         "false_positives": false_positives,
         "false_negatives": false_negatives,
         "auto_finals": len(finals),
-        "review_adjudicated": len(adjudicated - finals),
+        "review_golden_true": len(review_golden_true),
         "golden_foods": len(golden_foods),
         "covered_foods": len(covered_foods),
         "precision": precision,
-        "recall": recall,
+        "recall": matcher_recall,
+        "recall_confirmed": confirmed_recall,
         "food_recall": food_recall,
     }

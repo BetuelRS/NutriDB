@@ -27,12 +27,9 @@ from __future__ import annotations
 import re
 import sqlite3
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from pathlib import Path
 
 from nutridb.i18n import load_locales, normalize_label
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 __all__ = ["ApiError", "FoodValue", "SearchResult", "foods_for_nutrient", "search"]
 
@@ -118,7 +115,7 @@ def search(
         trigram = False
     match = " AND ".join(f'"{_FFS5_ESCAPE.sub("", term)}"{suffix}' for term in terms)
 
-    conn = sqlite3.connect(db_path)
+    conn = _open_readonly(db_path)
     try:
         chain = _chain(locale, locales_file)
         results: list[SearchResult] = []
@@ -172,7 +169,7 @@ def foods_for_nutrient(
     """
     if limit <= 0 or limit > _MAX_LIMIT:
         raise ApiError(f"limit must be in 1..{_MAX_LIMIT}, got {limit}")
-    conn = sqlite3.connect(db_path)
+    conn = _open_readonly(db_path)
     try:
         chain = _chain(locale, locales_file)
         for candidate in chain:
@@ -180,6 +177,7 @@ def foods_for_nutrient(
                 "SELECT concept_id, label, locale, food_group, nutrient_id, "
                 "value, unit, basis FROM mv_food_value "
                 "WHERE nutrient_id = ? AND locale = ? AND value IS NOT NULL "
+                "AND basis = 'per_100g_edible' "
                 "AND (? IS NULL OR food_group = ?) "
                 "ORDER BY value DESC LIMIT ?"
             )
@@ -240,3 +238,15 @@ def _resolve_labels(
         resolved[(hit.ref_kind, hit.ref)] = best
     ordered = sorted(resolved.values(), key=lambda r: r.score)
     return ordered[:limit]
+
+
+def _open_readonly(db_path: Path | str) -> sqlite3.Connection:
+    """Open an existing artefact without creating or mutating it (P5)."""
+    path = Path(db_path)
+    if not path.is_file():
+        raise ApiError(f"SQLite artefact not found: {path}")
+    uri = f"file:{path.resolve().as_posix()}?mode=ro"
+    try:
+        return sqlite3.connect(uri, uri=True)
+    except sqlite3.OperationalError as exc:
+        raise ApiError(f"could not open SQLite artefact read-only: {path}") from exc

@@ -9,9 +9,10 @@
   },
   "scripts": {
     "copy-wasm": "node scripts/copy-wasm.mjs",
-    "predev": "npm run copy-wasm",
+    "gen-locales": "node scripts/gen-locales.mjs",
+    "predev": "npm run copy-wasm && npm run gen-locales",
     "dev": "vite",
-    "prebuild": "npm run copy-wasm",
+    "prebuild": "npm run copy-wasm && npm run gen-locales",
     "build": "tsc --noEmit -p tsconfig.json && vite build",
     "preview": "vite preview"
   },
@@ -24,6 +25,7 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.3.4",
+    "smol-toml": "^1.8.0",
     "typescript": "5.6.3",
     "vite": "5.4.11"
   }

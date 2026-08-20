@@ -146,6 +146,13 @@ def test_search_empty_and_unknown_locale(db_path: str) -> None:
         search(db_path, "pastis", "zz-ZZ")
 
 
+def test_search_never_creates_missing_database(tmp_path: Path) -> None:
+    missing = tmp_path / "missing.sqlite"
+    with pytest.raises(ApiError):
+        search(missing, "pastis", "fr")
+    assert not missing.exists()
+
+
 def test_search_limit_enforced(db_path: str) -> None:
     with pytest.raises(ApiError, match="limit"):
         search(db_path, "pastis", "fr", limit=0)
@@ -225,6 +232,7 @@ def test_foods_for_nutrient_ranks_by_value(db_path: str) -> None:
     values = [v for v in (f.value for f in foods) if v is not None]
     assert values == sorted(values, reverse=True)
     assert foods[0].basis == "per_100g_edible"
+    assert all(food.basis == "per_100g_edible" for food in foods)
     assert foods[0].food_group == "alcoholic_beverages"
 
 

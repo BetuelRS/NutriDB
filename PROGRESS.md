@@ -2,7 +2,48 @@
 
 > Atualizado no fim de cada sessão (regra §17.1). Fonte da verdade operacional: `PLAN.md`; arquitetura: `docs/adr/`.
 
-## Estado atual (2026-08-17)
+## Estado oficial (2026-08-20)
+
+**Direção de produto aprovada:** o NutriDB é uma plataforma de dados de
+composição alimentar. O dataset é o produto principal; o Explorer é a camada
+de inspeção intuitiva; integrações e mais fontes seguem depois dos gates de
+produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
+
+| Área | Estado comprovado |
+|---|---|
+| Dataset | CIQUAL 2025 + INSA/TCA 7.1 integrados no canónico |
+| Artefacto | SQLite schema 4 + Parquet; integrity check OK |
+| Explorer | Build React/TypeScript funcional; comparação de valores por fonte; produto ainda inicial |
+| Qualidade | QA real com 0 erros; warnings documentados |
+| P1/P6/P9/P10 | Aquisição, gate de licença, fail-high e sync no build implementados |
+| API | Artefactos read-only; rankings limitados a `per_100g_edible` |
+| Golden/propriedades | Golden automático: 200 alimentos/943 células; Hypothesis ativo + merge idempotente |
+| CI | `checks`, `explorer`, `qa` e `determinism` verdes; relatório QA e metadados de release publicados |
+| Produção | Não fechada: adjudicação humana (6 237 pares), revisão humana do golden, SBOM e atestação pendentes |
+| Testes | 208 testes verdes; ruff/mypy limpos |
+| Próxima prioridade | adjudicação humana, fecho F6 e release verificável |
+
+### Próximas ações
+
+- Adjudicar os 6 237 pares de review (146 golden-true) e rever o golden 200 humanamente.
+- Fechar F6 (merge `--no-ff` em `f0/fundacoes`) e o release verificável.
+- Construir Explorer v1 com `pt-PT` primeiro, `en` depois (vista de cobertura pendente).
+- Só depois expandir fontes, API, bibliotecas e exports.
+
+### Bloqueios
+
+- Adjudicação humana dos pares de review (requer decisor humano; regra 17.6).
+- Revisão humana do golden 200 (verificação à mão, critério 2 do F6).
+- P3 ausência individual por motivo — requer evidência das fontes.
+- SBOM, atestado e assinatura de release — fase posterior.
+
+As secções seguintes são o histórico detalhado das fases e sessões. Quando uma
+secção histórica disser “estado atual”, essa expressão refere-se ao snapshot
+da data indicada, não ao estado oficial acima.
+
+---
+
+## Histórico: Fases 0-2 (snapshot 2026-08-17)
 
 **Fase 0 — Fundações: concluída** (branch `f0/fundacoes`).
 **Fase 1 — Vocabulário e primeira fonte:** **concluída** (branch `f1/ciqual-ponta-a-ponta`; F1.0–F1.10 + F1.8b; merge com CI verde).
@@ -48,7 +89,7 @@
 - **2026-08-16 (continuação 10)**: arranque F2. F2.0 — licença INSA verificada na fonte oficial (e-mail 2026-07-28 como evidência) → ADR-0004; formato XLSX inspecionado (folha de dados com group/column header e células nativas; folha "Componentes-Correspondência") → ADR-0005 (contrato de 4 tabelas por fonte, canónico único, `mv_food_value` por locale, schema 2). F2.1 — ADR-0005 aprovado. F2.2 — registry + sync INSA (SHA-256 verificado). F2.3 — extractor INSA com stdlib: `_shared_strings`/`_sheet_rows` (dict `{col_index: text}`), `_find_header_row`, 48 colunas de valores, correspondência com legendas numeradas/`NaN` ignoradas, `_KEY_ALIASES` (`alfa_tocoferol_mg`→`a_tocoferol_mg`), basis por grupo L1, record JSON verbatim; **correções descobertas nos dados reais**: cabeçalho "Cod | Nome do alimento" na row 2; alinhamento de colunas por índice (5..52) não por letra; unidades só na correspondência; células vazias `None`. F2.4 — +4 tagnames. F2.5 — mappings INSA (48 nutrientes; FATRN ×1000; energy_method `-`; 22 L1 + overrides). F2.6 — transform sem ramos por fonte; report real 4860/328724/230601 (conversions 1376). F2.7 — i18n/package: mv 384 897, FTS 4 locales, schema 2.
 - **2026-08-16 (continuação 11)**: golden INSA + explorer + limpeza. Gerado `tests/golden/insa_10.csv` programaticamente do XLSX real (`%TEMP%\opencode\insa_golden_gen.py`): 10 alimentos, 35 células com coordenadas reais; **bugs do gerador corrigidos**: `_shared_strings` precisa do archive, rows como dicts `{col: text}`, header em rows[1], col = 5 + keys.index(key); células nativas sem aspas no expected; trans INSA em g com fator do mapping (×1000 → mg); energia INSA method NULL (P2). 4 testes golden INSA (incl. proveniência com `analytical_method` na tabela `value`). Explorer: `search.ts` com `label/locale` + `VALUE_LOCALE_FALLBACK`, `App.tsx` com prop locale e footer 2 fontes; `npm run build` verde. Fix 4 testes unit: foodgroups `("1","00")` excluído; `raw` do ciqual com `alim_nom_fr`/`alim_nom_eng`; TransformError sem intermediários; vocab_en 161. Ruff/mypy limpos (19 erros fixos). Build completo re-verificado (counts idênticos, artefacto 229 572 608 B); golden/integration/property verdes. CI: branches `f2/**`. **106 testes verdes**.
 - **2026-08-17**: fecho do `test_extract_insa.py`. Escrito o ficheiro com workbook sintético gerado no teste (stdlib zipfile+xml.etree; 48 headers reais verbatim; correspondência com legendas/NaN/alias "Alfa-tocoferol"); **bugs da fixture corrigidos**: `sheet_xml` emitia um `<row>` por célula (→ 1 `<row>` por linha); linhas de dados sem colunas 0–4 (código/nome/níveis); legendas numeradas "1. " vs regra real `^\d+\s` ("1 Energia [kcal]" + linhas reais); `_read` sem `.parquet`; testes 2–4 sem chamar `extract`; null_count com `.item()`; esperado 83 calculado do FOODS (13 células preenchidas). Ruff/mypy no ficheiro (TYPE_CHECKING, `list[str | None]`, `\u03b1`). **114 testes verdes** (49 unit + 8 INSA + 8 golden + integração/property); format/lint/mypy limpos (33 ficheiros); PLAN.md F2.3 atualizado; PROGRESS.md atualizado. **Fecho da fase (F2.10)**: 12 commits atómicos (`docs(f2)` ADRs, `feat(f2)` registry/extractor/mappings/transform/i18n/golden/explorer, `ci(f2)`, `docs(f2)` PLAN/PROGRESS); push `f2/multi-fonte`; merge `--no-ff` em `f0/fundacoes` + push (e4fb3a9); PROGRESS/PLAN marcados concluídos.
-## Estado atual (2026-08-18)
+## Histórico: Fase 3 (snapshot 2026-08-18)
 
 **Fase 0**: concluida (`f0/fundacoes`). **Fase 1**: concluida (`f1/ciqual-ponta-a-ponta`). **Fase 2**: concluida (`f2/multi-fonte`; merge e4fb3a9).
 
@@ -68,7 +109,7 @@
 
 **Entregaveis da fase**: matching.py; food_terms.csv; golden 633; links.csv 12 720 linhas; CLI link; transform/i18n/package F3; testes sandbox; CI.
 
-## Estado atual (2026-08-18)
+## Histórico: Fase 4 (snapshot 2026-08-18)
 
 **Fase 4 - Multilinguismo: concluida** (branch `f4/multilinguismo`; F4.0-F4.8; F4.9 em fecho).
 
@@ -101,7 +142,7 @@
 
 - **2026-08-18**: F3 completa. Matcher afinado (0.84), golden 633 gerado e revisto (42 FALSE, 15 FN colaterais 1:1, food_recall 0.9956), `nutridb link` + transform/i18n/package integrados, sandbox root nos testes (correcao de mojibake via `git checkout` + reaplicacao com edit tool), suite 119 testes verdes, lint/mypy limpos, pipeline real verificado ponta a ponta (123 tombstones, 390 323 mv rows, 0 duplicados).
 
-## Estado atual (2026-08-19)
+## Histórico: Fase 5 (snapshot 2026-08-19)
 
 **Fases 0-4: concluidas** (`f0/fundacoes`).
 
@@ -121,7 +162,7 @@
 
 **Entregaveis da fase**: ADR-0007; source_priority.csv; overrides.csv; 4 tabelas de fatores; merge stage; derive stage; CLI; package schema 3; 19 testes unit novos. **Artefacto real (2026-08-19)**: mv 391 101 linhas, divergence_flag 4 542, locales 5, derive 0 derivacoes (fatores vazios — report explicito), 236 380 160 bytes, integrity ok.
 
-## Estado atual (2026-08-19)
+## Histórico: emenda A8 (snapshot 2026-08-19)
 
 **Fases 0-5: concluidas** (`f0/fundacoes`; F5 merge `4af00b7`).
 
@@ -152,3 +193,52 @@
 ## Historico de sessoes
 
 - **2026-08-19**: emenda A8 (f5b). Investigacao ULID: paridade byte-identica (100k seeds) com formula translates, mas mais lenta que o loop (1,83 vs 1,67 s/600k — pyinstrument inflava 3x) → **modulo revertido**, golden P4 como regressao. VACUUM removido do package (36,7 → 18,3 s). `cache.py` content-addressed (fingerprint sha256; hit → copia; fail-high) + `build --full`; determinismo full vs cached provado (todas as tabelas iguais exceto build_metadata). Schema 4: FTS trigram por locale; API `kind`/`food_group`/`foods_for_nutrient` (trigram quando >= 3 chars, senao prefixo). Explorer: IndexedDB (chave com schema_version), modo nutrientes, chips de grupo. **176 testes verdes**; ruff/mypy limpos; artefacto real 240 730 112 B (user_version 4, integrity ok); ADR-0008 aprovado; 7 commits `(f5b)` (perf VACUUM, test ULIDs golden, ci f5b/**, test cache, perf cache, feat schema 4, feat explorer, docs ADR).
+
+## Histórico: Fase 6 inicial (snapshot 2026-08-19)
+
+**Fases 0-5 + emenda A8: concluidas** (`f0/fundacoes`).
+
+**Fase 6 - Qualidade: em curso** (branch `f6/qualidade`; F6.0-F6.4 done, F6.5-F6.8 pendentes).
+
+| Tarefa | Estado | Nota |
+|---|---|---|
+| F6.0 ADR-0009 | done | Severidades por origem da incoerencia (fonte → warning/revisao; contrato do pipeline → error); energia Atwater UE 1169/2011 (POLYL opcional 2,4) ±5% com piso absoluto 5 kcal; divergencia em pares nao ordenados >= 30% (info); coerencia por (conceito, fonte) |
+| F6.1 Suite quality | done | `src/nutridb/quality/` 20 checks (SPEC §11); `_per_source_g` normaliza mg/ug → g; energia so com metodo registado (1485 sem metodo contados, P2); z-score |z|>4 n>=10 por (nutriente, grupo); integridade/órfaos/derivation/unmapped/mt_unreviewed como error |
+| F6.2 CLI qa | done | Tabela rich + `build/qa/report.html` + `metrics.json` (schema qa-1); exit 1 com erros; stdout UTF-8 (isinstance guard) |
+| F6.3 Testes unit 22 | done | Sinteticos por check; per-source (mistura nao dispara), FATRN 16500 mg→g, NA 200 mg, POLYL opcional, z-score n>=10, órfaos FK, mt_unreviewed; ruff/mypy limpos; **198 testes verdes** (22 novos) |
+| F6.4 Triagem real | done | `nutridb qa` real: **0 erros**; warnings proximados 222 (3702 completos, mediana 99,99; Isolat de soja 107,64 CIQUAL, Farine de seigle T85 110,80 INSA), energia 33, AG 44, açucares 2, sal 937 (4259 pares, mediana 1,00 exato; vinhos), RAE 2, z-score 1893; info: divergencia 1200 pares >= 30%, resto 0 |
+| F6.5 Golden 200 | pending | Estratificado ~18/grupo CIQUAL (11 grupos, seed fixa); celulas ENERC_KCAL/PROCNT/FAT/CHOAVL/WATER; skip ausentes; tolerancia 1e-9; script efemero dos XMLs oficiais |
+| F6.6 Property tests | pending | Hypothesis: shuffle invariante (merge/transform), roundtrip conversao, propriedades da divergencia |
+| F6.7 CI f6 | pending | Trigger `f6/**` + job `qa` (fixtures → suite → upload-artifact do relatorio) |
+| F6.8 Fecho | pending | PLAN/PROGRESS; commits atomicos `(f6)`; merge `--no-ff` em `f0/fundacoes`; push; CI verde |
+
+**Entregaveis da fase (em curso)**: ADR-0009; suite quality 20 checks; CLI qa + relatorio; 22 testes; triagem real documentada.
+
+## Decisoes em aberto
+
+- Nenhuma.
+
+## Bloqueios / pendencia
+
+- Nenhum. F6 em curso: golden 200, property tests, CI, fecho.
+
+## Sessão 2026-08-20
+
+- Direção de produto publicada no GitHub e registada em ADR-0010: dataset como núcleo, Explorer intuitivo e workspace neutro sem aconselhamento.
+- SPEC alinhada com o workspace neutro (`0d03227`).
+- ADR-0011 e contrato de aquisição: `declared` para células publicadas, `calculated` para derivações; package rejeita nulos/tipos desconhecidos (`c567de4`).
+- Gate P6 de compatibilidade de fontes por perfil (`086b8ed`).
+- Build verifica sources/hash e inclui registry no fingerprint (`6fb27c2`).
+- Fail-high para fonte sem extractor, SQLite inválido e survivor de identidade desconhecido (`56a3340`, `56f45e6`).
+- API read-only e ranking por 100 g (`27f2dd9`, `78970d7`).
+- Golden automático CIQUAL: 200 alimentos e 943 células; Hypothesis adicionado em ADR-0012.
+- CI `f6/**` com `checks`, `explorer`, build real, QA e upload do relatório; execução verde.
+- `nutridb build --full` passou a executar `vocab check` e QA internamente; último build: `qa_errors=0`, `qa_warnings=7` (`ea1d256`).
+- Manifesto `release-1` e `SHA256SUMS` gerados pelo build, com fontes, licenças, hashes e counts QA (`458b54d`).
+- CI: job `determinism` prova byte-identidade de dois builds completos (P5, `6095a3d` + `78f04c3`); `qa` faz upload do relatório e dos metadados de release; execução 32407054962 verde.
+- Explorer: locales derivadas de `i18n/locales.toml` no build (fonte única, P8), padrão `pt-PT`, locales disponíveis descobertas do artefacto (`ba34256`).
+- Identidade honesta: `recall` de cobertura (0.9537) separado de `recall_confirmed` (0.4342); `review_golden_true` 146 pares aguardam adjudicação (`dbc5810`).
+- Ledger de IDs (ADR-0014, `b0a47b7`): `mappings/id_ledger.csv` com 4 860 atribuições eternas; mudança de algoritmo falha alto; `identity_drift` sinaliza edições da fonte mantendo o ID; escritas LF para determinismo entre plataformas (`2c5837a`).
+- F6.5/F6.6/F6.7 fechados no PLAN: golden 200 automático; property tests (roundtrip, divergência simétrica/limitada, ordem de fontes invariante) + merge idempotente (re-run byte-idêntico, `test_merge.py`); CI com jobs `checks`/`explorer`/`qa`/`determinism`.
+- Explorer: vista "valores por fonte" — comparação lado a lado por nutriente/fonte com deteção de divergência >= 30% (espelho da regra de fusão), incluindo tipo, aquisição, confiança e licença (`b13157b`).
+- Suite: **208 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.

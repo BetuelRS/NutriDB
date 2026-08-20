@@ -2,8 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main, f0/fundacoes, f1/**, f2/**, f3/**, f4/**, f5/**, f5b/**]
+    branches: [main, f0/fundacoes, f1/**, f2/**, f3/**, f4/**, f5/**, f5b/**, f6/**]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   checks:
@@ -51,3 +54,60 @@ jobs:
       - name: Build (tsc + vite)
         run: npm run build
         working-directory: explorer
+
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Sync pinned sources
+        run: uv run nutridb sources sync
+
+      - name: Build full artefact
+        run: uv run nutridb build --full
+
+      - name: Run quality suite
+        run: uv run nutridb qa
+
+      - name: Upload quality report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nutridb-qa-report
+          path: build/qa/
+          if-no-files-found: warn
+
+      - name: Upload release metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nutridb-release-metadata
+          path: |
+            build/artifacts/*.manifest.json
+            build/artifacts/SHA256SUMS
+          if-no-files-found: warn
+
+  determinism:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Sync pinned sources
+        run: uv run nutridb sources sync
+
+      - name: Build twice and compare (SPEC P5)
+        run: uv run python scripts/check_determinism.py

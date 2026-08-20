@@ -69,11 +69,10 @@ def test_sources_audit_reports_ciqual() -> None:
     assert "NO" in result.stdout or "pinned" in result.stdout
 
 
-def test_unimplemented_commands_fail_high() -> None:
-    for command in (("qa",),):
-        result = runner.invoke(app, [*command])
-        assert result.exit_code == 2
-        assert "not implemented" in result.output
+def test_qa_is_implemented() -> None:
+    result = runner.invoke(app, ["qa"])
+    assert result.exit_code in (0, 1)
+    assert "not implemented" not in result.output
 
 
 def test_merge_is_implemented() -> None:
@@ -87,3 +86,11 @@ def test_sources_fetch_unknown_id_fails() -> None:
     result = runner.invoke(app, ["sources", "fetch", "does-not-exist"])
     assert result.exit_code != 0
     assert "does-not-exist" in result.output
+
+
+def test_transform_cache_inputs_include_registry() -> None:
+    from nutridb.cli import _transform_inputs
+    from nutridb.paths import paths
+
+    base = paths()
+    assert base["registry"] in _transform_inputs(base)

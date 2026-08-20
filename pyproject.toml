@@ -22,6 +22,7 @@ nutridb = "nutridb.cli:app"
 
 [dependency-groups]
 dev = [
+    "hypothesis>=6.151.9",
     "mypy>=2.3.1",
     "pytest>=9.1.1",
     "ruff>=0.16.3",

@@ -181,7 +181,12 @@ def _extract_inputs(base: dict[str, Path], source_id: str) -> list[Path]:
 
 def _transform_inputs(base: dict[str, Path]) -> list[Path]:
     """Every input the transform stage depends on."""
-    files: list[Path] = [base["build"] / "intermediates", base["mappings"], base["vocab"]]
+    files: list[Path] = [
+        base["registry"],
+        base["build"] / "intermediates",
+        base["mappings"],
+        base["vocab"],
+    ]
     root = project_root()
     files.extend(
         [
@@ -301,9 +306,10 @@ def link(
             "false_positives",
             "false_negatives",
             "auto_finals",
-            "review_adjudicated",
+            "review_golden_true",
             "precision",
             "recall",
+            "recall_confirmed",
             "food_recall",
         ):
             value = metrics[key]
@@ -461,8 +467,64 @@ def derive() -> None:
 
 @app.command("qa")
 def qa() -> None:
-    """Run the quality suite and emit an HTML report (F6)."""
-    _not_implemented("F6", "quality suite")
+    """Run the quality suite and emit an HTML report (SPEC §11, F6)."""
+    import io
+    import sys
+    import time
+
+    from nutridb.paths import paths
+    from nutridb.quality import QualityError, run_quality, write_report
+
+    if isinstance(sys.stdout, io.TextIOWrapper):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    base = paths()
+    artifact = base["build"] / "artifacts" / "nutridb-core-0.1.0.sqlite"
+    started = time.perf_counter()
+    try:
+        findings = run_quality(
+            base["build"] / "canonical",
+            base["vocab"],
+            base["root"],
+            artifact if artifact.is_file() else None,
+        )
+    except QualityError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    duration = time.perf_counter() - started
+    report_dir = base["build"] / "qa"
+    write_report(report_dir, findings, artifact if artifact.is_file() else None, duration)
+
+    console = rich.console.Console()
+    table = rich.table.Table(title="qa (SPEC §11)", title_justify="left")
+    table.add_column("severidade")
+    table.add_column("check")
+    table.add_column("detalhe")
+    table.add_column("n", justify="right")
+    colors = {"error": "red", "warning": "yellow", "info": "blue"}
+    for finding in findings:
+        table.add_row(
+            f"[{colors[finding.severity]}]{finding.severity}",
+            finding.check,
+            finding.detail,
+            str(finding.count),
+        )
+    console.print(table)
+    counts = {"error": 0, "warning": 0, "info": 0}
+    for finding in findings:
+        counts[finding.severity] += 1
+    typer.echo(
+        "qa report: "
+        f"{report_dir / 'report.html'} ({(report_dir / 'report.html').stat().st_size:,} B)"
+    )
+    typer.echo(f"qa metrics: {report_dir / 'metrics.json'}")
+    if counts["error"]:
+        typer.secho(
+            f"qa: {counts['error']} error(s) — release bloqueado (SPEC §11)",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(code=1)
+    typer.echo("qa OK")
 
 
 @app.command("package")
@@ -483,6 +545,7 @@ def package(
             base["vocab"],
             base["build"] / "artifacts",
             base["root"],
+            profile=profile,
         )
     except PackageError as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
@@ -508,12 +571,12 @@ def build(
 ) -> None:
     """Run the full deterministic pipeline (SPEC §16, P10).
 
-    Chains extract -> transform -> derive -> i18n build -> merge ->
-    package core; any stage failure aborts the build (fail high, P9).
+    Chains sync -> vocab check -> extract -> transform -> derive -> i18n
+    build -> merge -> package -> QA; any stage failure aborts the build (P9).
     Extract and transform are content-addressed in ``build/cache``: an
     unchanged run reuses the previous stage output (byte-identical, P5)
-    and only re-runs derive/i18n/merge/package. Requires the source
-    cache: run `uv run nutridb sources sync` first.
+    and only re-runs derive/i18n/merge/package. Source files are verified
+    against the registry before extraction.
     """
     from nutridb.cache import CacheError, populate_cache, refresh_from_cache, stage_cache_path
     from nutridb.cache import fingerprint as stage_fingerprint
@@ -526,19 +589,26 @@ def build(
     from nutridb.package import PackageError
     from nutridb.package import package as run_package
     from nutridb.paths import paths
+    from nutridb.quality import QualityError, run_quality, write_report
+    from nutridb.release import ReleaseError, write_release_metadata
     from nutridb.sources.registry import load_registry
     from nutridb.transform import TransformError
     from nutridb.transform import transform as run_transform
+    from nutridb.vocab import check_vocabulary
 
     base = paths()
     registry = load_registry()
     cache_dir = base["build"] / "cache"
     try:
+        vocab_report = check_vocabulary(base["root"])
+        if vocab_report.errors:
+            raise CacheError(f"vocabulary check failed: {vocab_report.errors[:5]}")
+        sync_sources(registry)
         extract_reports: dict[str, dict[str, int]] = {}
         for source_id in sorted(registry.sources):
             extractor = _EXTRACTORS.get(source_id)
             if extractor is None:
-                continue  # registered sources without an extractor are not built
+                raise CacheError(f"registered source {source_id!r} has no extractor")
             source_intermediates = base["build"] / "intermediates" / source_id
             cached: dict[str, int] | None = None
             if not full:
@@ -577,8 +647,34 @@ def build(
             base["vocab"],
             base["build"] / "artifacts",
             base["root"],
+            profile="core",
         )
-    except (CacheError, TransformError, DeriveError, I18nError, MergeError, PackageError) as exc:
+        import time
+
+        qa_started = time.perf_counter()
+        artifact = base["build"] / "artifacts" / package_info["artifact"]
+        findings = run_quality(base["build"] / "canonical", base["vocab"], base["root"], artifact)
+        write_report(base["build"] / "qa", findings, artifact, time.perf_counter() - qa_started)
+        qa_errors = sum(finding.severity == "error" for finding in findings)
+        qa_warnings = sum(finding.severity == "warning" for finding in findings)
+        if qa_errors:
+            raise PackageError(f"QA blocked release with {qa_errors} error(s)")
+        release_info = write_release_metadata(
+            artifact,
+            base["root"],
+            "core",
+            base["build"] / "qa" / "metrics.json",
+        )
+    except (
+        CacheError,
+        TransformError,
+        DeriveError,
+        I18nError,
+        MergeError,
+        PackageError,
+        QualityError,
+        ReleaseError,
+    ) as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
     except Exception as exc:
@@ -599,6 +695,10 @@ def build(
     table.add_row("artifact", package_info["artifact"])
     table.add_row("size_bytes", f"{package_info['size_bytes']:,}")
     table.add_row("integrity", package_info["integrity"])
+    table.add_row("qa_errors", str(qa_errors))
+    table.add_row("qa_warnings", str(qa_warnings))
+    table.add_row("manifest", release_info["manifest"])
+    table.add_row("checksums", release_info["checksums"])
     rich.console.Console().print(table)
     typer.echo("build OK")
 
