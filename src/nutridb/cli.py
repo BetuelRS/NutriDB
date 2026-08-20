@@ -306,9 +306,10 @@ def link(
             "false_positives",
             "false_negatives",
             "auto_finals",
-            "review_adjudicated",
+            "review_golden_true",
             "precision",
             "recall",
+            "recall_confirmed",
             "food_recall",
         ):
             value = metrics[key]
