@@ -479,6 +479,18 @@ Aplicação web **estática**, alojável em GitHub Pages sem servidor. A base de
 12. **Atribuições** — gerada do registo de licenças, cumprindo os requisitos de cada fonte
 13. **Playground SQL** — consulta livre em modo leitura, com exemplos guardados. É a demonstração mais forte de que a base de dados é real.
 
+### Composição neutra no Explorer
+
+O Explorer pode oferecer um workspace de composição neutra: o utilizador
+seleciona alimentos, quantidades e bases de quantificação e vê os totais
+calculados a partir desses inputs. Cada total deve mostrar a fórmula, os
+valores de entrada e a proveniência dos valores usados.
+
+Este workspace é uma ferramenta de inspeção e composição de dados. Não cria
+metas clínicas, não recomenda dietas, não diagnostica e não substitui uma
+aplicação de saúde. Diário alimentar, contas, persistência de planos e lógica
+de recomendação continuam fora do NutriDB core.
+
 ### Direção de design
 
 Densa, orientada a dados, para quem quer ler números. Referência mental: um bom terminal financeiro ou um site de referência científica — **não** uma app de fitness. Numerais tabulares e monoespaçados para alinhamento em coluna. Hierarquia por tipografia e espaçamento, não por caixas coloridas e sombras. Tema claro e escuro, ambos deliberados. Nada de cartões arredondados pastel, nada de gradientes decorativos, nada de dashboard genérico.
@@ -612,7 +624,10 @@ Documentação, guia de contribuição, política de versionamento, release.
 
 Coisas que este projeto **não** faz, e que não deves acrescentar por iniciativa própria:
 
-- Registo de refeições, contagem de calorias, contas de utilizador, planos alimentares
+- Registo de refeições, contagem de calorias como produto de utilizador, contas
+  de utilizador e recomendações alimentares
+- Persistência de planos ou geração de dietas como decisão de saúde. O Explorer
+  pode apenas calcular uma composição neutra, com inputs e fórmulas visíveis.
 - Aconselhamento nutricional de qualquer espécie
 - Valores nutricionais estimados por modelos de linguagem
 - Dados de produtos de marca no artefacto principal
