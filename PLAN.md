@@ -46,11 +46,20 @@ ausências ou divergências. A direção está registada no
 
 ### Bloqueadores atuais
 
-- `acquisition_type` está nulo em todos os valores do artefacto real.
-- O empacotador ainda não aplica o gate de compatibilidade de licença.
-- `nutridb build` ainda exige sync separado e não executa todos os gates.
-- A suite tem 192 testes recolhidos, com um teste CLI obsoleto a falhar.
+- O artefacto ainda não contém todos os metadados de release da registry (hashes e manifesto de atribuições por fonte).
+- A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
+- O ledger persistente de IDs e a adjudicação humana completa ainda não estão fechados.
+- O build ainda não executa `vocab check`, QA e todos os gates de release como uma única política explícita.
 - Golden 200, propriedades Hypothesis e job QA da CI ainda não existem.
+
+### Progresso confirmado desde a auditoria
+
+- `acquisition_type` controlado: fontes publicadas usam `declared`, cálculos usam `calculated` e o package falha em nulos/tipos desconhecidos.
+- Gate de compatibilidade de licença aplicado no package por perfil.
+- `build` verifica a registry e os hashes antes de extrair; a registry entra no fingerprint do transform.
+- Fonte registada sem extractor, survivor de identidade desconhecido e SQLite inválido falham alto.
+- API abre artefactos existentes em modo somente leitura e rankings filtram `per_100g_edible`.
+- Suite atual: **197 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
 Não devem ser interpretadas como o estado oficial atual quando divergirem deste
