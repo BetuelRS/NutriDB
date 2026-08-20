@@ -6,7 +6,8 @@ import csv
 import os
 import shutil
 import subprocess
-from typing import TYPE_CHECKING, NoReturn
+from pathlib import Path  # noqa: TC003  (typer evaluates annotations at runtime)
+from typing import TYPE_CHECKING, Annotated, NoReturn
 
 import rich.table
 import rich.text
@@ -21,7 +22,6 @@ from nutridb.sources.registry import ArtifactProfile, load_registry
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from pathlib import Path
 
 log = structlog.get_logger()
 
@@ -255,17 +255,32 @@ def vocab_check() -> None:
     typer.echo("vocabulary OK")
 
 
-@app.command("link")
+link_app = typer.Typer(
+    name="link",
+    help="Entity resolution: matcher and human adjudication (SPEC §6).",
+    invoke_without_command=True,
+    no_args_is_help=False,
+)
+app.add_typer(link_app, name="link")
+
+
+@link_app.callback()
 def link(
+    ctx: typer.Context,
     write: bool = typer.Option(True, help="Write mappings/links.csv (P8 adjudication record)"),
 ) -> None:
     """Entity resolution: blocking, signals, adjudication (F3).
 
+    ``nutridb link`` runs the matcher (automatic finals + review queue);
+    ``nutridb link review`` lists the human queue and applies decisions.
     Runs blocking + signals over the pinned intermediates and the
     bilingual dictionary, writes the adjudication record to
-    ``mappings/links.csv`` (automatic finals + review queue) and reports
-    precision / recall against the hand-labelled golden set.
+    ``mappings/links.csv`` (automatic finals + review queue; human
+    ``adjudicated`` decisions are preserved) and reports precision /
+    recall against the hand-labelled golden set.
     """
+    if ctx.invoked_subcommand is not None:
+        return
     from nutridb.identity.matching import (
         _status,
         evaluate,
@@ -290,8 +305,9 @@ def link(
     rich.console.Console().print(table)
 
     if write:
-        rows = write_links_csv(proposals, base["root"] / "mappings" / "links.csv")
-        typer.echo(f"links.csv: {rows} rows (automatic + review)")
+        links_csv = base["root"] / "mappings" / "links.csv"
+        rows = write_links_csv(proposals, links_csv, preserve=links_csv)
+        typer.echo(f"links.csv: {rows} rows (automatic + review + preserved adjudicated)")
 
     golden = base["root"] / "tests" / "golden" / "identity_pairs.csv"
     if golden.is_file():
@@ -318,6 +334,100 @@ def link(
         if metrics["precision"] < 0.98 or metrics["recall"] < 0.90:
             raise typer.Exit(code=1)
     typer.echo("link OK")
+
+
+@link_app.command("review")
+def link_review(
+    apply: Annotated[
+        Path | None,
+        typer.Option(
+            "--apply",
+            exists=True,
+            dir_okay=False,
+            help="Apply human decisions from a CSV (insa_code,ciqual_code,decision,justification)",
+        ),
+    ] = None,
+    limit: int = typer.Option(50, "--limit", help="Rows shown in the listing (0 = all)"),
+) -> None:
+    """List the human adjudication queue and apply decisions (SPEC §6.3).
+
+    Listing reads the pending ``review`` pairs from ``mappings/links.csv``
+    (the P8 record) and joins proposal context (names, similarity, score)
+    from the matcher. ``--apply`` consumes a CSV with columns
+    ``insa_code,ciqual_code,decision,justification`` (decision
+    ``accepted`` | ``rejected``; justification mandatory for accepted) and
+    rewrites the record deterministically.
+    """
+    from nutridb.identity.matching import (
+        LinkError,
+        apply_link_decisions,
+        match_foods,
+        review_pairs,
+    )
+    from nutridb.paths import paths
+
+    base = paths()
+    links_csv = base["root"] / "mappings" / "links.csv"
+    if not links_csv.is_file():
+        typer.secho(f"links.csv missing: {links_csv}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1)
+
+    if apply is not None:
+        try:
+            decisions: list[tuple[str, str, str, str]] = []
+            with apply.open(encoding="utf-8") as fh:
+                for row in csv.DictReader(fh):
+                    decisions.append(
+                        (
+                            row["insa_code"].strip(),
+                            row["ciqual_code"].strip(),
+                            row["decision"].strip(),
+                            (row.get("justification") or "").strip(),
+                        )
+                    )
+            report = apply_link_decisions(links_csv, decisions)
+        except (LinkError, KeyError, ValueError) as exc:
+            typer.secho(str(exc), fg=typer.colors.RED, err=True)
+            raise typer.Exit(code=1) from exc
+        table = rich.table.Table(title="Adjudication applied", title_justify="left")
+        table.add_column("item")
+        table.add_column("count", justify="right")
+        for key, value in report.items():
+            table.add_row(key, str(value))
+        rich.console.Console().print(table)
+        typer.echo("link review OK")
+        return
+
+    proposals = {
+        (p.insa_code, p.ciqual_code): p
+        for p in match_foods(base["build"] / "intermediates", base["root"])
+    }
+    pairs = review_pairs(links_csv)
+    table = rich.table.Table(title="Adjudication queue (SPEC §6.3)", title_justify="left")
+    table.add_column("insa")
+    table.add_column("ciqual")
+    table.add_column("alimento (INSA)")
+    table.add_column("aliment (CIQUAL)")
+    table.add_column("sim")
+    table.add_column("score")
+    shown = pairs if limit == 0 else pairs[:limit]
+    for insa_code, ciqual_code in shown:
+        proposal = proposals.get((insa_code, ciqual_code))
+        if proposal is None:
+            table.add_row(insa_code, ciqual_code, "?", "?", "?", "?")
+            continue
+        table.add_row(
+            insa_code,
+            ciqual_code,
+            proposal.pt_name,
+            proposal.cq_name,
+            f"{proposal.sim:.2f}",
+            f"{proposal.score:.2f}",
+        )
+    rich.console.Console().print(table)
+    typer.echo(
+        f"{len(pairs)} pairs in the review queue" + (f" (showing {len(shown)})" if limit else "")
+    )
 
 
 i18n_app = typer.Typer(name="i18n", help="Multilingual label pipeline (SPEC §7).")

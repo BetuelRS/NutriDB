@@ -15,9 +15,12 @@ import pytest
 
 from nutridb.identity import CROCKFORD_ALPHABET, ID_PREFIX, canonical_id, ulid
 from nutridb.identity.matching import (
+    LinkError,
     LinkProposal,
     _status,
+    apply_link_decisions,
     evaluate,
+    review_pairs,
     write_links_csv,
 )
 
@@ -155,3 +158,96 @@ def test_evaluate_precision_recall_and_food_level(tmp_path: Path) -> None:
     assert metrics["golden_foods"] == 4  # insa 1, 2, 4, 5
     assert metrics["covered_foods"] == 3  # 1, 2 and 5
     assert metrics["food_recall"] == pytest.approx(3 / 4)
+
+
+def _survivor(insa_code: str, ciqual_code: str) -> str:
+    return min(
+        canonical_id("concept", "insa", "food", insa_code),
+        canonical_id("concept", "ciqual", "food", ciqual_code),
+    )
+
+
+def _queue_csv(tmp_path: Path) -> Path:
+    path = tmp_path / "links.csv"
+    path.write_text(
+        "concept_id,source,source_code,status\n"
+        f"{_survivor('26', '19042')},insa,26,review\n"
+        f"{_survivor('26', '19042')},ciqual,19042,review\n"
+        f"{_survivor('27', '19043')},insa,27,review\n"
+        f"{_survivor('27', '19043')},ciqual,19043,review\n"
+        f"{_survivor('25', '19041')},insa,25,automatic\n"
+        f"{_survivor('25', '19041')},ciqual,19041,automatic\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def test_review_pairs_lists_pending_queue(tmp_path: Path) -> None:
+    pairs = review_pairs(_queue_csv(tmp_path))
+    assert pairs == [("26", "19042"), ("27", "19043")]
+
+
+def test_apply_decisions_accepted_and_rejected(tmp_path: Path) -> None:
+    path = _queue_csv(tmp_path)
+    report = apply_link_decisions(
+        path,
+        [
+            ("26", "19042", "accepted", "verificado a mao"),
+            ("27", "19043", "rejected", ""),
+        ],
+    )
+    assert report == {"accepted": 1, "rejected": 1, "remaining_review": 0}
+    frame = pl.read_csv(path, has_header=True).with_columns(pl.col("source_code").cast(pl.Utf8))
+    rows = {tuple(r) for r in frame.rows()}
+    assert rows == {
+        (_survivor("26", "19042"), "insa", "26", "adjudicated"),
+        (_survivor("26", "19042"), "ciqual", "19042", "adjudicated"),
+        (_survivor("25", "19041"), "insa", "25", "automatic"),
+        (_survivor("25", "19041"), "ciqual", "19041", "automatic"),
+    }
+
+
+def test_apply_decisions_unknown_pair_fails_high(tmp_path: Path) -> None:
+    with pytest.raises(LinkError, match="not in the review queue"):
+        apply_link_decisions(_queue_csv(tmp_path), [("99", "99999", "accepted", "x")])
+
+
+def test_apply_decisions_duplicate_pair_fails_high(tmp_path: Path) -> None:
+    with pytest.raises(LinkError, match="duplicate decision"):
+        apply_link_decisions(
+            _queue_csv(tmp_path),
+            [("26", "19042", "accepted", "x"), ("26", "19042", "rejected", "")],
+        )
+
+
+def test_apply_decisions_invalid_decision_fails_high(tmp_path: Path) -> None:
+    with pytest.raises(LinkError, match="unknown decision"):
+        apply_link_decisions(_queue_csv(tmp_path), [("26", "19042", "maybe", "")])
+
+
+def test_apply_decisions_accepted_requires_justification(tmp_path: Path) -> None:
+    with pytest.raises(LinkError, match="requires a justification"):
+        apply_link_decisions(_queue_csv(tmp_path), [("26", "19042", "accepted", " ")])
+
+
+def test_write_links_csv_preserves_adjudicated(tmp_path: Path) -> None:
+    path = _queue_csv(tmp_path)
+    path.write_text(
+        path.read_text(encoding="utf-8")
+        + f"{_survivor('28', '19044')},insa,28,adjudicated\n"
+        + f"{_survivor('28', '19044')},ciqual,19044,adjudicated\n",
+        encoding="utf-8",
+    )
+    write_links_csv(
+        [
+            _proposal("25", "19041", score=0.90),
+            _proposal("26", "19042", score=0.70),
+        ],
+        path,
+        preserve=path,
+    )
+    frame = pl.read_csv(path, has_header=True)
+    assert frame.filter(pl.col("status") == "adjudicated").height == 2
+    assert frame.filter(pl.col("status") == "adjudicated")["source_code"].cast(
+        pl.Utf8
+    ).to_list() == ["19044", "28"]
