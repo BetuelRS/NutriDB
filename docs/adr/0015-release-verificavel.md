@@ -50,7 +50,11 @@ no diretório de artefactos:
 O `SHA256SUMS` (ADR-0013) passa a cobrir apenas os ficheiros
 determinísticos: artefacto, manifesto e SBOM. A atestação não entra nos
 checksums porque o seu hash varia com o bloco temporal; os seus `digests`
-internos é que fixam os restantes ficheiros.
+internos é que fixam os restantes ficheiros. Nota: artefacto, manifesto e
+SBOM embutem impressões digitais do hash físico do artefacto (que inclui o
+bloco temporal); no gate de determinismo essas referências são apagadas
+(sentinelas) antes da comparação — o que se prova é o conteúdo
+determinístico, não os fingerprints do bloco temporal.
 
 Novo comando **`nutridb release verify <artefacto>`**: verifica os hashes
 do artefacto contra o manifesto, `SHA256SUMS` e SBOM; verifica os digests
@@ -71,7 +75,8 @@ regras de trabalho).
   num ficheiro próprio, sem tocar no artefacto.
 - Releases sem `NUTRIDB_SIGNING_KEY` são verificáveis em integridade mas
   não autenticáveis; o gate de determinismo do CI compara agora também
-  manifesto, SBOM e `SHA256SUMS`.
+  manifesto, SBOM e `SHA256SUMS` (na forma normalizada — ver nota nos
+  checksums).
 - A chave privada é âncora de confiança humana: o seu manuseamento (onde
   guardar, quem a detém) fica fora do repositório e é decidido pelo
   mantenedor aquando da primeira assinatura pública.
