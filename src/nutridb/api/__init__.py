@@ -177,6 +177,7 @@ def foods_for_nutrient(
                 "SELECT concept_id, label, locale, food_group, nutrient_id, "
                 "value, unit, basis FROM mv_food_value "
                 "WHERE nutrient_id = ? AND locale = ? AND value IS NOT NULL "
+                "AND basis = 'per_100g_edible' "
                 "AND (? IS NULL OR food_group = ?) "
                 "ORDER BY value DESC LIMIT ?"
             )

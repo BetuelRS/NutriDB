@@ -232,6 +232,7 @@ def test_foods_for_nutrient_ranks_by_value(db_path: str) -> None:
     values = [v for v in (f.value for f in foods) if v is not None]
     assert values == sorted(values, reverse=True)
     assert foods[0].basis == "per_100g_edible"
+    assert all(food.basis == "per_100g_edible" for food in foods)
     assert foods[0].food_group == "alcoholic_beverages"
 
 
