@@ -268,6 +268,74 @@ export function coverageBySource(conceptId: string): SourceCoverage[] {
   }));
 }
 
+export interface DatasetSummary {
+  foods: number;
+  cells: number;
+}
+
+export interface CoverageRow {
+  sourceId: string;
+  sourceName: string;
+  sourceVersion: string;
+  foods: number;
+  nutrients: number;
+}
+
+export interface CoverageGroupRow {
+  sourceId: string;
+  foodGroup: string;
+  foods: number;
+  nutrients: number;
+}
+
+export function coverageGlobal(): {
+  summary: DatasetSummary;
+  bySource: CoverageRow[];
+  byGroup: CoverageGroupRow[];
+} {
+  const summaryRows = query(
+    "SELECT (SELECT COUNT(*) FROM concept WHERE kind = 'food'), (SELECT COUNT(*) FROM value)",
+    [],
+  );
+  const bySourceRows = query(
+    `SELECT s.source_id, s.name, s.version,
+            COUNT(DISTINCT v.concept_id), COUNT(DISTINCT v.nutrient_id)
+     FROM value v
+     JOIN source s ON s.source_id = v.source_id
+     GROUP BY s.source_id, s.name, s.version`,
+    [],
+  );
+  const byGroupRows = query(
+    `SELECT s.source_id, c.food_group,
+            COUNT(DISTINCT v.concept_id), COUNT(DISTINCT v.nutrient_id)
+     FROM value v
+     JOIN concept c ON c.concept_id = v.concept_id
+     JOIN source s ON s.source_id = v.source_id
+     GROUP BY s.source_id, c.food_group
+     ORDER BY s.source_id, c.food_group`,
+    [],
+  );
+  return {
+    summary: {
+      foods: Number(summaryRows[0]?.values[0] ?? 0),
+      cells: Number(summaryRows[0]?.values[1] ?? 0),
+    },
+    bySource: bySourceRows.map((row) => ({
+      sourceId: row.values[0]?.toString() ?? "",
+      sourceName: row.values[1]?.toString() ?? "",
+      sourceVersion: row.values[2]?.toString() ?? "",
+      foods: Number(row.values[3] ?? 0),
+      nutrients: Number(row.values[4] ?? 0),
+    })),
+    byGroup: byGroupRows.map((row) => ({
+      sourceId: row.values[0]?.toString() ?? "",
+      foodGroup: row.values[1]?.toString() ?? "",
+      foods: Number(row.values[2] ?? 0),
+      nutrients: Number(row.values[3] ?? 0),
+    })),
+  };
+}
+
 export function foodGroups(): FoodGroup[] {
   const rows = query(
     "SELECT DISTINCT c.food_group, fg.name_pt, fg.name_en FROM concept c " +

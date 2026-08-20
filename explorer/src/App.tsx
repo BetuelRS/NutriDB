@@ -3,12 +3,15 @@ import {
   availableLocales,
   buildMetadata,
   coverageBySource,
+  coverageGlobal,
   foodGroups,
   foodValues,
   foodValuesBySource,
   foodsForNutrient,
   provenance,
   search,
+  type CoverageGroupRow,
+  type CoverageRow,
   type FoodGroup,
   type FoodValue,
   type NutrientRank,
@@ -25,7 +28,7 @@ type Status =
   | { kind: "ready"; version: string; builtAt: string }
   | { kind: "error"; message: string };
 
-type Mode = "food" | "nutrient";
+type Mode = "food" | "nutrient" | "coverage";
 
 function formatValue(value: number | null): string {
   if (value === null) return "";
@@ -252,6 +255,58 @@ function NutrientDetail({
   );
 }
 
+function CoverageView() {
+  const data = useMemo(() => coverageGlobal(), []);
+  return (
+    <section className="coverage">
+      <p className="muted">
+        dataset: {data.summary.foods.toLocaleString("pt-PT")} alimentos ·{" "}
+        {data.summary.cells.toLocaleString("pt-PT")} células medidas
+      </p>
+      <table className="values">
+        <thead>
+          <tr>
+            <th>fonte</th>
+            <th>alimentos</th>
+            <th>nutrientes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.bySource.map((row: CoverageRow) => (
+            <tr key={row.sourceId}>
+              <td>
+                {row.sourceName} {row.sourceVersion} · {row.sourceId}
+              </td>
+              <td className="num">{row.foods}</td>
+              <td className="num">{row.nutrients}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <table className="values">
+        <thead>
+          <tr>
+            <th>grupo</th>
+            <th>fonte</th>
+            <th>alimentos</th>
+            <th>nutrientes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.byGroup.map((row: CoverageGroupRow) => (
+            <tr key={`${row.sourceId}-${row.foodGroup}`}>
+              <td>{row.foodGroup}</td>
+              <td>{row.sourceId}</td>
+              <td className="num">{row.foods}</td>
+              <td className="num">{row.nutrients}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  );
+}
+
 export default function App() {
   const [status, setStatus] = useState<Status>({ kind: "loading" });
   const [queryText, setQueryText] = useState("");
@@ -298,7 +353,7 @@ export default function App() {
       setSelectedFood(null);
       setSelectedNutrient(null);
       try {
-        setResults(search(text, locale, limit, mode, foodGroup));
+        setResults(search(text, locale, limit, mode === "coverage" ? "food" : mode, foodGroup));
       } catch (err) {
         setError(String(err));
         setResults([]);
@@ -376,39 +431,56 @@ export default function App() {
         >
           nutrientes
         </button>
-        <input
-          aria-label="termo de pesquisa"
-          type="search"
-          placeholder={mode === "food" ? "ex.: pomme, lait, água, noix…" : "ex.: vitamina c, fibra…"}
-          value={queryText}
-          onChange={(event) => setQueryText(event.target.value)}
-        />
-        <select
-          aria-label="idioma"
-          value={locale}
-          onChange={(event) => setLocale(event.target.value)}
+        <button
+          type="button"
+          className={mode === "coverage" ? "result selected" : "result"}
+          onClick={() => changeMode("coverage")}
         >
-          {locales.map((l) => (
-            <option key={l} value={l}>
-              {l}
-            </option>
-          ))}
-        </select>
-        <select
-          aria-label="número de resultados"
-          value={limit}
-          onChange={(event) => setLimit(Number(event.target.value))}
-        >
-          {[10, 25, 50, 100].map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
-        <button type="submit">pesquisar</button>
+          cobertura
+        </button>
+        {mode !== "coverage" && (
+          <>
+            <input
+              aria-label="termo de pesquisa"
+              type="search"
+              placeholder={
+                mode === "food" ? "ex.: pomme, lait, água, noix…" : "ex.: vitamina c, fibra…"
+              }
+              value={queryText}
+              onChange={(event) => setQueryText(event.target.value)}
+            />
+            <select
+              aria-label="idioma"
+              value={locale}
+              onChange={(event) => setLocale(event.target.value)}
+            >
+              {locales.map((l) => (
+                <option key={l} value={l}>
+                  {l}
+                </option>
+              ))}
+            </select>
+            <select
+              aria-label="número de resultados"
+              value={limit}
+              onChange={(event) => setLimit(Number(event.target.value))}
+            >
+              {[10, 25, 50, 100].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+            <button type="submit">pesquisar</button>
+          </>
+        )}
       </form>
 
-      {groups.length > 0 && (
+      {mode === "coverage" ? (
+        <CoverageView />
+      ) : (
+        <>
+          {groups.length > 0 && (
         <div className="search">
           <span className="muted">grupo:</span>
           <button
@@ -489,6 +561,8 @@ export default function App() {
           />
         ) : null}
       </div>
+        </>
+      )}
 
       <footer className="muted">
         Dados: CIQUAL 2025 (etalab-2.0) · INSA/TCA 7.1 (insa-tca-7.1) · artefacto em IndexedDB
