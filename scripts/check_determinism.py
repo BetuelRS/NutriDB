@@ -45,12 +45,33 @@ def main() -> int:
     subprocess.run(["uv", "run", "nutridb", "build", "--full"], check=True, cwd=ROOT)
     artifact = next((ROOT / "build" / "artifacts").glob("nutridb-*.sqlite"))
     first = sha256(normalize(artifact))
+    first_deterministic = {
+        path.name: sha256(path)
+        for path in [
+            artifact,
+            artifact.with_suffix(".manifest.json"),
+            artifact.with_name(artifact.stem + ".sbom.json"),
+            ROOT / "build" / "artifacts" / "SHA256SUMS",
+        ]
+    }
 
     subprocess.run(["uv", "run", "nutridb", "build", "--full"], check=True, cwd=ROOT)
     second = sha256(normalize(artifact))
+    second_deterministic = {
+        path.name: sha256(path)
+        for path in [
+            artifact,
+            artifact.with_suffix(".manifest.json"),
+            artifact.with_name(artifact.stem + ".sbom.json"),
+            ROOT / "build" / "artifacts" / "SHA256SUMS",
+        ]
+    }
 
-    if first != second:
+    if first != second or first_deterministic != second_deterministic:
         print(f"P5 FAIL: normalized artifacts differ\n  build1 {first}\n  build2 {second}")
+        for name in first_deterministic.keys() | second_deterministic.keys():
+            if first_deterministic.get(name) != second_deterministic.get(name):
+                print(f"  {name} differs across builds")
         return 1
     print(f"P5 OK: two builds byte-identical (build_metadata excluded) {first}")
     return 0

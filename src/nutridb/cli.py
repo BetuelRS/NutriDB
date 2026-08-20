@@ -700,7 +700,11 @@ def build(
     from nutridb.package import package as run_package
     from nutridb.paths import paths
     from nutridb.quality import QualityError, run_quality, write_report
-    from nutridb.release import ReleaseError, write_release_metadata
+    from nutridb.release import (
+        ReleaseError,
+        write_attestation,
+        write_release_metadata,
+    )
     from nutridb.sources.registry import load_registry
     from nutridb.transform import TransformError
     from nutridb.transform import transform as run_transform
@@ -775,6 +779,12 @@ def build(
             "core",
             base["build"] / "qa" / "metrics.json",
         )
+        attestation_info = write_attestation(
+            artifact,
+            base["root"],
+            "core",
+            base["build"] / "qa" / "metrics.json",
+        )
     except (
         CacheError,
         TransformError,
@@ -808,9 +818,56 @@ def build(
     table.add_row("qa_errors", str(qa_errors))
     table.add_row("qa_warnings", str(qa_warnings))
     table.add_row("manifest", release_info["manifest"])
+    table.add_row("sbom", release_info["sbom"])
+    table.add_row("attestation", attestation_info["attestation"])
+    table.add_row("signed", attestation_info["signed"])
     table.add_row("checksums", release_info["checksums"])
     rich.console.Console().print(table)
     typer.echo("build OK")
+
+
+release_app = typer.Typer(name="release", help="Release verification (ADR-0015).")
+app.add_typer(release_app, name="release")
+
+
+@release_app.command("verify")
+def release_verify(
+    artifact: Annotated[Path, typer.Argument(help="Path to the release artefact (.sqlite)")],
+    public_key: Annotated[
+        Path | None,
+        typer.Option(
+            "--public-key",
+            exists=True,
+            dir_okay=False,
+            help="Ed25519 public key PEM used to verify the attestation signature",
+        ),
+    ] = None,
+) -> None:
+    """Verify manifest, SHA256SUMS, SBOM and attestation of a release.
+
+    Recomputes every hash (artifact vs manifest, SBOM root component,
+    SHA256SUMS and attestation digests). If the attestation is signed and
+    a public key is provided (or ``NUTRIDB_PUBLIC_KEY`` is set), the
+    Ed25519 signature is verified; a signed attestation without a key is
+    reported as ``unverified``. Any mismatch fails the command (P9).
+    """
+    from nutridb.release import ReleaseError, verify_release
+
+    key_value = os.environ.get("NUTRIDB_PUBLIC_KEY")
+    if key_value is None and public_key is not None:
+        key_value = public_key.read_text(encoding="utf-8")
+    try:
+        report = verify_release(artifact, public_key=key_value)
+    except (ReleaseError, OSError) as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title=f"release verify {artifact.name}", title_justify="left")
+    table.add_column("item")
+    table.add_column("value", justify="right")
+    for key, value in report.items():
+        table.add_row(key, str(value))
+    rich.console.Console().print(table)
+    typer.echo("release verify OK")
 
 
 @app.command("diff")

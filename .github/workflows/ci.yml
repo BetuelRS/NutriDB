@@ -91,6 +91,8 @@ jobs:
           name: nutridb-release-metadata
           path: |
             build/artifacts/*.manifest.json
+            build/artifacts/*.sbom.json
+            build/artifacts/*.attestation.json
             build/artifacts/SHA256SUMS
           if-no-files-found: warn
 
