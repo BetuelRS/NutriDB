@@ -20,14 +20,14 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 | Golden/propriedades | Golden automático: 200 alimentos/943 células; Hypothesis ativo + merge idempotente |
 | CI | `checks`, `explorer`, `qa` e `determinism` verdes; relatório QA e metadados de release publicados |
 | Release verificável | Manifesto `release-1` + `SHA256SUMS` + SBOM CycloneDX 1.6 + atestação `attestation-1` (Ed25519) + `release verify` (ADR-0015) |
-| Produção | Não fechada: adjudicação humana (6 237 pares — ferramenta `link review` pronta), revisão humana do golden, primeira chave de assinatura |
+| Produção | Não fechada: 6 029 pares de identidade em review, revisão humana do golden e decisão operacional de custódia da chave |
 | Testes | 230 testes verdes; ruff/mypy limpos |
-| Próxima prioridade | adjudicação humana, revisão do golden, primeira release assinada publicamente |
+| Próxima prioridade | rever conflitos 1:1 restantes, concluir golden 200 e preparar release assinada |
 
 ### Próximas ações
 
-- Adjudicar os 6 237 pares de review (146 golden-true) com `nutridb link review --apply` e rever o golden 200 humanamente.
-- Decidir quem detém `NUTRIDB_SIGNING_KEY` e assinar a primeira release publicamente.
+- Rever os 6 029 pares restantes com `nutridb link review`; 75 golden-true adiados permanecem explicitamente em review por conflito 1:1.
+- Confirmar a custódia/backup de `NUTRIDB_SIGNING_KEY` e publicar uma release assinada.
 - Só depois expandir fontes, API, bibliotecas e exports.
 
 ### Bloqueios
@@ -35,7 +35,7 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 - Adjudicação humana dos pares de review (requer decisor humano; regra 17.6).
 - Revisão humana do golden 200 (verificação à mão, critério 2 do F6).
 - P3 ausência individual por motivo — requer evidência das fontes.
-- Chave de assinatura: decisão humana sobre o detentor (fora do repositório).
+- Chave de assinatura: a chave foi gerada fora do repositório; falta confirmar a custódia humana antes de a tratar como âncora pública.
 
 As secções seguintes são o histórico detalhado das fases e sessões. Quando uma
 secção histórica disser “estado atual”, essa expressão refere-se ao snapshot
@@ -247,3 +247,6 @@ da data indicada, não ao estado oficial acima.
 - `link review` (F6.9): grupo typer com `invoke_without_command` (typer 0.27.1 sem click), listagem com contexto dos proposals e `--apply` CSV determinístico; `_queue_index` corrigido para produto cartesiano por survivor — **listagem real corrigida de 1 719 para 6 237 pares** (1 008 survivors multi-par, 1 008 linhas partilhadas; regra: linha só sai quando todos os pares que a usam estão decididos; 2 testes de regressão).
 - **Release verificável (ADR-0015, F7)**: `sbom.py` (CycloneDX 1.6, UUID5 do hash, sem timestamp, licenças honestas); `signing.py` (Ed25519 PEM/base64, fail-high); `write_attestation` (schema `attestation-1`, digests, bloco temporal, assinatura opcional); `nutridb release verify` (hashes + assinatura); `cryptography>=44` adicionado ao pyproject (decisão do ADR); SHA256SUMS cobre só determinísticos; gate de determinismo compara também manifesto/SBOM/checksums; CI faz upload dos novos ficheiros. **E2E real**: build com chave → `signature: verified`; 15 testes novos; suite **230 testes verdes**.
 - Suite: **230 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.
+- Adjudicação de identidade aplicada no commit `d431959`: 95 aceites, 112 rejeitados, 6 029 pares restantes; build real com 218 tombstones, 5 078 concept links e QA com 0 erros.
+- Os 75 golden-true adiados são conflitos 1:1, principalmente múltiplos alimentos específicos contra CIQUAL `aliment moyen`; não foram fabricadas fusões.
+- Chave Ed25519 gerada fora do repositório; `docs/keys/nutridb-signing.pub.pem` contém a pública. Build com `NUTRIDB_SIGNING_KEY` e `release verify --public-key` retornaram `signature: verified`.

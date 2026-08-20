@@ -46,10 +46,10 @@ ausências ou divergências. A direção está registada no
 
 ### Bloqueadores atuais
 
-- A adjudicação humana completa dos 6 237 pares de review ainda não está fechada (agora com ferramenta: `nutridb link review`).
+- A adjudicação inicial fechou 95 pares (73 golden-true + 22 exclusivos) e rejeitou 112 golden-false; permanecem 6 029 pares em review. 75 golden-true foram adiados por conflitos 1:1, sobretudo contra entradas compostas `aliment moyen`.
 - O golden 200 automático existe; falta a revisão humana final das células selecionadas.
 - A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
-- A primeira assinatura pública de release depende da decisão humana sobre quem detém a chave (`NUTRIDB_SIGNING_KEY`) — fora do repositório.
+- A chave privada Ed25519 está fora do repositório em `C:\Users\Betuel\.nutridb\signing\`; a chave pública está em `docs/keys/nutridb-signing.pub.pem`. Falta apenas a decisão operacional de custódia/backup para uma release pública.
 
 ### Progresso confirmado desde a auditoria
 
@@ -65,10 +65,10 @@ ausências ou divergências. A direção está registada no
 - O build gera manifesto `release-1`, `SHA256SUMS`, SBOM CycloneDX 1.6 e atestação `attestation-1` (Ed25519 se `NUTRIDB_SIGNING_KEY`; ADR-0015); `nutridb release verify` valida tudo, incluindo a assinatura.
 - CI: job `determinism` constrói duas vezes e prova byte-identidade (P5) — agora compara também manifesto, SBOM e `SHA256SUMS`; `qa` faz upload do relatório e dos metadados de release.
 - Explorer deriva locales de `i18n/locales.toml` no build; `pt-PT` é o padrão; locales disponíveis descobertas do artefacto.
-- Métricas de identidade honestas: `recall` (cobertura do matcher 0.954) separada de `recall_confirmed` (0.434, sem adjudicação); `review_golden_true` = 146.
+- Métricas de identidade honestas: `recall` (cobertura do matcher 0.954) separada de `recall_confirmed` (0.434, antes da adjudicação); 95 links adjudicados estão aplicados e 6 029 pares continuam em review.
 - Ledger de IDs (ADR-0014): `mappings/id_ledger.csv` com 4 860 atribuições; mudança de algoritmo falha alto, `identity_drift` sinaliza edições da fonte sem trocar o ID.
 - Suite atual: **230 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
-- `nutridb link review`: fila de adjudicação humana com contexto (nomes, similaridade, score), `--apply` determinístico em `mappings/links.csv` (P8) — 6 237 pares reais; pares que partilham survivor preservados (fix `_queue_index`).
+- `nutridb link review`: fila de adjudicação humana com contexto (nomes, similaridade, score), `--apply` determinístico em `mappings/links.csv` (P8); após a primeira vaga restam 6 029 pares, com a restrição 1:1 preservada.
 - Explorer: vista de cobertura global do dataset (por fonte e por grupo) e interface com locale `pt`/`en` (toggle).
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
