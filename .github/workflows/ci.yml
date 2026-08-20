@@ -73,6 +73,9 @@ jobs:
       - name: Build full artefact
         run: uv run nutridb build --full
 
+      - name: Verify release metadata
+        run: uv run nutridb release verify build/artifacts/nutridb-core-0.1.0.sqlite
+
       - name: Run quality suite
         run: uv run nutridb qa
 
