@@ -708,29 +708,36 @@ def write_links_csv(
 
 def _queue_index(
     links_csv: Path,
-) -> tuple[dict[tuple[str, str], str], dict[str, tuple[str, str]]]:
-    """Index of pending review rows: pair -> survivor and survivor -> pair.
+) -> tuple[dict[tuple[str, str], str], dict[tuple[str, str, str], set[tuple[str, str]]]]:
+    """Index of pending review rows: pair -> survivor and row -> pairs.
 
     Each review pair writes two rows sharing the survivor concept
-    (ADR-0006); the pair is read back by joining the sides per survivor.
+    (ADR-0006). A survivor may host several pairs (one food proposed
+    against several counterparts), in which case a row is shared by all
+    the pairs of its side at that survivor; the index keeps the full
+    cross product so no pair is lost.
     """
-    by_survivor: dict[str, dict[str, str]] = {}
+    by_survivor: dict[str, dict[str, set[str]]] = {}
     with links_csv.open(encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             if (row["status"] or "").strip() != "review":
                 continue
-            by_survivor.setdefault(row["concept_id"].strip(), {})[row["source"].strip()] = row[
-                "source_code"
-            ].strip()
+            concept_id = row["concept_id"].strip()
+            by_survivor.setdefault(concept_id, {}).setdefault(row["source"].strip(), set()).add(
+                row["source_code"].strip()
+            )
     pairs: dict[tuple[str, str], str] = {}
-    sides: dict[str, tuple[str, str]] = {}
-    for survivor, side_rows in by_survivor.items():
-        insa = side_rows.get("insa")
-        ciqual = side_rows.get("ciqual")
-        if insa is not None and ciqual is not None:
-            pairs[(insa, ciqual)] = survivor
-            sides[survivor] = (insa, ciqual)
-    return pairs, sides
+    row_pairs: dict[tuple[str, str, str], set[tuple[str, str]]] = {}
+    for survivor in sorted(by_survivor):
+        insa_codes = sorted(by_survivor[survivor].get("insa", ()))
+        ciqual_codes = sorted(by_survivor[survivor].get("ciqual", ()))
+        for insa in insa_codes:
+            for ciqual in ciqual_codes:
+                pair = (insa, ciqual)
+                pairs[pair] = survivor
+                row_pairs.setdefault((survivor, "insa", insa), set()).add(pair)
+                row_pairs.setdefault((survivor, "ciqual", ciqual), set()).add(pair)
+    return pairs, row_pairs
 
 
 def review_pairs(links_csv: Path) -> list[tuple[str, str]]:
@@ -750,9 +757,11 @@ def apply_link_decisions(
     current review queue or the call fails high (P9): the queue is the
     authority and silent edits are never invented. Accepted pairs become
     status ``adjudicated`` (merged by the transform), rejected pairs are
-    removed. All other rows are preserved verbatim.
+    removed. A row shared by several pairs (one food proposed against
+    several counterparts at the same survivor) is only removed once every
+    pair using it has been decided. All other rows are preserved verbatim.
     """
-    queue, sides_by_survivor = _queue_index(links_csv)
+    queue, row_pairs = _queue_index(links_csv)
     seen: set[tuple[str, str]] = set()
     accepted: set[tuple[str, str]] = set()
     rejected: set[tuple[str, str]] = set()
@@ -785,10 +794,10 @@ def apply_link_decisions(
             if status != "review":
                 rows.append((concept_id, source, source_code, status))
                 continue
-            insa, ciqual = sides_by_survivor.get(concept_id, ("", ""))
-            pair = (source_code, ciqual) if source == "insa" else (insa, source_code)
-            if pair not in decided:
-                rows.append((concept_id, source, source_code, status))
+            my_pairs = row_pairs.get((concept_id, source, source_code), set())
+            if my_pairs and my_pairs <= decided:
+                continue
+            rows.append((concept_id, source, source_code, status))
     for insa_code, ciqual_code in accepted:
         survivor = queue[(insa_code, ciqual_code)]
         rows.append((survivor, "insa", insa_code, "adjudicated"))

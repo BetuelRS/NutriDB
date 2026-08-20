@@ -251,3 +251,42 @@ def test_write_links_csv_preserves_adjudicated(tmp_path: Path) -> None:
     assert frame.filter(pl.col("status") == "adjudicated")["source_code"].cast(
         pl.Utf8
     ).to_list() == ["19044", "28"]
+
+
+def _shared_queue_csv(tmp_path: Path) -> Path:
+    """Two review pairs sharing a survivor and the insa row (regression)."""
+    path = tmp_path / "links.csv"
+    path.write_text(
+        "concept_id,source,source_code,status\n"
+        "nfx_SHARED01,insa,26,review\n"
+        "nfx_SHARED01,ciqual,19042,review\n"
+        "nfx_SHARED01,ciqual,99999,review\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def test_review_pairs_keeps_pairs_sharing_a_survivor(tmp_path: Path) -> None:
+    pairs = review_pairs(_shared_queue_csv(tmp_path))
+    assert pairs == [("26", "19042"), ("26", "99999")]
+
+
+def test_apply_shared_row_kept_until_all_pairs_decided(tmp_path: Path) -> None:
+    path = _shared_queue_csv(tmp_path)
+    report = apply_link_decisions(path, [("26", "99999", "accepted", "verificado a mao")])
+    assert report == {"accepted": 1, "rejected": 0, "remaining_review": 2}
+    frame = pl.read_csv(path, has_header=True).with_columns(pl.col("source_code").cast(pl.Utf8))
+    rows = {tuple(r) for r in frame.rows()}
+    assert rows == {
+        ("nfx_SHARED01", "insa", "26", "review"),
+        ("nfx_SHARED01", "ciqual", "19042", "review"),
+        ("nfx_SHARED01", "insa", "26", "adjudicated"),
+        ("nfx_SHARED01", "ciqual", "99999", "adjudicated"),
+    }
+    report = apply_link_decisions(path, [("26", "19042", "rejected", "")])
+    assert report == {"accepted": 0, "rejected": 1, "remaining_review": 0}
+    frame = pl.read_csv(path, has_header=True).with_columns(pl.col("source_code").cast(pl.Utf8))
+    assert {tuple(r) for r in frame.rows()} == {
+        ("nfx_SHARED01", "insa", "26", "adjudicated"),
+        ("nfx_SHARED01", "ciqual", "99999", "adjudicated"),
+    }
