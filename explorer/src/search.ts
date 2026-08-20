@@ -240,6 +240,34 @@ export function foodValuesBySource(conceptId: string): SourceValue[] {
   }));
 }
 
+export interface SourceCoverage {
+  sourceId: string;
+  sourceName: string;
+  sourceVersion: string;
+  covered: number;
+  total: number;
+}
+
+export function coverageBySource(conceptId: string): SourceCoverage[] {
+  const rows = query(
+    `SELECT v.source_id, s.name, s.version,
+            COUNT(DISTINCT v.nutrient_id), (SELECT COUNT(*) FROM nutrient)
+     FROM value v
+     JOIN source s ON s.source_id = v.source_id
+     WHERE v.concept_id = ?
+     GROUP BY v.source_id, s.name, s.version
+     ORDER BY COUNT(DISTINCT v.nutrient_id) DESC`,
+    [conceptId],
+  );
+  return rows.map((row) => ({
+    sourceId: row.values[0]?.toString() ?? "",
+    sourceName: row.values[1]?.toString() ?? "",
+    sourceVersion: row.values[2]?.toString() ?? "",
+    covered: Number(row.values[3] ?? 0),
+    total: Number(row.values[4] ?? 0),
+  }));
+}
+
 export function foodGroups(): FoodGroup[] {
   const rows = query(
     "SELECT DISTINCT c.food_group, fg.name_pt, fg.name_en FROM concept c " +

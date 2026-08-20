@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   availableLocales,
   buildMetadata,
+  coverageBySource,
   foodGroups,
   foodValues,
   foodValuesBySource,
@@ -13,6 +14,7 @@ import {
   type NutrientRank,
   type Provenance,
   type SearchResult,
+  type SourceCoverage,
   type SourceValue,
 } from "./search";
 import { loadArtifact, sqliteVersion } from "./db";
@@ -60,6 +62,7 @@ function FoodDetail({
 }) {
   const values: FoodValue[] = useMemo(() => foodValues(conceptId, locale), [conceptId, locale]);
   const bySource: SourceValue[] = useMemo(() => foodValuesBySource(conceptId), [conceptId]);
+  const coverage: SourceCoverage[] = useMemo(() => coverageBySource(conceptId), [conceptId]);
   const divergent = useMemo(() => divergentNutrients(bySource), [bySource]);
   const [openRecord, setOpenRecord] = useState<string | null>(null);
   const first = values[0];
@@ -126,6 +129,15 @@ function FoodDetail({
             </details>
           );
         })()}
+      {coverage.length > 0 && (
+        <div className="chips">
+          {coverage.map((c) => (
+            <span key={c.sourceId} className="chip">
+              {c.sourceName} {c.sourceVersion}: {c.covered}/{c.total} nutrientes
+            </span>
+          ))}
+        </div>
+      )}
       {bySource.length > 0 && (
         <details className="provenance">
           <summary>

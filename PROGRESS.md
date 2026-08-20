@@ -241,4 +241,6 @@ da data indicada, não ao estado oficial acima.
 - Ledger de IDs (ADR-0014, `b0a47b7`): `mappings/id_ledger.csv` com 4 860 atribuições eternas; mudança de algoritmo falha alto; `identity_drift` sinaliza edições da fonte mantendo o ID; escritas LF para determinismo entre plataformas (`2c5837a`).
 - F6.5/F6.6/F6.7 fechados no PLAN: golden 200 automático; property tests (roundtrip, divergência simétrica/limitada, ordem de fontes invariante) + merge idempotente (re-run byte-idêntico, `test_merge.py`); CI com jobs `checks`/`explorer`/`qa`/`determinism`.
 - Explorer: vista "valores por fonte" — comparação lado a lado por nutriente/fonte com deteção de divergência >= 30% (espelho da regra de fusão), incluindo tipo, aquisição, confiança e licença (`b13157b`).
+- Explorer: chips de cobertura por fonte — nutrientes medidos vs vocabulário total (161 tagnames) por conceito (`coverageBySource`; real: 66/161 CIQUAL, 40/161 INSA).
+- **F6 fechado**: merge `--no-ff` `9457d52` em `f0/fundacoes`; CI verde (32409215939); pendências humanas e SBOM/atestado documentadas como pós-F6.
 - Suite: **208 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.
