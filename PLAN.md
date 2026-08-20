@@ -50,7 +50,7 @@ ausências ou divergências. A direção está registada no
 - A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
 - O ledger persistente de IDs e a adjudicação humana completa ainda não estão fechados.
 - O build ainda não executa `vocab check`, QA e todos os gates de release como uma única política explícita.
-- Golden 200, propriedades Hypothesis e job QA da CI ainda não existem.
+- O golden 200 automático existe; falta a revisão humana final das células selecionadas.
 
 ### Progresso confirmado desde a auditoria
 
@@ -59,7 +59,10 @@ ausências ou divergências. A direção está registada no
 - `build` verifica a registry e os hashes antes de extrair; a registry entra no fingerprint do transform.
 - Fonte registada sem extractor, survivor de identidade desconhecido e SQLite inválido falham alto.
 - API abre artefactos existentes em modo somente leitura e rankings filtram `per_100g_edible`.
-- Suite atual: **197 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
+- Golden automático CIQUAL: 200 alimentos e 943 células do XML primário.
+- Hypothesis cobre conversões, divergência e ordem determinística de identidade.
+- CI `f6/**` executa checks, Explorer, build real, QA e upload do relatório.
+- Suite atual: **202 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
 Não devem ser interpretadas como o estado oficial atual quando divergirem deste

@@ -17,14 +17,16 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 | Qualidade | QA real com 0 erros; warnings documentados |
 | P1/P6/P9/P10 | Aquisição, gate de licença, fail-high e sync no build implementados |
 | API | Artefactos read-only; rankings limitados a `per_100g_edible` |
-| Produção | Não fechada: manifesto, ledger de IDs, golden 200 e CI de release pendentes |
-| Testes | 197 testes verdes; ruff/mypy limpos |
+| Golden/propriedades | Golden automático: 200 alimentos/943 células; Hypothesis ativo |
+| CI | `checks`, `explorer` e `qa` verdes; relatório QA publicado como artefacto |
+| Produção | Não fechada: manifesto, ledger de IDs e revisão humana do golden pendentes |
+| Testes | 202 testes verdes; ruff/mypy limpos |
 | Próxima prioridade | hardening do dataset e release verificável |
 
 ### Próximas ações
 
 - Fechar manifesto de release, ausência, ledger de IDs, gates completos e determinismo byte-a-byte.
-- Completar golden 200, propriedades Hypothesis e QA na CI.
+- Revisar humanamente o golden 200 e fechar o manifesto de release.
 - Construir Explorer v1 com `pt-PT` primeiro, `en` depois.
 - Só depois expandir fontes, API, bibliotecas e exports.
 
@@ -33,7 +35,7 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 - Manifesto de fontes/atribuições ainda não é emitido pelo package.
 - Build ainda precisa integrar explicitamente `vocab check`, QA e os restantes gates de release.
 - Ledger persistente de IDs e adjudicação humana completa ainda pendentes.
-- Golden 200, Hypothesis e job QA da CI ainda pendentes.
+- Golden 200 precisa de revisão humana; manifesto, ledger de IDs e gates completos continuam pendentes.
 
 As secções seguintes são o histórico detalhado das fases e sessões. Quando uma
 secção histórica disser “estado atual”, essa expressão refere-se ao snapshot
@@ -229,4 +231,6 @@ da data indicada, não ao estado oficial acima.
 - Build verifica sources/hash e inclui registry no fingerprint (`6fb27c2`).
 - Fail-high para fonte sem extractor, SQLite inválido e survivor de identidade desconhecido (`56a3340`, `56f45e6`).
 - API read-only e ranking por 100 g (`27f2dd9`, `78970d7`).
-- Suite: **197 testes verdes**, ruff/mypy limpos, build real e QA com 0 erros.
+- Golden automático CIQUAL: 200 alimentos e 943 células; Hypothesis adicionado em ADR-0012.
+- CI `f6/**` com `checks`, `explorer`, build real, QA e upload do relatório; execução verde.
+- Suite: **202 testes verdes**, ruff/mypy limpos, build real e QA com 0 erros.
