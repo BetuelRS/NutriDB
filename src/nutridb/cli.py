@@ -570,8 +570,8 @@ def build(
 ) -> None:
     """Run the full deterministic pipeline (SPEC §16, P10).
 
-    Chains extract -> transform -> derive -> i18n build -> merge ->
-    package core; any stage failure aborts the build (fail high, P9).
+    Chains sync -> vocab check -> extract -> transform -> derive -> i18n
+    build -> merge -> package -> QA; any stage failure aborts the build (P9).
     Extract and transform are content-addressed in ``build/cache``: an
     unchanged run reuses the previous stage output (byte-identical, P5)
     and only re-runs derive/i18n/merge/package. Source files are verified
@@ -588,14 +588,19 @@ def build(
     from nutridb.package import PackageError
     from nutridb.package import package as run_package
     from nutridb.paths import paths
+    from nutridb.quality import QualityError, run_quality, write_report
     from nutridb.sources.registry import load_registry
     from nutridb.transform import TransformError
     from nutridb.transform import transform as run_transform
+    from nutridb.vocab import check_vocabulary
 
     base = paths()
     registry = load_registry()
     cache_dir = base["build"] / "cache"
     try:
+        vocab_report = check_vocabulary(base["root"])
+        if vocab_report.errors:
+            raise CacheError(f"vocabulary check failed: {vocab_report.errors[:5]}")
         sync_sources(registry)
         extract_reports: dict[str, dict[str, int]] = {}
         for source_id in sorted(registry.sources):
@@ -642,7 +647,25 @@ def build(
             base["root"],
             profile="core",
         )
-    except (CacheError, TransformError, DeriveError, I18nError, MergeError, PackageError) as exc:
+        import time
+
+        qa_started = time.perf_counter()
+        artifact = base["build"] / "artifacts" / package_info["artifact"]
+        findings = run_quality(base["build"] / "canonical", base["vocab"], base["root"], artifact)
+        write_report(base["build"] / "qa", findings, artifact, time.perf_counter() - qa_started)
+        qa_errors = sum(finding.severity == "error" for finding in findings)
+        qa_warnings = sum(finding.severity == "warning" for finding in findings)
+        if qa_errors:
+            raise PackageError(f"QA blocked release with {qa_errors} error(s)")
+    except (
+        CacheError,
+        TransformError,
+        DeriveError,
+        I18nError,
+        MergeError,
+        PackageError,
+        QualityError,
+    ) as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
     except Exception as exc:
@@ -663,6 +686,8 @@ def build(
     table.add_row("artifact", package_info["artifact"])
     table.add_row("size_bytes", f"{package_info['size_bytes']:,}")
     table.add_row("integrity", package_info["integrity"])
+    table.add_row("qa_errors", str(qa_errors))
+    table.add_row("qa_warnings", str(qa_warnings))
     rich.console.Console().print(table)
     typer.echo("build OK")
 
