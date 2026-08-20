@@ -256,6 +256,23 @@ class TestMerge:
         with pytest.raises(MergeError, match="unknown concept"):
             merge(canonical, sandbox_root)
 
+    def test_merge_is_deterministic_and_idempotent(
+        self, tmp_path: Path, sandbox_root: Path
+    ) -> None:
+        """Re-running merge on the same canonical input yields identical bytes (F6.6)."""
+        canonical = _canonical(tmp_path)
+        (sandbox_root / "mappings" / "source_priority.csv").write_bytes(
+            _rules(
+                tmp_path,
+                [("pt", "*", "*", "insa>ciqual"), ("fr", "*", "*", "ciqual>insa")],
+            ).read_bytes()
+        )
+        merge(canonical, sandbox_root)
+        first = (canonical / "mv_food_value.parquet").read_bytes()
+        merge(canonical, sandbox_root)
+        second = (canonical / "mv_food_value.parquet").read_bytes()
+        assert second == first
+
     def test_only_default_codes_in_mv(self, tmp_path: Path, sandbox_root: Path) -> None:
         """The mv view keeps the default method per tagname (ADR-0007)."""
         canonical = _canonical(tmp_path)

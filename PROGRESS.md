@@ -2,7 +2,7 @@
 
 > Atualizado no fim de cada sessão (regra §17.1). Fonte da verdade operacional: `PLAN.md`; arquitetura: `docs/adr/`.
 
-## Estado oficial (2026-08-19)
+## Estado oficial (2026-08-20)
 
 **Direção de produto aprovada:** o NutriDB é uma plataforma de dados de
 composição alimentar. O dataset é o produto principal; o Explorer é a camada
@@ -13,29 +13,29 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 |---|---|
 | Dataset | CIQUAL 2025 + INSA/TCA 7.1 integrados no canónico |
 | Artefacto | SQLite schema 4 + Parquet; integrity check OK |
-| Explorer | Build React/TypeScript funcional; produto ainda inicial |
+| Explorer | Build React/TypeScript funcional; comparação de valores por fonte; produto ainda inicial |
 | Qualidade | QA real com 0 erros; warnings documentados |
 | P1/P6/P9/P10 | Aquisição, gate de licença, fail-high e sync no build implementados |
 | API | Artefactos read-only; rankings limitados a `per_100g_edible` |
-| Golden/propriedades | Golden automático: 200 alimentos/943 células; Hypothesis ativo |
-| CI | `checks`, `explorer` e `qa` verdes; relatório QA publicado como artefacto |
-| Produção | Não fechada: ledger de IDs, revisão humana do golden, SBOM e atestação pendentes |
-| Testes | 202 testes verdes; ruff/mypy limpos |
-| Próxima prioridade | hardening do dataset e release verificável |
+| Golden/propriedades | Golden automático: 200 alimentos/943 células; Hypothesis ativo + merge idempotente |
+| CI | `checks`, `explorer`, `qa` e `determinism` verdes; relatório QA e metadados de release publicados |
+| Produção | Não fechada: adjudicação humana (6 237 pares), revisão humana do golden, SBOM e atestação pendentes |
+| Testes | 208 testes verdes; ruff/mypy limpos |
+| Próxima prioridade | adjudicação humana, fecho F6 e release verificável |
 
 ### Próximas ações
 
-- Fechar manifesto de release, ausência, ledger de IDs, gates completos e determinismo byte-a-byte.
-- Revisar humanamente o golden 200 e fechar o manifesto de release.
-- Construir Explorer v1 com `pt-PT` primeiro, `en` depois.
+- Adjudicar os 6 237 pares de review (146 golden-true) e rever o golden 200 humanamente.
+- Fechar F6 (merge `--no-ff` em `f0/fundacoes`) e o release verificável.
+- Construir Explorer v1 com `pt-PT` primeiro, `en` depois (vista de cobertura pendente).
 - Só depois expandir fontes, API, bibliotecas e exports.
 
 ### Bloqueios
 
-- Manifesto de fontes/atribuições ainda não é emitido pelo package.
-- Build ainda precisa integrar explicitamente `vocab check`, QA e os restantes gates de release.
-- Ledger persistente de IDs e adjudicação humana completa ainda pendentes.
-- Golden 200 precisa de revisão humana; manifesto, ledger de IDs e gates completos continuam pendentes.
+- Adjudicação humana dos pares de review (requer decisor humano; regra 17.6).
+- Revisão humana do golden 200 (verificação à mão, critério 2 do F6).
+- P3 ausência individual por motivo — requer evidência das fontes.
+- SBOM, atestado e assinatura de release — fase posterior.
 
 As secções seguintes são o histórico detalhado das fases e sessões. Quando uma
 secção histórica disser “estado atual”, essa expressão refere-se ao snapshot
@@ -239,4 +239,6 @@ da data indicada, não ao estado oficial acima.
 - Explorer: locales derivadas de `i18n/locales.toml` no build (fonte única, P8), padrão `pt-PT`, locales disponíveis descobertas do artefacto (`ba34256`).
 - Identidade honesta: `recall` de cobertura (0.9537) separado de `recall_confirmed` (0.4342); `review_golden_true` 146 pares aguardam adjudicação (`dbc5810`).
 - Ledger de IDs (ADR-0014, `b0a47b7`): `mappings/id_ledger.csv` com 4 860 atribuições eternas; mudança de algoritmo falha alto; `identity_drift` sinaliza edições da fonte mantendo o ID; escritas LF para determinismo entre plataformas (`2c5837a`).
-- Suite: **207 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.
+- F6.5/F6.6/F6.7 fechados no PLAN: golden 200 automático; property tests (roundtrip, divergência simétrica/limitada, ordem de fontes invariante) + merge idempotente (re-run byte-idêntico, `test_merge.py`); CI com jobs `checks`/`explorer`/`qa`/`determinism`.
+- Explorer: vista "valores por fonte" — comparação lado a lado por nutriente/fonte com deteção de divergência >= 30% (espelho da regra de fusão), incluindo tipo, aquisição, confiança e licença (`b13157b`).
+- Suite: **208 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.

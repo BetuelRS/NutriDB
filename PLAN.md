@@ -291,8 +291,8 @@ Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Ap
 
 **Critérios de aceitação da spec (§16 F6)**:
 1. Suite executa com o artefacto real — ✅ 0 erros / warnings de revisão (proximados 222, energia 33, AG 44, açúcares 2, sal 937, RAE 2, z-score 1893)
-2. 200 alimentos verificados à mão passam — [ ] (golden em curso)
-3. Propriedades: conversões reversíveis, fusão idempotente, ordem de fontes não altera resultado — [ ] (Hypothesis em curso)
+2. 200 alimentos verificados à mão passam — [ ] (golden automatizado pronto; revisão humana pendente)
+3. Propriedades: conversões reversíveis, fusão idempotente, ordem de fontes não altera resultado — ✅ (roundtrip, divergência simétrica/limitada, ordem invariante, merge byte-idêntico em re-run)
 
 | # | Tarefa | Estado | Nota |
 |---|---|---|---|
@@ -301,9 +301,9 @@ Resolvidas em 2026-08-15 (ADR-0001 §7): A1–A20 fechadas — remote GitHub, Ap
 | F6.2 | CLI `nutridb qa` + relatório | ✅ | Tabela rich + `build/qa/report.html` + `metrics.json` (schema `qa-1`); exit 1 com erros; stdout UTF-8 (reconfigure guardado por isinstance) |
 | F6.3 | Testes unitários da suite (22) | ✅ | Violações sintéticas por check; inclui per-source (não dispara com mistura), mg→g (FATRN 16500 mg, NA 200 mg), POLYL opcional, z-score n≥10, órfãos FK, mt_unreviewed; ruff/mypy limpos |
 | F6.4 | Triagem dos dados reais | ✅ | 3702 proximados completos (mediana 99,99; 222 fora de [97,103] — Isolat de soja 107,64 CIQUAL, Farine de seigle T85 110,80 INSA); energia: fibra entra (p95 3,14% vs 18,35% sem fibra), 1485 sem método (P2, não verificados); sal: mediana rácio 1,00 exato (Sel blanc NACL 97,8 g / NA 39 100 mg), 937 fora de ±10% (vinhos); AG 44; açúcares 2; RAE 2; z-score 1893; AA 0 completos (nenhuma fonte mapeia AA — honesto); divergência entre fontes 1200 pares ≥30% |
-| F6.5 | Golden 200 alimentos (estratificado ~18/grupo, células ENERC_KCAL/PROCNT/FAT/CHOAVL/WATER, skip de ausentes, tolerância 1e-9) | [ ] | Script efémero dos XMLs oficiais (seed fixa) → `tests/golden/ciqual_200.csv` + `test_golden_200.py` |
-| F6.6 | Property tests (Hypothesis): shuffle invariante (merge/transform), roundtrip de conversão, propriedades da divergência | [ ] | `tests/property/` |
-| F6.7 | CI: trigger `f6/**` + job `qa` (pipeline de fixtures → suite → upload-artifact do relatório) | [ ] | `.github/workflows/ci.yml` |
+| F6.5 | Golden 200 alimentos (estratificado ~18/grupo, células ENERC_KCAL/PROCNT/FAT/CHOAVL/WATER, skip de ausentes, tolerância 1e-9) | ✅ script efémero + `tests/golden/ciqual_200.csv` + `test_golden_200.py`; revisão humana do critério 2 pendente | `pytest tests/golden/` |
+| F6.6 | Property tests (Hypothesis): shuffle invariante (merge/transform), roundtrip de conversão, propriedades da divergência | ✅ `tests/property/` (roundtrip, divergência simétrica/limitada, ordem de fontes invariante) + merge idempotente (re-run byte-idêntico, `test_merge.py`) | `pytest tests/property/ tests/unit/test_merge.py` |
+| F6.7 | CI: trigger `f6/**` + job `qa` (pipeline de fixtures → suite → upload-artifact do relatório) | ✅ `.github/workflows/ci.yml` (jobs checks/explorer/qa/determinism; qa sobe relatório + metadados de release) | `gh run watch` |
 | F6.8 | Fecho: PLAN/PROGRESS, commits atómicos `(f6)`, merge `--no-ff` em `f0/fundacoes`, push, CI verde | [ ] | `gh run watch` |
 
 **Entregáveis da fase**: ADR-0009; `src/nutridb/quality/`; CLI `qa` + relatório HTML/métricas; 22 testes; golden 200; property tests; job CI com artefacto do relatório.
