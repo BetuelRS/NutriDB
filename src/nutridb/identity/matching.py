@@ -679,7 +679,7 @@ def write_links_csv(proposals: Iterable[LinkProposal], path: Path) -> int:
         rows.append((survivor, "ciqual", proposal.ciqual_code, "review"))
     rows.sort(key=lambda r: (r[0], r[1], r[2]))
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="") as fh:
+    with path.open("w", encoding="utf-8", newline="\n") as fh:
         writer = csv.writer(fh)
         writer.writerow(("concept_id", "source", "source_code", "status"))
         writer.writerows(rows)

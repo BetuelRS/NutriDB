@@ -267,9 +267,9 @@ def _load_id_ledger(path: Path) -> dict[tuple[str, str], tuple[str, str]]:
 
 
 def _write_id_ledger(path: Path, ledger: dict[tuple[str, str], tuple[str, str]]) -> None:
-    """Write the ledger deterministically sorted by (source, code)."""
+    """Write the ledger deterministically sorted by (source, code), LF only."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="") as fh:
+    with path.open("w", encoding="utf-8", newline="\n") as fh:
         writer = csv.writer(fh)
         writer.writerow(["source", "source_code", "concept_id", "seed_sha256"])
         for (source, code), (concept_id, seed) in sorted(ledger.items()):
