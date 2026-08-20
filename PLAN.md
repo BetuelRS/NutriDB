@@ -48,7 +48,7 @@ ausências ou divergências. A direção está registada no
 
 - SBOM, atestação e assinatura de release ainda não estão implementados.
 - A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
-- O ledger persistente de IDs e a adjudicação humana completa ainda não estão fechados.
+- A adjudicação humana completa dos 6 237 pares de review ainda não está fechada.
 - O golden 200 automático existe; falta a revisão humana final das células selecionadas.
 - `links.csv` sem linhas `adjudicated`: 146 pares verdadeiros do golden aguardam adjudicação humana (recall confirmada hoje: 0.43).
 
@@ -67,7 +67,8 @@ ausências ou divergências. A direção está registada no
 - CI: job `determinism` constrói duas vezes e prova byte-identidade (P5); `qa` faz upload do relatório e dos metadados de release.
 - Explorer deriva locales de `i18n/locales.toml` no build; `pt-PT` é o padrão; locales disponíveis descobertas do artefacto.
 - Métricas de identidade honestas: `recall` (cobertura do matcher 0.954) separada de `recall_confirmed` (0.434, sem adjudicação); `review_golden_true` = 146.
-- Suite atual: **203 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
+- Ledger de IDs (ADR-0014): `mappings/id_ledger.csv` com 4 860 atribuições; mudança de algoritmo falha alto, `identity_drift` sinaliza edições da fonte sem trocar o ID.
+- Suite atual: **207 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
 Não devem ser interpretadas como o estado oficial atual quando divergirem deste

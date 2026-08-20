@@ -238,4 +238,5 @@ da data indicada, não ao estado oficial acima.
 - CI: job `determinism` prova byte-identidade de dois builds completos (P5, `6095a3d` + `78f04c3`); `qa` faz upload do relatório e dos metadados de release; execução 32407054962 verde.
 - Explorer: locales derivadas de `i18n/locales.toml` no build (fonte única, P8), padrão `pt-PT`, locales disponíveis descobertas do artefacto (`ba34256`).
 - Identidade honesta: `recall` de cobertura (0.9537) separado de `recall_confirmed` (0.4342); `review_golden_true` 146 pares aguardam adjudicação (`dbc5810`).
-- Suite: **203 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.
+- Ledger de IDs (ADR-0014, `b0a47b7`): `mappings/id_ledger.csv` com 4 860 atribuições eternas; mudança de algoritmo falha alto; `identity_drift` sinaliza edições da fonte mantendo o ID; escritas LF para determinismo entre plataformas (`2c5837a`).
+- Suite: **207 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.
