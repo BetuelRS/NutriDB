@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  ACTIVE_LOCALES,
+  availableLocales,
   buildMetadata,
   foodGroups,
   foodsForNutrient,
@@ -181,7 +181,8 @@ function NutrientDetail({
 export default function App() {
   const [status, setStatus] = useState<Status>({ kind: "loading" });
   const [queryText, setQueryText] = useState("");
-  const [locale, setLocale] = useState("fr");
+  const [locales, setLocales] = useState<string[]>([]);
+  const [locale, setLocale] = useState("pt-PT");
   const [limit, setLimit] = useState(25);
   const [mode, setMode] = useState<Mode>("food");
   const [foodGroup, setFoodGroup] = useState<string | null>(null);
@@ -199,6 +200,9 @@ export default function App() {
         if (cancelled) return;
         const version = sqliteVersion() ?? "?";
         const meta = buildMetadata();
+        const found = availableLocales();
+        setLocales(found);
+        setLocale((current) => (found.includes(current) ? current : found[0] ?? "pt-PT"));
         setGroups(foodGroups());
         setStatus({
           kind: "ready",
@@ -310,7 +314,7 @@ export default function App() {
           value={locale}
           onChange={(event) => setLocale(event.target.value)}
         >
-          {ACTIVE_LOCALES.map((l) => (
+          {locales.map((l) => (
             <option key={l} value={l}>
               {l}
             </option>

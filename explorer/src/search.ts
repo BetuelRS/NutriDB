@@ -1,3 +1,4 @@
+import { LOCALE_CHAINS } from "./generated/locales";
 import { buildMatch } from "./fts";
 import { query } from "./db";
 
@@ -54,15 +55,6 @@ export interface Provenance {
   record: string;
 }
 
-const LOCALE_CHAINS: Record<string, string[]> = {
-  fr: [],
-  en: [],
-  "pt-PT": ["pt", "en"],
-  "pt-BR": ["pt-PT", "pt", "en"],
-};
-
-export const ACTIVE_LOCALES = Object.keys(LOCALE_CHAINS);
-
 // mv_food_value holds one row per (concept, nutrient, locale); labels are
 // native per source (INSA=pt, CIQUAL=fr/en). Display falls back through the
 // locales that exist in the mv: exact match first, then a stable order.
@@ -71,7 +63,28 @@ const VALUE_LOCALE_FALLBACK: Record<string, string[]> = {
   en: ["fr", "pt"],
   pt: ["en", "fr"],
   "pt-PT": ["pt", "en", "fr"],
+  "pt-BR": ["pt", "en", "fr"],
 };
+
+function valueChain(locale: string): string[] {
+  return [locale, ...(VALUE_LOCALE_FALLBACK[locale] ?? LOCALE_CHAINS[locale] ?? [])];
+}
+
+export function availableLocales(): string[] {
+  const rows = query(
+    "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'label_fts_%'",
+  );
+  const seen = new Set<string>();
+  for (const row of rows) {
+    const name = row.values[0]?.toString() ?? "";
+    const locale = name
+      .replace(/^label_fts_/, "")
+      .replace(/_tri$/, "")
+      .replaceAll("_", "-");
+    seen.add(locale);
+  }
+  return [...seen].sort();
+}
 
 export function search(
   queryText: string,
@@ -119,7 +132,7 @@ export function search(
 }
 
 export function foodValues(conceptId: string, locale: string): FoodValue[] {
-  const chain = [locale, ...(VALUE_LOCALE_FALLBACK[locale] ?? [])];
+  const chain = valueChain(locale);
   const collected: FoodValue[] = [];
   for (const candidate of chain) {
     const rows = query(
@@ -201,7 +214,7 @@ export function foodsForNutrient(
   limit: number,
   foodGroup?: string | null,
 ): NutrientRank[] {
-  const chain = [locale, ...(VALUE_LOCALE_FALLBACK[locale] ?? [])];
+  const chain = valueChain(locale);
   for (const candidate of chain) {
     const rows = query(
       `SELECT concept_id, label, locale, food_group, nutrient_id, value, unit, basis
