@@ -69,11 +69,10 @@ def test_sources_audit_reports_ciqual() -> None:
     assert "NO" in result.stdout or "pinned" in result.stdout
 
 
-def test_unimplemented_commands_fail_high() -> None:
-    for command in (("qa",),):
-        result = runner.invoke(app, [*command])
-        assert result.exit_code == 2
-        assert "not implemented" in result.output
+def test_qa_is_implemented() -> None:
+    result = runner.invoke(app, ["qa"])
+    assert result.exit_code in (0, 1)
+    assert "not implemented" not in result.output
 
 
 def test_merge_is_implemented() -> None:
