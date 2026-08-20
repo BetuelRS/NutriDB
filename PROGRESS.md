@@ -233,4 +233,5 @@ da data indicada, não ao estado oficial acima.
 - API read-only e ranking por 100 g (`27f2dd9`, `78970d7`).
 - Golden automático CIQUAL: 200 alimentos e 943 células; Hypothesis adicionado em ADR-0012.
 - CI `f6/**` com `checks`, `explorer`, build real, QA e upload do relatório; execução verde.
+- `nutridb build --full` passou a executar `vocab check` e QA internamente; último build: `qa_errors=0`, `qa_warnings=7` (`ea1d256`).
 - Suite: **202 testes verdes**, ruff/mypy limpos, build real e QA com 0 erros.
