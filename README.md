@@ -68,6 +68,7 @@ base europeia inicial:
 | Artefacto de leitura | SQLite schema 4 com FTS5 e pesquisa trigram |
 | Explorer | Build React/TypeScript funcional; cobertura de produto ainda inicial |
 | Qualidade | Suite QA e relatório HTML; hardening de produção em curso |
+| Release metadata | Manifesto `release-1` e `SHA256SUMS` gerados pelo build |
 | Golden/property/CI de release | Golden automático e QA CI ativos; revisão de release em curso |
 
 O artefacto local atual contém 4 860 conceitos, 230 601 valores canónicos e

@@ -19,7 +19,7 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 | API | Artefactos read-only; rankings limitados a `per_100g_edible` |
 | Golden/propriedades | Golden automático: 200 alimentos/943 células; Hypothesis ativo |
 | CI | `checks`, `explorer` e `qa` verdes; relatório QA publicado como artefacto |
-| Produção | Não fechada: manifesto, ledger de IDs e revisão humana do golden pendentes |
+| Produção | Não fechada: ledger de IDs, revisão humana do golden, SBOM e atestação pendentes |
 | Testes | 202 testes verdes; ruff/mypy limpos |
 | Próxima prioridade | hardening do dataset e release verificável |
 
@@ -234,4 +234,5 @@ da data indicada, não ao estado oficial acima.
 - Golden automático CIQUAL: 200 alimentos e 943 células; Hypothesis adicionado em ADR-0012.
 - CI `f6/**` com `checks`, `explorer`, build real, QA e upload do relatório; execução verde.
 - `nutridb build --full` passou a executar `vocab check` e QA internamente; último build: `qa_errors=0`, `qa_warnings=7` (`ea1d256`).
-- Suite: **202 testes verdes**, ruff/mypy limpos, build real e QA com 0 erros.
+- Manifesto `release-1` e `SHA256SUMS` gerados pelo build, com fontes, licenças, hashes e counts QA (`458b54d`).
+- Suite: **203 testes verdes**, ruff/mypy limpos; build real e QA com 0 erros.

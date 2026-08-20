@@ -46,7 +46,7 @@ ausências ou divergências. A direção está registada no
 
 ### Bloqueadores atuais
 
-- O artefacto ainda não contém todos os metadados de release da registry (hashes e manifesto de atribuições por fonte).
+- SBOM, atestação e assinatura de release ainda não estão implementados.
 - A ausência individual continua compactada por `coverage` + ausência de linha; motivos adicionais só entram com evidência da fonte.
 - O ledger persistente de IDs e a adjudicação humana completa ainda não estão fechados.
 - O build agora executa `vocab check` e QA; ainda faltam manifesto, checksums e os gates de release restantes.
@@ -63,6 +63,7 @@ ausências ou divergências. A direção está registada no
 - Hypothesis cobre conversões, divergência e ordem determinística de identidade.
 - CI `f6/**` executa checks, Explorer, build real, QA e upload do relatório.
 - `nutridb build --full` executa `vocab check` e QA internamente e falha com qualquer `error`.
+- O build gera manifesto `release-1` e `SHA256SUMS` ao lado do SQLite.
 - Suite atual: **202 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
