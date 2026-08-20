@@ -1,0 +1,944 @@
+alim_code,food_fr,const_code,tagname,unit,expected,xls_raw,xls_ref,ref
+24999,Dessert (aliment moyen),328,ENERC_KCAL,kcal,255.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 24999 const 328 (teneur '255')
+24999,Dessert (aliment moyen),25000,PROCNT,g,4.41,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24999 const 25000 (teneur '4,41')"
+24999,Dessert (aliment moyen),40000,FAT,g,11.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24999 const 40000 (teneur '11,3')"
+24999,Dessert (aliment moyen),31000,CHOAVL,g,32.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24999 const 31000 (teneur '32,9')"
+24999,Dessert (aliment moyen),400,WATER,g,49.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24999 const 400 (teneur '49,9')"
+10082,"Moules marinières (oignons et vin blanc), préemballées",328,ENERC_KCAL,kcal,91.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10082 const 328 (teneur '91,9')"
+10082,"Moules marinières (oignons et vin blanc), préemballées",25000,PROCNT,g,10.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10082 const 25000 (teneur '10,3')"
+10082,"Moules marinières (oignons et vin blanc), préemballées",40000,FAT,g,2.24,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10082 const 40000 (teneur '2,24')"
+10082,"Moules marinières (oignons et vin blanc), préemballées",31000,CHOAVL,g,7.43,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10082 const 31000 (teneur '7,43')"
+10082,"Moules marinières (oignons et vin blanc), préemballées",400,WATER,g,76.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10082 const 400 (teneur '76,5')"
+10083,"Moules farcies (matière grasse, persillade…), préemballées, crues",328,ENERC_KCAL,kcal,283.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 10083 const 328 (teneur '283')
+10083,"Moules farcies (matière grasse, persillade…), préemballées, crues",25000,PROCNT,g,9.56,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10083 const 25000 (teneur '9,56')"
+10083,"Moules farcies (matière grasse, persillade…), préemballées, crues",40000,FAT,g,24.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10083 const 40000 (teneur '24,8')"
+10083,"Moules farcies (matière grasse, persillade…), préemballées, crues",31000,CHOAVL,g,4.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10083 const 31000 (teneur '4,2')"
+10083,"Moules farcies (matière grasse, persillade…), préemballées, crues",400,WATER,g,57.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10083 const 400 (teneur '57,5')"
+20914,Galette ou pavé au soja,328,ENERC_KCAL,kcal,252.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20914 const 328 (teneur '252')
+20914,Galette ou pavé au soja,25000,PROCNT,g,15.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20914 const 25000 (teneur '15,5')"
+20914,Galette ou pavé au soja,40000,FAT,g,14.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20914 const 40000 (teneur '14,7')"
+20914,Galette ou pavé au soja,31000,CHOAVL,g,8.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20914 const 31000 (teneur '8,5')"
+20914,Galette ou pavé au soja,400,WATER,g,52.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20914 const 400 (teneur '52,7')"
+25001,"Blanquette de veau, préemballée",328,ENERC_KCAL,kcal,113.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25001 const 328 (teneur '113')
+25001,"Blanquette de veau, préemballée",25000,PROCNT,g,15.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25001 const 25000 (teneur '15,4')"
+25001,"Blanquette de veau, préemballée",40000,FAT,g,4.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25001 const 40000 (teneur '4')
+25001,"Blanquette de veau, préemballée",31000,CHOAVL,g,3.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25001 const 31000 (teneur '3,1')"
+25001,"Blanquette de veau, préemballée",400,WATER,g,75.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25001 const 400 (teneur '75,1')"
+25103,"Tomate farcie, préemballée",328,ENERC_KCAL,kcal,127.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25103 const 328 (teneur '127')
+25103,"Tomate farcie, préemballée",25000,PROCNT,g,6.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25103 const 25000 (teneur '6')
+25103,"Tomate farcie, préemballée",40000,FAT,g,9.67,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25103 const 40000 (teneur '9,67')"
+25103,"Tomate farcie, préemballée",31000,CHOAVL,g,2.95,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25103 const 31000 (teneur '2,95')"
+25103,"Tomate farcie, préemballée",400,WATER,g,78.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25103 const 400 (teneur '78,5')"
+25135,"Pâtes à la carbonara (spaghetti, tagliatelles…), préemballées",328,ENERC_KCAL,kcal,161.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25135 const 328 (teneur '161')
+25135,"Pâtes à la carbonara (spaghetti, tagliatelles…), préemballées",25000,PROCNT,g,5.91,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25135 const 25000 (teneur '5,91')"
+25135,"Pâtes à la carbonara (spaghetti, tagliatelles…), préemballées",40000,FAT,g,8.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25135 const 40000 (teneur '8,7')"
+25135,"Pâtes à la carbonara (spaghetti, tagliatelles…), préemballées",31000,CHOAVL,g,14.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25135 const 31000 (teneur '14,2')"
+25135,"Pâtes à la carbonara (spaghetti, tagliatelles…), préemballées",400,WATER,g,67.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25135 const 400 (teneur '67,4')"
+25142,"Poisson blanc à la sauce moutarde, préemballé",328,ENERC_KCAL,kcal,90.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25142 const 328 (teneur '90,8')"
+25142,"Poisson blanc à la sauce moutarde, préemballé",25000,PROCNT,g,9.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25142 const 25000 (teneur '9,2')"
+25142,"Poisson blanc à la sauce moutarde, préemballé",40000,FAT,g,3.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25142 const 40000 (teneur '3,6')"
+25142,"Poisson blanc à la sauce moutarde, préemballé",31000,CHOAVL,g,5.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25142 const 31000 (teneur '5,4')"
+25146,"Poisson blanc sauce oseille, préemballé",328,ENERC_KCAL,kcal,111.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25146 const 328 (teneur '111')
+25146,"Poisson blanc sauce oseille, préemballé",25000,PROCNT,g,11.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25146 const 25000 (teneur '11,8')"
+25146,"Poisson blanc sauce oseille, préemballé",40000,FAT,g,5.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25146 const 40000 (teneur '5,5')"
+25146,"Poisson blanc sauce oseille, préemballé",31000,CHOAVL,g,3.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25146 const 31000 (teneur '3')
+25146,"Poisson blanc sauce oseille, préemballé",400,WATER,g,78.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25146 const 400 (teneur '78,6')"
+25169,"Spécialité chinoise type bouchée à la vapeur, préemballée, cuite",328,ENERC_KCAL,kcal,149.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25169 const 328 (teneur '149')
+25169,"Spécialité chinoise type bouchée à la vapeur, préemballée, cuite",25000,PROCNT,g,5.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25169 const 25000 (teneur '5,9')"
+25169,"Spécialité chinoise type bouchée à la vapeur, préemballée, cuite",40000,FAT,g,1.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25169 const 40000 (teneur '1,4')"
+25169,"Spécialité chinoise type bouchée à la vapeur, préemballée, cuite",31000,CHOAVL,g,28.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25169 const 31000 (teneur '28')
+25169,"Spécialité chinoise type bouchée à la vapeur, préemballée, cuite",400,WATER,g,64.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25169 const 400 (teneur '64,6')"
+25173,"Escalope panée, viennoise ou milanaise, veau, cuite",328,ENERC_KCAL,kcal,271.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25173 const 328 (teneur '271')
+25173,"Escalope panée, viennoise ou milanaise, veau, cuite",25000,PROCNT,g,22.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25173 const 25000 (teneur '22,9')"
+25173,"Escalope panée, viennoise ou milanaise, veau, cuite",40000,FAT,g,14.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25173 const 40000 (teneur '14,1')"
+25173,"Escalope panée, viennoise ou milanaise, veau, cuite",31000,CHOAVL,g,12.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25173 const 31000 (teneur '12,6')"
+25173,"Escalope panée, viennoise ou milanaise, veau, cuite",400,WATER,g,47.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25173 const 400 (teneur '47,8')"
+25226,"Nuggets ou croquette panée de soja et blé (ne convient pas aux véganes ou végétaliens), préemballé",328,ENERC_KCAL,kcal,253.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25226 const 328 (teneur '253')
+25226,"Nuggets ou croquette panée de soja et blé (ne convient pas aux véganes ou végétaliens), préemballé",25000,PROCNT,g,14.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25226 const 25000 (teneur '14,1')"
+25226,"Nuggets ou croquette panée de soja et blé (ne convient pas aux véganes ou végétaliens), préemballé",40000,FAT,g,12.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25226 const 40000 (teneur '12,6')"
+25226,"Nuggets ou croquette panée de soja et blé (ne convient pas aux véganes ou végétaliens), préemballé",31000,CHOAVL,g,18.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25226 const 31000 (teneur '18,5')"
+25226,"Nuggets ou croquette panée de soja et blé (ne convient pas aux véganes ou végétaliens), préemballé",400,WATER,g,48.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25226 const 400 (teneur '48')
+25523,"Toasts ou canapés salés, garnitures diverses, préemballés",328,ENERC_KCAL,kcal,251.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25523 const 328 (teneur '251')
+25523,"Toasts ou canapés salés, garnitures diverses, préemballés",25000,PROCNT,g,9.09,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25523 const 25000 (teneur '9,09')"
+25523,"Toasts ou canapés salés, garnitures diverses, préemballés",40000,FAT,g,13.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25523 const 40000 (teneur '13,3')"
+25523,"Toasts ou canapés salés, garnitures diverses, préemballés",31000,CHOAVL,g,22.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25523 const 31000 (teneur '22,4')"
+25523,"Toasts ou canapés salés, garnitures diverses, préemballés",400,WATER,g,53.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25523 const 400 (teneur '53,5')"
+25538,"Carpaccio de boeuf, avec marinade (huile, herbes, fromage), fait maison",328,ENERC_KCAL,kcal,271.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25538 const 328 (teneur '271')
+25538,"Carpaccio de boeuf, avec marinade (huile, herbes, fromage), fait maison",25000,PROCNT,g,15.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25538 const 25000 (teneur '15,2')"
+25538,"Carpaccio de boeuf, avec marinade (huile, herbes, fromage), fait maison",40000,FAT,g,23.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25538 const 40000 (teneur '23')
+25538,"Carpaccio de boeuf, avec marinade (huile, herbes, fromage), fait maison",31000,CHOAVL,g,0.55,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25538 const 31000 (teneur '0,55')"
+25538,"Carpaccio de boeuf, avec marinade (huile, herbes, fromage), fait maison",400,WATER,g,57.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25538 const 400 (teneur '57')
+25541,Brochette d'agneau,328,ENERC_KCAL,kcal,137.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25541 const 328 (teneur '137')
+25541,Brochette d'agneau,25000,PROCNT,g,13.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25541 const 25000 (teneur '13,2')"
+25541,Brochette d'agneau,40000,FAT,g,7.93,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25541 const 40000 (teneur '7,93')"
+25541,Brochette d'agneau,31000,CHOAVL,g,2.54,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25541 const 31000 (teneur '2,54')"
+25541,Brochette d'agneau,400,WATER,g,72.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25541 const 400 (teneur '72,8')"
+25573,Tarte ou quiche salée (aliment moyen),328,ENERC_KCAL,kcal,268.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25573 const 328 (teneur '268')
+25573,Tarte ou quiche salée (aliment moyen),25000,PROCNT,g,8.04,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25573 const 25000 (teneur '8,04')"
+25573,Tarte ou quiche salée (aliment moyen),40000,FAT,g,15.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25573 const 40000 (teneur '15,1')"
+25573,Tarte ou quiche salée (aliment moyen),31000,CHOAVL,g,24.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25573 const 31000 (teneur '24,3')"
+25573,Tarte ou quiche salée (aliment moyen),400,WATER,g,50.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25573 const 400 (teneur '50,8')"
+25661,"Sandwich pain polaire, jambon fromage, préemballé",328,ENERC_KCAL,kcal,266.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25661 const 328 (teneur '266')
+25661,"Sandwich pain polaire, jambon fromage, préemballé",25000,PROCNT,g,10.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25661 const 25000 (teneur '10,5')"
+25661,"Sandwich pain polaire, jambon fromage, préemballé",40000,FAT,g,12.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25661 const 40000 (teneur '12,3')"
+25661,"Sandwich pain polaire, jambon fromage, préemballé",31000,CHOAVL,g,27.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25661 const 31000 (teneur '27,2')"
+25923,"Soupe asiatique, avec pâtes, déshydratée reconstituée",328,ENERC_KCAL,kcal,38.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25923 const 328 (teneur '38,4')"
+25923,"Soupe asiatique, avec pâtes, déshydratée reconstituée",25000,PROCNT,g,1.12,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25923 const 25000 (teneur '1,12')"
+25923,"Soupe asiatique, avec pâtes, déshydratée reconstituée",40000,FAT,g,1.14,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25923 const 40000 (teneur '1,14')"
+25923,"Soupe asiatique, avec pâtes, déshydratée reconstituée",31000,CHOAVL,g,5.69,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25923 const 31000 (teneur '5,69')"
+25923,"Soupe asiatique, avec pâtes, déshydratée reconstituée",400,WATER,g,93.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25923 const 400 (teneur '93,3')"
+26259,"Salade de chou et carotte ou coleslaw, avec sauce, préemballée",328,ENERC_KCAL,kcal,105.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 26259 const 328 (teneur '105')
+26259,"Salade de chou et carotte ou coleslaw, avec sauce, préemballée",25000,PROCNT,g,0.94,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26259 const 25000 (teneur '0,94')"
+26259,"Salade de chou et carotte ou coleslaw, avec sauce, préemballée",40000,FAT,g,8.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26259 const 40000 (teneur '8,1')"
+26259,"Salade de chou et carotte ou coleslaw, avec sauce, préemballée",31000,CHOAVL,g,5.78,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26259 const 31000 (teneur '5,78')"
+26259,"Salade de chou et carotte ou coleslaw, avec sauce, préemballée",400,WATER,g,80.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26259 const 400 (teneur '80,4')"
+8297,Flan de légumes aux oeufs,328,ENERC_KCAL,kcal,210.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 8297 const 328 (teneur '210')
+8297,Flan de légumes aux oeufs,25000,PROCNT,g,5.38,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 8297 const 25000 (teneur '5,38')"
+8297,Flan de légumes aux oeufs,40000,FAT,g,18.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 8297 const 40000 (teneur '18,6')"
+8297,Flan de légumes aux oeufs,31000,CHOAVL,g,4.13,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 8297 const 31000 (teneur '4,13')"
+8297,Flan de légumes aux oeufs,400,WATER,g,68.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 8297 const 400 (teneur '68')
+13190,"Pomme Chantecler, chair sans peau, crue",328,ENERC_KCAL,kcal,47.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13190 const 328 (teneur '47,2')"
+13190,"Pomme Chantecler, chair sans peau, crue",25000,PROCNT,g,0.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13190 const 25000 (teneur '0,25')"
+13190,"Pomme Chantecler, chair sans peau, crue",31000,CHOAVL,g,11.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13190 const 31000 (teneur '11,2')"
+13190,"Pomme Chantecler, chair sans peau, crue",400,WATER,g,86.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13190 const 400 (teneur '86,4')"
+13715,"Abricot au sirop, appertisé, non égoutté",328,ENERC_KCAL,kcal,69.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13715 const 328 (teneur '69,7')"
+13715,"Abricot au sirop, appertisé, non égoutté",25000,PROCNT,g,0.29,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13715 const 25000 (teneur '0,29')"
+13715,"Abricot au sirop, appertisé, non égoutté",31000,CHOAVL,g,16.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13715 const 31000 (teneur '16,3')"
+13715,"Abricot au sirop, appertisé, non égoutté",400,WATER,g,81.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13715 const 400 (teneur '81,4')"
+13999,Fruit cru (aliment moyen),328,ENERC_KCAL,kcal,56.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13999 const 328 (teneur '56,6')"
+13999,Fruit cru (aliment moyen),25000,PROCNT,g,0.69,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13999 const 25000 (teneur '0,69')"
+13999,Fruit cru (aliment moyen),40000,FAT,g,0.26,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13999 const 40000 (teneur '0,26')"
+13999,Fruit cru (aliment moyen),31000,CHOAVL,g,12.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13999 const 31000 (teneur '12,1')"
+13999,Fruit cru (aliment moyen),400,WATER,g,84.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13999 const 400 (teneur '84,3')"
+15008,"Noix du Brésil ou noix d'Amazonie, sans sel ajouté",328,ENERC_KCAL,kcal,701.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 15008 const 328 (teneur '701')
+15008,"Noix du Brésil ou noix d'Amazonie, sans sel ajouté",25000,PROCNT,g,14.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15008 const 25000 (teneur '14,3')"
+15008,"Noix du Brésil ou noix d'Amazonie, sans sel ajouté",40000,FAT,g,67.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15008 const 40000 (teneur '67,1')"
+15008,"Noix du Brésil ou noix d'Amazonie, sans sel ajouté",31000,CHOAVL,g,4.23,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15008 const 31000 (teneur '4,23')"
+15008,"Noix du Brésil ou noix d'Amazonie, sans sel ajouté",400,WATER,g,3.42,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15008 const 400 (teneur '3,42')"
+15032,"Luzerne, graine",328,ENERC_KCAL,kcal,426.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 15032 const 328 (teneur '426')
+15032,"Luzerne, graine",25000,PROCNT,g,29.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15032 const 25000 (teneur '29,7')"
+15032,"Luzerne, graine",40000,FAT,g,12.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15032 const 40000 (teneur '12,6')"
+15032,"Luzerne, graine",31000,CHOAVL,g,39.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15032 const 31000 (teneur '39,3')"
+15032,"Luzerne, graine",400,WATER,g,7.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15032 const 400 (teneur '7,4')"
+15202,Beurre de cacahuète ou pâte d'arachide,328,ENERC_KCAL,kcal,643.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 15202 const 328 (teneur '643')
+15202,Beurre de cacahuète ou pâte d'arachide,25000,PROCNT,g,22.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15202 const 25000 (teneur '22,2')"
+15202,Beurre de cacahuète ou pâte d'arachide,40000,FAT,g,51.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15202 const 40000 (teneur '51,4')"
+15202,Beurre de cacahuète ou pâte d'arachide,31000,CHOAVL,g,17.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15202 const 31000 (teneur '17,3')"
+15202,Beurre de cacahuète ou pâte d'arachide,400,WATER,g,1.23,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 15202 const 400 (teneur '1,23')"
+20025,"Céleri-rave, cuit",328,ENERC_KCAL,kcal,36.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20025 const 328 (teneur '36,5')"
+20025,"Céleri-rave, cuit",25000,PROCNT,g,1.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20025 const 25000 (teneur '1,3')"
+20025,"Céleri-rave, cuit",40000,FAT,g,0.86,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20025 const 40000 (teneur '0,86')"
+20025,"Céleri-rave, cuit",31000,CHOAVL,g,4.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20025 const 31000 (teneur '4,6')"
+20025,"Céleri-rave, cuit",400,WATER,g,90.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20025 const 400 (teneur '90,1')"
+20038,"Pissenlit, cru",328,ENERC_KCAL,kcal,48.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20038 const 328 (teneur '48,5')"
+20038,"Pissenlit, cru",25000,PROCNT,g,2.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20038 const 25000 (teneur '2,7')"
+20038,"Pissenlit, cru",40000,FAT,g,0.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20038 const 40000 (teneur '0,7')"
+20038,"Pissenlit, cru",31000,CHOAVL,g,6.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20038 const 31000 (teneur '6,1')"
+20038,"Pissenlit, cru",400,WATER,g,85.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20038 const 400 (teneur '85,6')"
+20093,"Petits pois et carottes, appertisés, égouttés",328,ENERC_KCAL,kcal,53.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20093 const 328 (teneur '53,8')"
+20093,"Petits pois et carottes, appertisés, égouttés",25000,PROCNT,g,2.52,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20093 const 25000 (teneur '2,52')"
+20093,"Petits pois et carottes, appertisés, égouttés",40000,FAT,g,0.37,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20093 const 40000 (teneur '0,37')"
+20093,"Petits pois et carottes, appertisés, égouttés",31000,CHOAVL,g,8.58,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20093 const 31000 (teneur '8,58')"
+20093,"Petits pois et carottes, appertisés, égouttés",400,WATER,g,87.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20093 const 400 (teneur '87,5')"
+20181,"Panais, cru",328,ENERC_KCAL,kcal,67.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20181 const 328 (teneur '67,9')"
+20181,"Panais, cru",25000,PROCNT,g,1.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20181 const 25000 (teneur '1,2')"
+20181,"Panais, cru",40000,FAT,g,0.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20181 const 40000 (teneur '0,3')"
+20181,"Panais, cru",31000,CHOAVL,g,12.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20181 const 31000 (teneur '12,6')"
+20181,"Panais, cru",400,WATER,g,79.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20181 const 400 (teneur '79,5')"
+20272,"Mesclun ou salade, mélange de jeunes pousses",328,ENERC_KCAL,kcal,22.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20272 const 328 (teneur '22')
+20272,"Mesclun ou salade, mélange de jeunes pousses",25000,PROCNT,g,2.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20272 const 25000 (teneur '2')
+20272,"Mesclun ou salade, mélange de jeunes pousses",40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20272 const 40000 (teneur '0')
+20272,"Mesclun ou salade, mélange de jeunes pousses",31000,CHOAVL,g,2.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20272 const 31000 (teneur '2,5')"
+20313,"Courgette, chair et peau, rôtie/cuite au four",328,ENERC_KCAL,kcal,20.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20313 const 328 (teneur '20,3')"
+20313,"Courgette, chair et peau, rôtie/cuite au four",25000,PROCNT,g,1.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20313 const 25000 (teneur '1,5')"
+20313,"Courgette, chair et peau, rôtie/cuite au four",31000,CHOAVL,g,3.13,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20313 const 31000 (teneur '3,13')"
+20313,"Courgette, chair et peau, rôtie/cuite au four",400,WATER,g,93.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20313 const 400 (teneur '93,1')"
+20330,"Poivron vert, sauté/poêlé",328,ENERC_KCAL,kcal,27.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20330 const 328 (teneur '27,3')"
+20330,"Poivron vert, sauté/poêlé",25000,PROCNT,g,1.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20330 const 25000 (teneur '1,25')"
+20330,"Poivron vert, sauté/poêlé",40000,FAT,g,0.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20330 const 40000 (teneur '0,3')"
+20330,"Poivron vert, sauté/poêlé",31000,CHOAVL,g,3.53,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20330 const 31000 (teneur '3,53')"
+20330,"Poivron vert, sauté/poêlé",400,WATER,g,92.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20330 const 400 (teneur '92,4')"
+20497,"Légumes pour couscous, cuits",328,ENERC_KCAL,kcal,29.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20497 const 328 (teneur '29,6')"
+20497,"Légumes pour couscous, cuits",25000,PROCNT,g,1.58,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20497 const 25000 (teneur '1,58')"
+20497,"Légumes pour couscous, cuits",40000,FAT,g,0.42,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20497 const 40000 (teneur '0,42')"
+20497,"Légumes pour couscous, cuits",31000,CHOAVL,g,3.87,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20497 const 31000 (teneur '3,87')"
+20497,"Légumes pour couscous, cuits",400,WATER,g,90.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20497 const 400 (teneur '90,9')"
+20542,"Fève, pelée, fraîche, surgelée, bouillie/cuite à l'eau",328,ENERC_KCAL,kcal,71.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20542 const 328 (teneur '71,9')"
+20542,"Fève, pelée, fraîche, surgelée, bouillie/cuite à l'eau",25000,PROCNT,g,6.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20542 const 25000 (teneur '6,4')"
+20542,"Fève, pelée, fraîche, surgelée, bouillie/cuite à l'eau",40000,FAT,g,0.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20542 const 40000 (teneur '0,5')"
+20542,"Fève, pelée, fraîche, surgelée, bouillie/cuite à l'eau",31000,CHOAVL,g,9.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20542 const 31000 (teneur '9')
+20542,"Fève, pelée, fraîche, surgelée, bouillie/cuite à l'eau",400,WATER,g,80.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20542 const 400 (teneur '80,7')"
+20812,"Farine de pulpe de patate douce, prélevée à la Martinique",328,ENERC_KCAL,kcal,223.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20812 const 328 (teneur '223')
+20812,"Farine de pulpe de patate douce, prélevée à la Martinique",31000,CHOAVL,g,50.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20812 const 31000 (teneur '50,1')"
+20812,"Farine de pulpe de patate douce, prélevée à la Martinique",400,WATER,g,8.55,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20812 const 400 (teneur '8,55')"
+4018,"Purée de pomme de terre, avec lait et beurre, sans sel ajouté",328,ENERC_KCAL,kcal,94.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 4018 const 328 (teneur '94,8')"
+4018,"Purée de pomme de terre, avec lait et beurre, sans sel ajouté",25000,PROCNT,g,1.89,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 4018 const 25000 (teneur '1,89')"
+4018,"Purée de pomme de terre, avec lait et beurre, sans sel ajouté",40000,FAT,g,2.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 4018 const 40000 (teneur '2,4')"
+4018,"Purée de pomme de terre, avec lait et beurre, sans sel ajouté",31000,CHOAVL,g,15.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 4018 const 31000 (teneur '15,7')"
+4018,"Purée de pomme de terre, avec lait et beurre, sans sel ajouté",400,WATER,g,77.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 4018 const 400 (teneur '77')
+53503,"Igname, épluchée, bouillie/cuite à l'eau",328,ENERC_KCAL,kcal,109.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 53503 const 328 (teneur '109')
+53503,"Igname, épluchée, bouillie/cuite à l'eau",25000,PROCNT,g,1.49,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 53503 const 25000 (teneur '1,49')"
+53503,"Igname, épluchée, bouillie/cuite à l'eau",40000,FAT,g,0.14,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 53503 const 40000 (teneur '0,14')"
+53503,"Igname, épluchée, bouillie/cuite à l'eau",31000,CHOAVL,g,23.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 53503 const 31000 (teneur '23,6')"
+53503,"Igname, épluchée, bouillie/cuite à l'eau",400,WATER,g,70.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 53503 const 400 (teneur '70,1')"
+25510,"Gnocchi à la pomme de terre, cuit",328,ENERC_KCAL,kcal,178.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25510 const 328 (teneur '178')
+25510,"Gnocchi à la pomme de terre, cuit",25000,PROCNT,g,5.01,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25510 const 25000 (teneur '5,01')"
+25510,"Gnocchi à la pomme de terre, cuit",40000,FAT,g,2.05,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25510 const 40000 (teneur '2,05')"
+25510,"Gnocchi à la pomme de terre, cuit",31000,CHOAVL,g,34.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25510 const 31000 (teneur '34,1')"
+25510,"Gnocchi à la pomme de terre, cuit",400,WATER,g,55.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25510 const 400 (teneur '55,5')"
+38104,"Chips, beignet ou pétale à la crevette",328,ENERC_KCAL,kcal,508.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 38104 const 328 (teneur '508')
+38104,"Chips, beignet ou pétale à la crevette",25000,PROCNT,g,3.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38104 const 25000 (teneur '3,1')"
+38104,"Chips, beignet ou pétale à la crevette",40000,FAT,g,26.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38104 const 40000 (teneur '26,6')"
+38104,"Chips, beignet ou pétale à la crevette",31000,CHOAVL,g,63.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38104 const 31000 (teneur '63,7')"
+38104,"Chips, beignet ou pétale à la crevette",400,WATER,g,3.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38104 const 400 (teneur '3,5')"
+38407,"Biscuit ou cracker apéritif, feuilleté (flûtes, torsades, palmiers…), sans fromage",328,ENERC_KCAL,kcal,476.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 38407 const 328 (teneur '476')
+38407,"Biscuit ou cracker apéritif, feuilleté (flûtes, torsades, palmiers…), sans fromage",25000,PROCNT,g,10.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38407 const 25000 (teneur '10,9')"
+38407,"Biscuit ou cracker apéritif, feuilleté (flûtes, torsades, palmiers…), sans fromage",40000,FAT,g,20.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38407 const 40000 (teneur '20,7')"
+38407,"Biscuit ou cracker apéritif, feuilleté (flûtes, torsades, palmiers…), sans fromage",31000,CHOAVL,g,59.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38407 const 31000 (teneur '59,7')"
+38407,"Biscuit ou cracker apéritif, feuilleté (flûtes, torsades, palmiers…), sans fromage",400,WATER,g,2.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38407 const 400 (teneur '2,5')"
+38408,"Biscuit apéritif, crêpe dentelle fourrée, préemballée",328,ENERC_KCAL,kcal,555.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 38408 const 328 (teneur '555')
+38408,"Biscuit apéritif, crêpe dentelle fourrée, préemballée",25000,PROCNT,g,9.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38408 const 25000 (teneur '9,3')"
+38408,"Biscuit apéritif, crêpe dentelle fourrée, préemballée",40000,FAT,g,35.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38408 const 40000 (teneur '35,6')"
+38408,"Biscuit apéritif, crêpe dentelle fourrée, préemballée",31000,CHOAVL,g,48.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38408 const 31000 (teneur '48,8')"
+38415,"Gressin, au sésame, allégé en matière grasse",328,ENERC_KCAL,kcal,427.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 38415 const 328 (teneur '427')
+38415,"Gressin, au sésame, allégé en matière grasse",25000,PROCNT,g,14.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 38415 const 25000 (teneur '14')
+38415,"Gressin, au sésame, allégé en matière grasse",40000,FAT,g,13.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38415 const 40000 (teneur '13,9')"
+38415,"Gressin, au sésame, allégé en matière grasse",31000,CHOAVL,g,56.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 38415 const 31000 (teneur '56,8')"
+51510,"Frik (blé dur immature concassé), cru",328,ENERC_KCAL,kcal,323.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 51510 const 328 (teneur '323')
+51510,"Frik (blé dur immature concassé), cru",25000,PROCNT,g,9.62,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 51510 const 25000 (teneur '9,62')"
+51510,"Frik (blé dur immature concassé), cru",40000,FAT,g,2.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 51510 const 40000 (teneur '2,25')"
+51510,"Frik (blé dur immature concassé), cru",31000,CHOAVL,g,55.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 51510 const 31000 (teneur '55,8')"
+51510,"Frik (blé dur immature concassé), cru",400,WATER,g,11.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 51510 const 400 (teneur '11,3')"
+7106,"Pain complet au seigle, préemballé",328,ENERC_KCAL,kcal,213.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7106 const 328 (teneur '213')
+7106,"Pain complet au seigle, préemballé",25000,PROCNT,g,5.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7106 const 25000 (teneur '5,7')"
+7106,"Pain complet au seigle, préemballé",40000,FAT,g,0.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7106 const 40000 (teneur '0,9')"
+7106,"Pain complet au seigle, préemballé",31000,CHOAVL,g,39.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7106 const 31000 (teneur '39,5')"
+7106,"Pain complet au seigle, préemballé",400,WATER,g,42.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7106 const 400 (teneur '42,7')"
+7201,"Pain de mie blanc, sans croûte, préemballé",328,ENERC_KCAL,kcal,266.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7201 const 328 (teneur '266')
+7201,"Pain de mie blanc, sans croûte, préemballé",25000,PROCNT,g,6.93,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7201 const 25000 (teneur '6,93')"
+7201,"Pain de mie blanc, sans croûte, préemballé",40000,FAT,g,3.23,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7201 const 40000 (teneur '3,23')"
+7201,"Pain de mie blanc, sans croûte, préemballé",31000,CHOAVL,g,50.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7201 const 31000 (teneur '50,2')"
+7201,"Pain de mie blanc, sans croûte, préemballé",400,WATER,g,34.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7201 const 400 (teneur '34,8')"
+7300,Biscotte classique,328,ENERC_KCAL,kcal,394.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7300 const 328 (teneur '394')
+7300,Biscotte classique,25000,PROCNT,g,10.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7300 const 25000 (teneur '10')
+7300,Biscotte classique,40000,FAT,g,5.43,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7300 const 40000 (teneur '5,43')"
+7300,Biscotte classique,31000,CHOAVL,g,73.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7300 const 31000 (teneur '73,2')"
+7300,Biscotte classique,400,WATER,g,2.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7300 const 400 (teneur '2,8')"
+7349,Cracker de table au blé complet,328,ENERC_KCAL,kcal,436.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7349 const 328 (teneur '436')
+7349,Cracker de table au blé complet,25000,PROCNT,g,12.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7349 const 25000 (teneur '12,6')"
+7349,Cracker de table au blé complet,40000,FAT,g,15.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7349 const 40000 (teneur '15,4')"
+7349,Cracker de table au blé complet,31000,CHOAVL,g,55.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7349 const 31000 (teneur '55,6')"
+7407,Petit pain grillé suédois au froment,328,ENERC_KCAL,kcal,411.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7407 const 328 (teneur '411')
+7407,Petit pain grillé suédois au froment,25000,PROCNT,g,8.66,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7407 const 25000 (teneur '8,66')"
+7407,Petit pain grillé suédois au froment,40000,FAT,g,8.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7407 const 40000 (teneur '8,4')"
+7407,Petit pain grillé suédois au froment,31000,CHOAVL,g,71.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7407 const 31000 (teneur '71,6')"
+7407,Petit pain grillé suédois au froment,400,WATER,g,4.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7407 const 400 (teneur '4,5')"
+7409,Petit pain grillé suédois aux céréales et graines,328,ENERC_KCAL,kcal,404.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7409 const 328 (teneur '404')
+7409,Petit pain grillé suédois aux céréales et graines,25000,PROCNT,g,10.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7409 const 25000 (teneur '10,4')"
+7409,Petit pain grillé suédois aux céréales et graines,40000,FAT,g,8.14,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7409 const 40000 (teneur '8,14')"
+7409,Petit pain grillé suédois aux céréales et graines,31000,CHOAVL,g,68.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7409 const 31000 (teneur '68,6')"
+7422,Petit pain grillé suédois brioché,328,ENERC_KCAL,kcal,421.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7422 const 328 (teneur '421')
+7422,Petit pain grillé suédois brioché,25000,PROCNT,g,9.43,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7422 const 25000 (teneur '9,43')"
+7422,Petit pain grillé suédois brioché,40000,FAT,g,10.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7422 const 40000 (teneur '10,6')"
+7422,Petit pain grillé suédois brioché,31000,CHOAVL,g,69.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7422 const 31000 (teneur '69,4')"
+7425,"Pain grillé aux céréales, tranches, préemballé",328,ENERC_KCAL,kcal,417.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7425 const 328 (teneur '417')
+7425,"Pain grillé aux céréales, tranches, préemballé",25000,PROCNT,g,12.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7425 const 25000 (teneur '12,8')"
+7425,"Pain grillé aux céréales, tranches, préemballé",40000,FAT,g,7.33,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7425 const 40000 (teneur '7,33')"
+7425,"Pain grillé aux céréales, tranches, préemballé",31000,CHOAVL,g,70.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7425 const 31000 (teneur '70')
+7425,"Pain grillé aux céréales, tranches, préemballé",400,WATER,g,2.38,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7425 const 400 (teneur '2,38')"
+9081,"Blé dur (grains entiers), précuit, cuit, sans sel ajouté",328,ENERC_KCAL,kcal,153.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 9081 const 328 (teneur '153')
+9081,"Blé dur (grains entiers), précuit, cuit, sans sel ajouté",25000,PROCNT,g,5.36,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9081 const 25000 (teneur '5,36')"
+9081,"Blé dur (grains entiers), précuit, cuit, sans sel ajouté",40000,FAT,g,1.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9081 const 40000 (teneur '1,1')"
+9081,"Blé dur (grains entiers), précuit, cuit, sans sel ajouté",31000,CHOAVL,g,28.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9081 const 31000 (teneur '28,2')"
+9081,"Blé dur (grains entiers), précuit, cuit, sans sel ajouté",400,WATER,g,61.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9081 const 400 (teneur '61,5')"
+9816,"Pâtes fraîches, aux oeufs, cuites, sans sel ajouté",328,ENERC_KCAL,kcal,168.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 9816 const 328 (teneur '168')
+9816,"Pâtes fraîches, aux oeufs, cuites, sans sel ajouté",25000,PROCNT,g,5.76,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9816 const 25000 (teneur '5,76')"
+9816,"Pâtes fraîches, aux oeufs, cuites, sans sel ajouté",40000,FAT,g,1.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9816 const 40000 (teneur '1,3')"
+9816,"Pâtes fraîches, aux oeufs, cuites, sans sel ajouté",31000,CHOAVL,g,32.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 9816 const 31000 (teneur '32')
+9816,"Pâtes fraîches, aux oeufs, cuites, sans sel ajouté",400,WATER,g,59.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9816 const 400 (teneur '59,1')"
+9871,"Pâtes sèches, au blé complet, cuites, sans sel ajouté",328,ENERC_KCAL,kcal,179.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 9871 const 328 (teneur '179')
+9871,"Pâtes sèches, au blé complet, cuites, sans sel ajouté",25000,PROCNT,g,7.35,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9871 const 25000 (teneur '7,35')"
+9871,"Pâtes sèches, au blé complet, cuites, sans sel ajouté",40000,FAT,g,1.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9871 const 40000 (teneur '1,4')"
+9871,"Pâtes sèches, au blé complet, cuites, sans sel ajouté",31000,CHOAVL,g,31.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9871 const 31000 (teneur '31,3')"
+9871,"Pâtes sèches, au blé complet, cuites, sans sel ajouté",400,WATER,g,54.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9871 const 400 (teneur '54,3')"
+9901,"Vermicelle de riz, cuite, sans sel ajouté",328,ENERC_KCAL,kcal,86.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9901 const 328 (teneur '86,6')"
+9901,"Vermicelle de riz, cuite, sans sel ajouté",25000,PROCNT,g,1.43,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9901 const 25000 (teneur '1,43')"
+9901,"Vermicelle de riz, cuite, sans sel ajouté",31000,CHOAVL,g,20.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9901 const 31000 (teneur '20,1')"
+9901,"Vermicelle de riz, cuite, sans sel ajouté",400,WATER,g,77.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9901 const 400 (teneur '77,8')"
+10005,"Crabe, miettes et ou pattes décortiquées, appertisé, égoutté",328,ENERC_KCAL,kcal,97.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10005 const 328 (teneur '97,8')"
+10005,"Crabe, miettes et ou pattes décortiquées, appertisé, égoutté",25000,PROCNT,g,18.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10005 const 25000 (teneur '18,1')"
+10005,"Crabe, miettes et ou pattes décortiquées, appertisé, égoutté",40000,FAT,g,0.96,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10005 const 40000 (teneur '0,96')"
+10005,"Crabe, miettes et ou pattes décortiquées, appertisé, égoutté",31000,CHOAVL,g,4.16,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10005 const 31000 (teneur '4,16')"
+10005,"Crabe, miettes et ou pattes décortiquées, appertisé, égoutté",400,WATER,g,74.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10005 const 400 (teneur '74,7')"
+10006,"Crevette grise, cuite",328,ENERC_KCAL,kcal,89.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10006 const 328 (teneur '89,4')"
+10006,"Crevette grise, cuite",25000,PROCNT,g,19.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10006 const 25000 (teneur '19,4')"
+10006,"Crevette grise, cuite",40000,FAT,g,1.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10006 const 40000 (teneur '1,1')"
+10006,"Crevette grise, cuite",31000,CHOAVL,g,0.47,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10006 const 31000 (teneur '0,47')"
+10006,"Crevette grise, cuite",400,WATER,g,74.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10006 const 400 (teneur '74,7')"
+10038,"Crevette, surgelée, crue",328,ENERC_KCAL,kcal,105.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 10038 const 328 (teneur '105')
+10038,"Crevette, surgelée, crue",25000,PROCNT,g,23.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10038 const 25000 (teneur '23,4')"
+10038,"Crevette, surgelée, crue",40000,FAT,g,0.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10038 const 40000 (teneur '0,9')"
+10038,"Crevette, surgelée, crue",31000,CHOAVL,g,0.74,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10038 const 31000 (teneur '0,74')"
+10039,"Crabe, cru",328,ENERC_KCAL,kcal,104.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 10039 const 328 (teneur '104')
+10039,"Crabe, cru",25000,PROCNT,g,19.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10039 const 25000 (teneur '19,5')"
+10039,"Crabe, cru",40000,FAT,g,2.86,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10039 const 40000 (teneur '2,86')"
+10039,"Crabe, cru",31000,CHOAVL,g,0.027,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10039 const 31000 (teneur '0,027')"
+10039,"Crabe, cru",400,WATER,g,75.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10039 const 400 (teneur '75,7')"
+10048,"Pecten d'Amérique ou peigne du Canada, noix, crue",328,ENERC_KCAL,kcal,81.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10048 const 328 (teneur '81,3')"
+10048,"Pecten d'Amérique ou peigne du Canada, noix, crue",25000,PROCNT,g,17.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10048 const 25000 (teneur '17,3')"
+10048,"Pecten d'Amérique ou peigne du Canada, noix, crue",40000,FAT,g,0.54,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10048 const 40000 (teneur '0,54')"
+10048,"Pecten d'Amérique ou peigne du Canada, noix, crue",31000,CHOAVL,g,1.78,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10048 const 31000 (teneur '1,78')"
+10048,"Pecten d'Amérique ou peigne du Canada, noix, crue",400,WATER,g,78.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 10048 const 400 (teneur '78,7')"
+22070,"Oeuf d'oie, cru",328,ENERC_KCAL,kcal,180.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 22070 const 328 (teneur '180')
+22070,"Oeuf d'oie, cru",25000,PROCNT,g,13.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 22070 const 25000 (teneur '13,9')"
+22070,"Oeuf d'oie, cru",40000,FAT,g,13.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 22070 const 40000 (teneur '13,3')"
+22070,"Oeuf d'oie, cru",31000,CHOAVL,g,1.35,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 22070 const 31000 (teneur '1,35')"
+22070,"Oeuf d'oie, cru",400,WATER,g,70.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 22070 const 400 (teneur '70,4')"
+25997,"Cabillaud, cuit, sans précision (aliment moyen)",328,ENERC_KCAL,kcal,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 25997 const 328 (teneur '100')
+25997,"Cabillaud, cuit, sans précision (aliment moyen)",25000,PROCNT,g,23.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25997 const 25000 (teneur '23,3')"
+25997,"Cabillaud, cuit, sans précision (aliment moyen)",40000,FAT,g,0.76,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25997 const 40000 (teneur '0,76')"
+25997,"Cabillaud, cuit, sans précision (aliment moyen)",400,WATER,g,74.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 25997 const 400 (teneur '74,8')"
+26029,"Poisson pané, surgelé, cru",328,ENERC_KCAL,kcal,163.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 26029 const 328 (teneur '163')
+26029,"Poisson pané, surgelé, cru",25000,PROCNT,g,11.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 26029 const 25000 (teneur '11')
+26029,"Poisson pané, surgelé, cru",40000,FAT,g,6.14,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26029 const 40000 (teneur '6,14')"
+26029,"Poisson pané, surgelé, cru",31000,CHOAVL,g,15.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26029 const 31000 (teneur '15,6')"
+26029,"Poisson pané, surgelé, cru",400,WATER,g,64.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26029 const 400 (teneur '64,8')"
+26161,"Saumon, sauvage, cru",328,ENERC_KCAL,kcal,166.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 26161 const 328 (teneur '166')
+26161,"Saumon, sauvage, cru",25000,PROCNT,g,21.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 26161 const 25000 (teneur '21')
+26161,"Saumon, sauvage, cru",40000,FAT,g,9.17,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26161 const 40000 (teneur '9,17')"
+26161,"Saumon, sauvage, cru",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 26161 const 31000 (teneur '0')
+26161,"Saumon, sauvage, cru",400,WATER,g,68.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26161 const 400 (teneur '68,4')"
+26238,"Hareng gras, cru",328,ENERC_KCAL,kcal,175.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 26238 const 328 (teneur '175')
+26238,"Hareng gras, cru",25000,PROCNT,g,18.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26238 const 25000 (teneur '18,7')"
+26238,"Hareng gras, cru",40000,FAT,g,10.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26238 const 40000 (teneur '10,8')"
+26238,"Hareng gras, cru",31000,CHOAVL,g,0.77,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26238 const 31000 (teneur '0,77')"
+26238,"Hareng gras, cru",400,WATER,g,68.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26238 const 400 (teneur '68,3')"
+26248,"Sole, grillée/poêlée",328,ENERC_KCAL,kcal,94.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26248 const 328 (teneur '94,4')"
+26248,"Sole, grillée/poêlée",25000,PROCNT,g,23.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26248 const 25000 (teneur '23,6')"
+26248,"Sole, grillée/poêlée",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 26248 const 31000 (teneur '0')
+26248,"Sole, grillée/poêlée",400,WATER,g,75.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 26248 const 400 (teneur '75,6')"
+27025,"Perche du Nil, crue",328,ENERC_KCAL,kcal,82.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 27025 const 328 (teneur '82,4')"
+27025,"Perche du Nil, crue",25000,PROCNT,g,19.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 27025 const 25000 (teneur '19,1')"
+27025,"Perche du Nil, crue",40000,FAT,g,0.68,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 27025 const 40000 (teneur '0,68')"
+27025,"Perche du Nil, crue",400,WATER,g,79.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 27025 const 400 (teneur '79')
+28476,"Porc, maigre 80/20 cru",328,ENERC_KCAL,kcal,293.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 28476 const 328 (teneur '293')
+28476,"Porc, maigre 80/20 cru",25000,PROCNT,g,17.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 28476 const 25000 (teneur '17,3')"
+28476,"Porc, maigre 80/20 cru",40000,FAT,g,24.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 28476 const 40000 (teneur '24,7')"
+28476,"Porc, maigre 80/20 cru",31000,CHOAVL,g,0.26,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 28476 const 31000 (teneur '0,26')"
+28476,"Porc, maigre 80/20 cru",400,WATER,g,60.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 28476 const 400 (teneur '60,1')"
+28917,Rond de jambon cuit,328,ENERC_KCAL,kcal,182.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 28917 const 328 (teneur '182')
+28917,Rond de jambon cuit,25000,PROCNT,g,20.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 28917 const 25000 (teneur '20,3')"
+28917,Rond de jambon cuit,40000,FAT,g,10.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 28917 const 40000 (teneur '10,6')"
+28917,Rond de jambon cuit,31000,CHOAVL,g,1.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 28917 const 31000 (teneur '1,4')"
+28917,Rond de jambon cuit,400,WATER,g,66.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 28917 const 400 (teneur '66')
+36023,"Poulet, aile, viande et peau crues",328,ENERC_KCAL,kcal,181.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 36023 const 328 (teneur '181')
+36023,"Poulet, aile, viande et peau crues",25000,PROCNT,g,20.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 36023 const 25000 (teneur '20,4')"
+36023,"Poulet, aile, viande et peau crues",40000,FAT,g,11.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 36023 const 40000 (teneur '11')
+36023,"Poulet, aile, viande et peau crues",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 36023 const 31000 (teneur '0')
+36023,"Poulet, aile, viande et peau crues",400,WATER,g,66.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 36023 const 400 (teneur '66,9')"
+6254,"Boeuf, steak haché 15% MG cru",328,ENERC_KCAL,kcal,215.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 6254 const 328 (teneur '215')
+6254,"Boeuf, steak haché 15% MG cru",25000,PROCNT,g,20.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 6254 const 25000 (teneur '20,2')"
+6254,"Boeuf, steak haché 15% MG cru",40000,FAT,g,14.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 6254 const 40000 (teneur '14,8')"
+6254,"Boeuf, steak haché 15% MG cru",31000,CHOAVL,g,0.47,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 6254 const 31000 (teneur '0,47')"
+6254,"Boeuf, steak haché 15% MG cru",400,WATER,g,65.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 6254 const 400 (teneur '65,4')"
+6311,"Boeuf, queue crue",328,ENERC_KCAL,kcal,203.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 6311 const 328 (teneur '203')
+6311,"Boeuf, queue crue",25000,PROCNT,g,21.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 6311 const 25000 (teneur '21,5')"
+6311,"Boeuf, queue crue",40000,FAT,g,12.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 6311 const 40000 (teneur '12,9')"
+6311,"Boeuf, queue crue",31000,CHOAVL,g,0.23,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 6311 const 31000 (teneur '0,23')"
+6311,"Boeuf, queue crue",400,WATER,g,65.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 6311 const 400 (teneur '65')
+8801,"Boudin blanc, à cuire",328,ENERC_KCAL,kcal,244.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 8801 const 328 (teneur '244')
+8801,"Boudin blanc, à cuire",25000,PROCNT,g,10.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 8801 const 25000 (teneur '10')
+8801,"Boudin blanc, à cuire",40000,FAT,g,21.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 8801 const 40000 (teneur '21')
+8801,"Boudin blanc, à cuire",31000,CHOAVL,g,3.64,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 8801 const 31000 (teneur '3,64')"
+8801,"Boudin blanc, à cuire",400,WATER,g,64.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 8801 const 400 (teneur '64,2')"
+12033,"Fromage à pâte molle, triple crème, environ 38% MG",328,ENERC_KCAL,kcal,380.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12033 const 328 (teneur '380')
+12033,"Fromage à pâte molle, triple crème, environ 38% MG",25000,PROCNT,g,10.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12033 const 25000 (teneur '10,5')"
+12033,"Fromage à pâte molle, triple crème, environ 38% MG",40000,FAT,g,37.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12033 const 40000 (teneur '37,2')"
+12033,"Fromage à pâte molle, triple crème, environ 38% MG",31000,CHOAVL,g,1.05,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12033 const 31000 (teneur '1,05')"
+12033,"Fromage à pâte molle, triple crème, environ 38% MG",400,WATER,g,48.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12033 const 400 (teneur '48')
+12067,"Fromage type feta, au lait de vache 100%, à l'huile et aux aromates, égoutté",25000,PROCNT,g,9.75,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12067 const 25000 (teneur '9,75')"
+12067,"Fromage type feta, au lait de vache 100%, à l'huile et aux aromates, égoutté",40000,FAT,g,56.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12067 const 40000 (teneur '56,6')"
+12067,"Fromage type feta, au lait de vache 100%, à l'huile et aux aromates, égoutté",31000,CHOAVL,g,0.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12067 const 31000 (teneur '0,5')"
+12070,"Fromage frais ou spécialité fromagère non affinée, ail et fines herbes, à tartiner, non allégée en matière grasse",328,ENERC_KCAL,kcal,320.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12070 const 328 (teneur '320')
+12070,"Fromage frais ou spécialité fromagère non affinée, ail et fines herbes, à tartiner, non allégée en matière grasse",25000,PROCNT,g,8.03,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12070 const 25000 (teneur '8,03')"
+12070,"Fromage frais ou spécialité fromagère non affinée, ail et fines herbes, à tartiner, non allégée en matière grasse",40000,FAT,g,30.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12070 const 40000 (teneur '30,8')"
+12070,"Fromage frais ou spécialité fromagère non affinée, ail et fines herbes, à tartiner, non allégée en matière grasse",31000,CHOAVL,g,2.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12070 const 31000 (teneur '2,7')"
+12070,"Fromage frais ou spécialité fromagère non affinée, ail et fines herbes, à tartiner, non allégée en matière grasse",400,WATER,g,56.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12070 const 400 (teneur '56,5')"
+12115,Emmental ou emmenthal,328,ENERC_KCAL,kcal,373.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12115 const 328 (teneur '373')
+12115,Emmental ou emmenthal,25000,PROCNT,g,27.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12115 const 25000 (teneur '27,9')"
+12115,Emmental ou emmenthal,40000,FAT,g,28.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12115 const 40000 (teneur '28,8')"
+12115,Emmental ou emmenthal,400,WATER,g,39.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12115 const 400 (teneur '39,1')"
+12305,"Fromage fondu, allégé en matière grasse",328,ENERC_KCAL,kcal,134.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12305 const 328 (teneur '134')
+12305,"Fromage fondu, allégé en matière grasse",25000,PROCNT,g,11.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12305 const 25000 (teneur '11,5')"
+12305,"Fromage fondu, allégé en matière grasse",40000,FAT,g,7.36,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12305 const 40000 (teneur '7,36')"
+12305,"Fromage fondu, allégé en matière grasse",31000,CHOAVL,g,4.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12305 const 31000 (teneur '4,6')"
+12305,"Fromage fondu, allégé en matière grasse",400,WATER,g,68.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12305 const 400 (teneur '68,2')"
+12716,Provolone,328,ENERC_KCAL,kcal,340.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12716 const 328 (teneur '340')
+12716,Provolone,25000,PROCNT,g,25.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12716 const 25000 (teneur '25,6')"
+12716,Provolone,40000,FAT,g,26.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12716 const 40000 (teneur '26,6')"
+12716,Provolone,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12716 const 31000 (teneur '0')
+12716,Provolone,400,WATER,g,41.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12716 const 400 (teneur '41')
+12755,Saint-Paulin (fromage à pâte pressée non cuite demi-ferme),328,ENERC_KCAL,kcal,327.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12755 const 328 (teneur '327')
+12755,Saint-Paulin (fromage à pâte pressée non cuite demi-ferme),25000,PROCNT,g,22.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12755 const 25000 (teneur '22,3')"
+12755,Saint-Paulin (fromage à pâte pressée non cuite demi-ferme),40000,FAT,g,26.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12755 const 40000 (teneur '26,4')"
+12755,Saint-Paulin (fromage à pâte pressée non cuite demi-ferme),400,WATER,g,47.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12755 const 400 (teneur '47,5')"
+12775,"Mélange de fromages râpés (ex : spécial gratins, spécial pâtes, spécial pizzas…)",328,ENERC_KCAL,kcal,386.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12775 const 328 (teneur '386')
+12775,"Mélange de fromages râpés (ex : spécial gratins, spécial pâtes, spécial pizzas…)",25000,PROCNT,g,32.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 12775 const 25000 (teneur '32')
+12775,"Mélange de fromages râpés (ex : spécial gratins, spécial pâtes, spécial pizzas…)",40000,FAT,g,28.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12775 const 40000 (teneur '28,9')"
+12775,"Mélange de fromages râpés (ex : spécial gratins, spécial pâtes, spécial pizzas…)",31000,CHOAVL,g,0.15,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 12775 const 31000 (teneur '0,15')"
+19037,"Lait demi-écrémé, UHT, enrichi en vitamine D",328,ENERC_KCAL,kcal,46.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19037 const 328 (teneur '46,6')"
+19037,"Lait demi-écrémé, UHT, enrichi en vitamine D",25000,PROCNT,g,3.38,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19037 const 25000 (teneur '3,38')"
+19037,"Lait demi-écrémé, UHT, enrichi en vitamine D",40000,FAT,g,1.52,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19037 const 40000 (teneur '1,52')"
+19037,"Lait demi-écrémé, UHT, enrichi en vitamine D",31000,CHOAVL,g,4.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19037 const 31000 (teneur '4,8')"
+19037,"Lait demi-écrémé, UHT, enrichi en vitamine D",400,WATER,g,89.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19037 const 400 (teneur '89,4')"
+19550,"Yaourt à la grecque nature, au lait de brebis",328,ENERC_KCAL,kcal,124.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 19550 const 328 (teneur '124')
+19550,"Yaourt à la grecque nature, au lait de brebis",25000,PROCNT,g,4.82,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19550 const 25000 (teneur '4,82')"
+19550,"Yaourt à la grecque nature, au lait de brebis",40000,FAT,g,9.78,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19550 const 40000 (teneur '9,78')"
+19550,"Yaourt à la grecque nature, au lait de brebis",31000,CHOAVL,g,4.28,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19550 const 31000 (teneur '4,28')"
+19550,"Yaourt à la grecque nature, au lait de brebis",400,WATER,g,80.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19550 const 400 (teneur '80,9')"
+19579,"Yaourt ou lait fermenté, aux céréales",328,ENERC_KCAL,kcal,111.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 19579 const 328 (teneur '111')
+19579,"Yaourt ou lait fermenté, aux céréales",25000,PROCNT,g,3.64,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19579 const 25000 (teneur '3,64')"
+19579,"Yaourt ou lait fermenté, aux céréales",40000,FAT,g,3.43,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19579 const 40000 (teneur '3,43')"
+19579,"Yaourt ou lait fermenté, aux céréales",31000,CHOAVL,g,16.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 19579 const 31000 (teneur '16')
+19579,"Yaourt ou lait fermenté, aux céréales",400,WATER,g,74.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19579 const 400 (teneur '74,1')"
+19594,"Yaourt ou lait fermenté, nature, 0% MG",328,ENERC_KCAL,kcal,39.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19594 const 328 (teneur '39,1')"
+19594,"Yaourt ou lait fermenté, nature, 0% MG",25000,PROCNT,g,4.16,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19594 const 25000 (teneur '4,16')"
+19594,"Yaourt ou lait fermenté, nature, 0% MG",31000,CHOAVL,g,4.89,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19594 const 31000 (teneur '4,89')"
+19594,"Yaourt ou lait fermenté, nature, 0% MG",400,WATER,g,88.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19594 const 400 (teneur '88,9')"
+19643,"Fromage blanc et crème fouettée, sur lit de fruits, sucré",328,ENERC_KCAL,kcal,145.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 19643 const 328 (teneur '145')
+19643,"Fromage blanc et crème fouettée, sur lit de fruits, sucré",25000,PROCNT,g,4.59,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19643 const 25000 (teneur '4,59')"
+19643,"Fromage blanc et crème fouettée, sur lit de fruits, sucré",40000,FAT,g,7.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 19643 const 40000 (teneur '7')
+19643,"Fromage blanc et crème fouettée, sur lit de fruits, sucré",31000,CHOAVL,g,16.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 19643 const 31000 (teneur '16')
+19643,"Fromage blanc et crème fouettée, sur lit de fruits, sucré",400,WATER,g,72.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19643 const 400 (teneur '72,1')"
+19714,"Fromage blanc ou spécialité laitière, aromatisé, 0% MG, sucré",328,ENERC_KCAL,kcal,76.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19714 const 328 (teneur '76,9')"
+19714,"Fromage blanc ou spécialité laitière, aromatisé, 0% MG, sucré",25000,PROCNT,g,7.01,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19714 const 25000 (teneur '7,01')"
+19714,"Fromage blanc ou spécialité laitière, aromatisé, 0% MG, sucré",40000,FAT,g,0.05,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19714 const 40000 (teneur '0,05')"
+19714,"Fromage blanc ou spécialité laitière, aromatisé, 0% MG, sucré",31000,CHOAVL,g,12.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19714 const 31000 (teneur '12,3')"
+19714,"Fromage blanc ou spécialité laitière, aromatisé, 0% MG, sucré",400,WATER,g,78.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19714 const 400 (teneur '78,2')"
+39210,"Mousse au chocolat traditionnelle, rayon frais",328,ENERC_KCAL,kcal,319.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39210 const 328 (teneur '319')
+39210,"Mousse au chocolat traditionnelle, rayon frais",25000,PROCNT,g,7.38,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39210 const 25000 (teneur '7,38')"
+39210,"Mousse au chocolat traditionnelle, rayon frais",40000,FAT,g,21.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39210 const 40000 (teneur '21,1')"
+39210,"Mousse au chocolat traditionnelle, rayon frais",31000,CHOAVL,g,23.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39210 const 31000 (teneur '23,8')"
+39211,"Crème aux oeufs (petit pot de crème chocolat, vanille, etc.), rayon frais",328,ENERC_KCAL,kcal,162.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39211 const 328 (teneur '162')
+39211,"Crème aux oeufs (petit pot de crème chocolat, vanille, etc.), rayon frais",25000,PROCNT,g,4.34,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39211 const 25000 (teneur '4,34')"
+39211,"Crème aux oeufs (petit pot de crème chocolat, vanille, etc.), rayon frais",40000,FAT,g,8.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39211 const 40000 (teneur '8,1')"
+39211,"Crème aux oeufs (petit pot de crème chocolat, vanille, etc.), rayon frais",31000,CHOAVL,g,17.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39211 const 31000 (teneur '17,5')"
+39211,"Crème aux oeufs (petit pot de crème chocolat, vanille, etc.), rayon frais",400,WATER,g,68.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39211 const 400 (teneur '68,2')"
+39214,"Crème dessert à la vanille, appertisée",328,ENERC_KCAL,kcal,133.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39214 const 328 (teneur '133')
+39214,"Crème dessert à la vanille, appertisée",25000,PROCNT,g,3.85,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39214 const 25000 (teneur '3,85')"
+39214,"Crème dessert à la vanille, appertisée",40000,FAT,g,3.62,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39214 const 40000 (teneur '3,62')"
+39214,"Crème dessert à la vanille, appertisée",31000,CHOAVL,g,21.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39214 const 31000 (teneur '21,1')"
+39214,"Crème dessert à la vanille, appertisée",400,WATER,g,73.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39214 const 400 (teneur '73,3')"
+39251,"Riz au lait, au caramel, rayon frais",328,ENERC_KCAL,kcal,146.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39251 const 328 (teneur '146')
+39251,"Riz au lait, au caramel, rayon frais",25000,PROCNT,g,2.95,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39251 const 25000 (teneur '2,95')"
+39251,"Riz au lait, au caramel, rayon frais",40000,FAT,g,4.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39251 const 40000 (teneur '4')
+39251,"Riz au lait, au caramel, rayon frais",31000,CHOAVL,g,24.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39251 const 31000 (teneur '24,5')"
+1007,Apéritif à base de vin ou vermouth,328,ENERC_KCAL,kcal,137.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 1007 const 328 (teneur '137')
+1007,Apéritif à base de vin ou vermouth,25000,PROCNT,g,0.054,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 1007 const 25000 (teneur '0,054')"
+1007,Apéritif à base de vin ou vermouth,40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 1007 const 40000 (teneur '0')
+1007,Apéritif à base de vin ou vermouth,31000,CHOAVL,g,11.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 1007 const 31000 (teneur '11,3')"
+1007,Apéritif à base de vin ou vermouth,400,WATER,g,75.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 1007 const 400 (teneur '75,3')"
+1016,Marsala aux oeufs,328,ENERC_KCAL,kcal,153.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 1016 const 328 (teneur '153')
+1016,Marsala aux oeufs,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 1016 const 25000 (teneur '0')
+1016,Marsala aux oeufs,40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 1016 const 40000 (teneur '0')
+1016,Marsala aux oeufs,31000,CHOAVL,g,12.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 1016 const 31000 (teneur '12,4')"
+18068,"Cola, sans sucres ajoutés, avec édulcorants, sans caféine",328,ENERC_KCAL,kcal,0.058,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18068 const 328 (teneur '0,058')"
+18068,"Cola, sans sucres ajoutés, avec édulcorants, sans caféine",25000,PROCNT,g,0.083,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18068 const 25000 (teneur '0,083')"
+18068,"Cola, sans sucres ajoutés, avec édulcorants, sans caféine",40000,FAT,g,0.083,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18068 const 40000 (teneur '0,083')"
+18068,"Cola, sans sucres ajoutés, avec édulcorants, sans caféine",31000,CHOAVL,g,0.13,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18068 const 31000 (teneur '0,13')"
+18068,"Cola, sans sucres ajoutés, avec édulcorants, sans caféine",400,WATER,g,99.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18068 const 400 (teneur '99,7')"
+18163,"Café au lait ou cappuccino au chocolat, poudre soluble",328,ENERC_KCAL,kcal,384.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 18163 const 328 (teneur '384')
+18163,"Café au lait ou cappuccino au chocolat, poudre soluble",25000,PROCNT,g,11.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18163 const 25000 (teneur '11,2')"
+18163,"Café au lait ou cappuccino au chocolat, poudre soluble",40000,FAT,g,9.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 18163 const 40000 (teneur '9')
+18163,"Café au lait ou cappuccino au chocolat, poudre soluble",31000,CHOAVL,g,63.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 18163 const 31000 (teneur '63')
+18299,"Citronnade, boisson plate au citron (teneur en fruits >= 10% et < 50%), sucrée",328,ENERC_KCAL,kcal,23.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18299 const 328 (teneur '23,2')"
+18299,"Citronnade, boisson plate au citron (teneur en fruits >= 10% et < 50%), sucrée",25000,PROCNT,g,3e-05,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18299 const 25000 (teneur '0,00003')"
+18299,"Citronnade, boisson plate au citron (teneur en fruits >= 10% et < 50%), sucrée",40000,FAT,g,0.005,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18299 const 40000 (teneur '0,005')"
+18299,"Citronnade, boisson plate au citron (teneur en fruits >= 10% et < 50%), sucrée",31000,CHOAVL,g,5.77,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18299 const 31000 (teneur '5,77')"
+18309,"Boisson plate aux fruits (teneur en fruits non spécifiée), sucrée",328,ENERC_KCAL,kcal,45.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18309 const 328 (teneur '45,8')"
+18309,"Boisson plate aux fruits (teneur en fruits non spécifiée), sucrée",25000,PROCNT,g,0.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18309 const 25000 (teneur '0,1')"
+18309,"Boisson plate aux fruits (teneur en fruits non spécifiée), sucrée",40000,FAT,g,0.07,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18309 const 40000 (teneur '0,07')"
+18309,"Boisson plate aux fruits (teneur en fruits non spécifiée), sucrée",31000,CHOAVL,g,11.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18309 const 31000 (teneur '11,2')"
+18309,"Boisson plate aux fruits (teneur en fruits non spécifiée), sucrée",400,WATER,g,88.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18309 const 400 (teneur '88,3')"
+18339,"Boisson plate aux fruits (teneur en fruits >= 10% et < 50%), sucrée",328,ENERC_KCAL,kcal,41.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18339 const 328 (teneur '41,1')"
+18339,"Boisson plate aux fruits (teneur en fruits >= 10% et < 50%), sucrée",25000,PROCNT,g,0.13,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18339 const 25000 (teneur '0,13')"
+18339,"Boisson plate aux fruits (teneur en fruits >= 10% et < 50%), sucrée",40000,FAT,g,0.14,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18339 const 40000 (teneur '0,14')"
+18339,"Boisson plate aux fruits (teneur en fruits >= 10% et < 50%), sucrée",31000,CHOAVL,g,9.92,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18339 const 31000 (teneur '9,92')"
+18339,"Boisson plate aux fruits (teneur en fruits >= 10% et < 50%), sucrée",400,WATER,g,89.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 18339 const 400 (teneur '89,3')"
+2009,"Nectar multifruit, base pomme, standard",328,ENERC_KCAL,kcal,41.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2009 const 328 (teneur '41,1')"
+2009,"Nectar multifruit, base pomme, standard",25000,PROCNT,g,0.28,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2009 const 25000 (teneur '0,28')"
+2009,"Nectar multifruit, base pomme, standard",31000,CHOAVL,g,10.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 2009 const 31000 (teneur '10')
+2009,"Nectar multifruit, base pomme, standard",400,WATER,g,88.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2009 const 400 (teneur '88,7')"
+2019,"Jus de raisin, à base de concentré",328,ENERC_KCAL,kcal,67.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2019 const 328 (teneur '67,1')"
+2019,"Jus de raisin, à base de concentré",25000,PROCNT,g,0.31,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2019 const 25000 (teneur '0,31')"
+2019,"Jus de raisin, à base de concentré",40000,FAT,g,0.11,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2019 const 40000 (teneur '0,11')"
+2019,"Jus de raisin, à base de concentré",31000,CHOAVL,g,16.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 2019 const 31000 (teneur '16')
+2019,"Jus de raisin, à base de concentré",400,WATER,g,84.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2019 const 400 (teneur '84,2')"
+2028,"Jus de citron, pur jus",328,ENERC_KCAL,kcal,29.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2028 const 328 (teneur '29,4')"
+2028,"Jus de citron, pur jus",25000,PROCNT,g,0.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2028 const 25000 (teneur '0,4')"
+2028,"Jus de citron, pur jus",40000,FAT,g,0.29,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2028 const 40000 (teneur '0,29')"
+2028,"Jus de citron, pur jus",31000,CHOAVL,g,6.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2028 const 31000 (teneur '6,1')"
+2028,"Jus de citron, pur jus",400,WATER,g,92.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2028 const 400 (teneur '92,5')"
+2033,"Jus multifruit, à base de jus et purée de fruits",328,ENERC_KCAL,kcal,49.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2033 const 328 (teneur '49,1')"
+2033,"Jus multifruit, à base de jus et purée de fruits",25000,PROCNT,g,0.46,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2033 const 25000 (teneur '0,46')"
+2033,"Jus multifruit, à base de jus et purée de fruits",40000,FAT,g,0.11,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2033 const 40000 (teneur '0,11')"
+2033,"Jus multifruit, à base de jus et purée de fruits",31000,CHOAVL,g,11.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2033 const 31000 (teneur '11,5')"
+2060,"Nectar multifruit, multivitaminé",328,ENERC_KCAL,kcal,47.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2060 const 328 (teneur '47,2')"
+2060,"Nectar multifruit, multivitaminé",25000,PROCNT,g,0.24,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2060 const 25000 (teneur '0,24')"
+2060,"Nectar multifruit, multivitaminé",40000,FAT,g,0.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2060 const 40000 (teneur '0,1')"
+2060,"Nectar multifruit, multivitaminé",31000,CHOAVL,g,11.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2060 const 31000 (teneur '11,3')"
+2060,"Nectar multifruit, multivitaminé",400,WATER,g,87.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 2060 const 400 (teneur '87,4')"
+76011,"Eau minérale Chambon, embouteillée, plate, faiblement minéralisée (Chambon, 45)",328,ENERC_KCAL,kcal,0.012,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 76011 const 328 (teneur '0,012')"
+76011,"Eau minérale Chambon, embouteillée, plate, faiblement minéralisée (Chambon, 45)",25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76011 const 25000 (teneur '0')
+76011,"Eau minérale Chambon, embouteillée, plate, faiblement minéralisée (Chambon, 45)",40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76011 const 40000 (teneur '0')
+76011,"Eau minérale Chambon, embouteillée, plate, faiblement minéralisée (Chambon, 45)",31000,CHOAVL,g,0.0029,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 76011 const 31000 (teneur '0,0029')"
+76011,"Eau minérale Chambon, embouteillée, plate, faiblement minéralisée (Chambon, 45)",400,WATER,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76011 const 400 (teneur '100')
+76013,"Eau minérale Chateauneuf, embouteillée, gazeuse, riche en sels minéraux (Chateauneuf, 63)",328,ENERC_KCAL,kcal,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76013 const 328 (teneur '0')
+76013,"Eau minérale Chateauneuf, embouteillée, gazeuse, riche en sels minéraux (Chateauneuf, 63)",25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76013 const 25000 (teneur '0')
+76013,"Eau minérale Chateauneuf, embouteillée, gazeuse, riche en sels minéraux (Chateauneuf, 63)",40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76013 const 40000 (teneur '0')
+76013,"Eau minérale Chateauneuf, embouteillée, gazeuse, riche en sels minéraux (Chateauneuf, 63)",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76013 const 31000 (teneur '0')
+76013,"Eau minérale Chateauneuf, embouteillée, gazeuse, riche en sels minéraux (Chateauneuf, 63)",400,WATER,g,99.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 76013 const 400 (teneur '99,8')"
+76029,"Eau minérale Orée du bois, embouteillée, plate, moyennement minéralisée (St-Amand, 59)",328,ENERC_KCAL,kcal,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76029 const 328 (teneur '0')
+76029,"Eau minérale Orée du bois, embouteillée, plate, moyennement minéralisée (St-Amand, 59)",25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76029 const 25000 (teneur '0')
+76029,"Eau minérale Orée du bois, embouteillée, plate, moyennement minéralisée (St-Amand, 59)",40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76029 const 40000 (teneur '0')
+76029,"Eau minérale Orée du bois, embouteillée, plate, moyennement minéralisée (St-Amand, 59)",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76029 const 31000 (teneur '0')
+76029,"Eau minérale Orée du bois, embouteillée, plate, moyennement minéralisée (St-Amand, 59)",400,WATER,g,99.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 76029 const 400 (teneur '99,9')"
+76062,"Eau minérale Avra, embouteillée, plate, faiblement minéralisée (Grèce)",328,ENERC_KCAL,kcal,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76062 const 328 (teneur '0')
+76062,"Eau minérale Avra, embouteillée, plate, faiblement minéralisée (Grèce)",25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76062 const 25000 (teneur '0')
+76062,"Eau minérale Avra, embouteillée, plate, faiblement minéralisée (Grèce)",40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76062 const 40000 (teneur '0')
+76062,"Eau minérale Avra, embouteillée, plate, faiblement minéralisée (Grèce)",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76062 const 31000 (teneur '0')
+76062,"Eau minérale Avra, embouteillée, plate, faiblement minéralisée (Grèce)",400,WATER,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76062 const 400 (teneur '100')
+76067,"Eau minérale Courmayeur, embouteillée, plate, riche en sels minéraux (Italie)",328,ENERC_KCAL,kcal,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76067 const 328 (teneur '0')
+76067,"Eau minérale Courmayeur, embouteillée, plate, riche en sels minéraux (Italie)",25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76067 const 25000 (teneur '0')
+76067,"Eau minérale Courmayeur, embouteillée, plate, riche en sels minéraux (Italie)",40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76067 const 40000 (teneur '0')
+76067,"Eau minérale Courmayeur, embouteillée, plate, riche en sels minéraux (Italie)",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76067 const 31000 (teneur '0')
+76067,"Eau minérale Courmayeur, embouteillée, plate, riche en sels minéraux (Italie)",400,WATER,g,99.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 76067 const 400 (teneur '99,8')"
+76072,"Eau minérale Penacova, embouteillée, plate, très faiblement minéralisée (Portugal)",328,ENERC_KCAL,kcal,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76072 const 328 (teneur '0')
+76072,"Eau minérale Penacova, embouteillée, plate, très faiblement minéralisée (Portugal)",25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76072 const 25000 (teneur '0')
+76072,"Eau minérale Penacova, embouteillée, plate, très faiblement minéralisée (Portugal)",40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76072 const 40000 (teneur '0')
+76072,"Eau minérale Penacova, embouteillée, plate, très faiblement minéralisée (Portugal)",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76072 const 31000 (teneur '0')
+76072,"Eau minérale Penacova, embouteillée, plate, très faiblement minéralisée (Portugal)",400,WATER,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 76072 const 400 (teneur '100')
+11299,"Crème de pruneaux, préemballée",328,ENERC_KCAL,kcal,240.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11299 const 328 (teneur '240')
+11299,"Crème de pruneaux, préemballée",25000,PROCNT,g,1.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11299 const 25000 (teneur '1,4')"
+11299,"Crème de pruneaux, préemballée",40000,FAT,g,0.45,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11299 const 40000 (teneur '0,45')"
+11299,"Crème de pruneaux, préemballée",31000,CHOAVL,g,55.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11299 const 31000 (teneur '55')
+23022,Canelé,328,ENERC_KCAL,kcal,298.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 23022 const 328 (teneur '298')
+23022,Canelé,25000,PROCNT,g,5.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 23022 const 25000 (teneur '5')
+23022,Canelé,40000,FAT,g,3.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23022 const 40000 (teneur '3,2')"
+23022,Canelé,31000,CHOAVL,g,61.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 23022 const 31000 (teneur '61')
+23022,Canelé,400,WATER,g,26.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23022 const 400 (teneur '26,3')"
+23467,Chouquette,328,ENERC_KCAL,kcal,408.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 23467 const 328 (teneur '408')
+23467,Chouquette,25000,PROCNT,g,9.13,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23467 const 25000 (teneur '9,13')"
+23467,Chouquette,40000,FAT,g,22.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23467 const 40000 (teneur '22,9')"
+23467,Chouquette,31000,CHOAVL,g,40.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23467 const 31000 (teneur '40,6')"
+23467,Chouquette,400,WATER,g,24.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23467 const 400 (teneur '24,4')"
+23490,Tarte ou tartelette aux pommes,328,ENERC_KCAL,kcal,227.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 23490 const 328 (teneur '227')
+23490,Tarte ou tartelette aux pommes,25000,PROCNT,g,2.52,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23490 const 25000 (teneur '2,52')"
+23490,Tarte ou tartelette aux pommes,40000,FAT,g,8.79,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23490 const 40000 (teneur '8,79')"
+23490,Tarte ou tartelette aux pommes,31000,CHOAVL,g,32.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23490 const 31000 (teneur '32,7')"
+23490,Tarte ou tartelette aux pommes,400,WATER,g,50.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 23490 const 400 (teneur '50,4')"
+24011,"Biscuit sec, assortiment",328,ENERC_KCAL,kcal,515.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 24011 const 328 (teneur '515')
+24011,"Biscuit sec, assortiment",25000,PROCNT,g,6.44,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24011 const 25000 (teneur '6,44')"
+24011,"Biscuit sec, assortiment",40000,FAT,g,26.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24011 const 40000 (teneur '26,4')"
+24011,"Biscuit sec, assortiment",31000,CHOAVL,g,61.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24011 const 31000 (teneur '61,4')"
+24011,"Biscuit sec, assortiment",400,WATER,g,1.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24011 const 400 (teneur '1,6')"
+24049,"Biscuit sec, sablé, galette ou palet, au beurre",328,ENERC_KCAL,kcal,481.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 24049 const 328 (teneur '481')
+24049,"Biscuit sec, sablé, galette ou palet, au beurre",25000,PROCNT,g,6.81,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24049 const 25000 (teneur '6,81')"
+24049,"Biscuit sec, sablé, galette ou palet, au beurre",40000,FAT,g,20.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 24049 const 40000 (teneur '20')
+24049,"Biscuit sec, sablé, galette ou palet, au beurre",31000,CHOAVL,g,66.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24049 const 31000 (teneur '66,8')"
+24049,"Biscuit sec, sablé, galette ou palet, au beurre",400,WATER,g,2.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 24049 const 400 (teneur '2')
+30995,"Confiture de fraise, allégée en sucres",328,ENERC_KCAL,kcal,166.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 30995 const 328 (teneur '166')
+30995,"Confiture de fraise, allégée en sucres",25000,PROCNT,g,0.31,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 30995 const 25000 (teneur '0,31')"
+30995,"Confiture de fraise, allégée en sucres",40000,FAT,g,0.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 30995 const 40000 (teneur '0,1')"
+30995,"Confiture de fraise, allégée en sucres",31000,CHOAVL,g,40.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 30995 const 31000 (teneur '40,3')"
+30995,"Confiture de fraise, allégée en sucres",400,WATER,g,54.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 30995 const 400 (teneur '54,3')"
+31006,"Confiture ou marmelade ou gelée, tout type de fruits, non allégée en sucres (aliment moyen)",328,ENERC_KCAL,kcal,244.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31006 const 328 (teneur '244')
+31006,"Confiture ou marmelade ou gelée, tout type de fruits, non allégée en sucres (aliment moyen)",25000,PROCNT,g,0.33,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31006 const 25000 (teneur '0,33')"
+31006,"Confiture ou marmelade ou gelée, tout type de fruits, non allégée en sucres (aliment moyen)",40000,FAT,g,0.28,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31006 const 40000 (teneur '0,28')"
+31006,"Confiture ou marmelade ou gelée, tout type de fruits, non allégée en sucres (aliment moyen)",31000,CHOAVL,g,59.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31006 const 31000 (teneur '59,3')"
+31006,"Confiture ou marmelade ou gelée, tout type de fruits, non allégée en sucres (aliment moyen)",400,WATER,g,38.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31006 const 400 (teneur '38,7')"
+31032,Pâte à tartiner chocolat et noisette,328,ENERC_KCAL,kcal,549.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31032 const 328 (teneur '549')
+31032,Pâte à tartiner chocolat et noisette,25000,PROCNT,g,5.02,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31032 const 25000 (teneur '5,02')"
+31032,Pâte à tartiner chocolat et noisette,40000,FAT,g,32.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31032 const 40000 (teneur '32,4')"
+31032,Pâte à tartiner chocolat et noisette,31000,CHOAVL,g,57.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31032 const 31000 (teneur '57,9')"
+31032,Pâte à tartiner chocolat et noisette,400,WATER,g,0.38,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31032 const 400 (teneur '0,38')"
+31036,Dragée amande,328,ENERC_KCAL,kcal,465.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31036 const 328 (teneur '465')
+31036,Dragée amande,25000,PROCNT,g,5.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31036 const 25000 (teneur '5,25')"
+31036,Dragée amande,40000,FAT,g,14.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31036 const 40000 (teneur '14,7')"
+31036,Dragée amande,31000,CHOAVL,g,75.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31036 const 31000 (teneur '75,7')"
+31036,Dragée amande,400,WATER,g,1.45,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31036 const 400 (teneur '1,45')"
+31074,"Chocolat noir 70 % de cacao environ, de dégustation, tablette",328,ENERC_KCAL,kcal,591.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31074 const 328 (teneur '591')
+31074,"Chocolat noir 70 % de cacao environ, de dégustation, tablette",25000,PROCNT,g,10.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31074 const 25000 (teneur '10,4')"
+31074,"Chocolat noir 70 % de cacao environ, de dégustation, tablette",40000,FAT,g,46.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31074 const 40000 (teneur '46,3')"
+31074,"Chocolat noir 70 % de cacao environ, de dégustation, tablette",31000,CHOAVL,g,26.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31074 const 31000 (teneur '26,9')"
+31074,"Chocolat noir 70 % de cacao environ, de dégustation, tablette",400,WATER,g,0.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31074 const 400 (teneur '0,9')"
+31089,Sirop d'agave,25000,PROCNT,g,0.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31089 const 25000 (teneur '0,25')"
+31089,Sirop d'agave,40000,FAT,g,0.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31089 const 40000 (teneur '0,5')"
+31089,Sirop d'agave,31000,CHOAVL,g,78.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31089 const 31000 (teneur '78')
+31089,Sirop d'agave,400,WATER,g,21.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31089 const 400 (teneur '21,8')"
+31115,Barre céréalière au chocolat et aux fruits,328,ENERC_KCAL,kcal,419.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31115 const 328 (teneur '419')
+31115,Barre céréalière au chocolat et aux fruits,25000,PROCNT,g,5.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31115 const 25000 (teneur '5,7')"
+31115,Barre céréalière au chocolat et aux fruits,40000,FAT,g,11.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31115 const 40000 (teneur '11,8')"
+31115,Barre céréalière au chocolat et aux fruits,31000,CHOAVL,g,70.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31115 const 31000 (teneur '70,4')"
+32000,"Grains de blé soufflés au miel ou caramel, enrichis en vitamines et minéraux",328,ENERC_KCAL,kcal,390.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 32000 const 328 (teneur '390')
+32000,"Grains de blé soufflés au miel ou caramel, enrichis en vitamines et minéraux",25000,PROCNT,g,7.31,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 32000 const 25000 (teneur '7,31')"
+32000,"Grains de blé soufflés au miel ou caramel, enrichis en vitamines et minéraux",40000,FAT,g,2.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 32000 const 40000 (teneur '2')
+32000,"Grains de blé soufflés au miel ou caramel, enrichis en vitamines et minéraux",31000,CHOAVL,g,82.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 32000 const 31000 (teneur '82,8')"
+32000,"Grains de blé soufflés au miel ou caramel, enrichis en vitamines et minéraux",400,WATER,g,1.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 32000 const 400 (teneur '1,5')"
+32138,"Muesli floconneux aux fruits, fruits à coque et/ou graines, non enrichi en vitamines et minéraux",328,ENERC_KCAL,kcal,371.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 32138 const 328 (teneur '371')
+32138,"Muesli floconneux aux fruits, fruits à coque et/ou graines, non enrichi en vitamines et minéraux",25000,PROCNT,g,10.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 32138 const 25000 (teneur '10,6')"
+32138,"Muesli floconneux aux fruits, fruits à coque et/ou graines, non enrichi en vitamines et minéraux",40000,FAT,g,7.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 32138 const 40000 (teneur '7')
+32138,"Muesli floconneux aux fruits, fruits à coque et/ou graines, non enrichi en vitamines et minéraux",31000,CHOAVL,g,60.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 32138 const 31000 (teneur '60,9')"
+32138,"Muesli floconneux aux fruits, fruits à coque et/ou graines, non enrichi en vitamines et minéraux",400,WATER,g,9.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 32138 const 400 (teneur '9')
+32145,"Muesli croustillant aux fruits à coque et/ou graines uniquement, non enrichi en vitamines et minéraux",328,ENERC_KCAL,kcal,450.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 32145 const 328 (teneur '450')
+32145,"Muesli croustillant aux fruits à coque et/ou graines uniquement, non enrichi en vitamines et minéraux",25000,PROCNT,g,10.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 32145 const 25000 (teneur '10')
+32145,"Muesli croustillant aux fruits à coque et/ou graines uniquement, non enrichi en vitamines et minéraux",40000,FAT,g,16.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 32145 const 40000 (teneur '16,5')"
+32145,"Muesli croustillant aux fruits à coque et/ou graines uniquement, non enrichi en vitamines et minéraux",31000,CHOAVL,g,61.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 32145 const 31000 (teneur '61,2')"
+32145,"Muesli croustillant aux fruits à coque et/ou graines uniquement, non enrichi en vitamines et minéraux",400,WATER,g,2.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 32145 const 400 (teneur '2,9')"
+7710,"Pain au lait, artisanal",328,ENERC_KCAL,kcal,376.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7710 const 328 (teneur '376')
+7710,"Pain au lait, artisanal",25000,PROCNT,g,8.55,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7710 const 25000 (teneur '8,55')"
+7710,"Pain au lait, artisanal",40000,FAT,g,15.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7710 const 40000 (teneur '15,4')"
+7710,"Pain au lait, artisanal",31000,CHOAVL,g,49.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7710 const 31000 (teneur '49')
+7710,"Pain au lait, artisanal",400,WATER,g,23.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7710 const 400 (teneur '23,7')"
+7738,"Brioche fourrée aux fruits, préemballée",328,ENERC_KCAL,kcal,326.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7738 const 328 (teneur '326')
+7738,"Brioche fourrée aux fruits, préemballée",25000,PROCNT,g,5.81,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7738 const 25000 (teneur '5,81')"
+7738,"Brioche fourrée aux fruits, préemballée",40000,FAT,g,9.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 7738 const 40000 (teneur '9')
+7738,"Brioche fourrée aux fruits, préemballée",31000,CHOAVL,g,52.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7738 const 31000 (teneur '52,4')"
+7738,"Brioche fourrée aux fruits, préemballée",400,WATER,g,25.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 7738 const 400 (teneur '25,8')"
+31013,"Sorbet, bâtonnet",328,ENERC_KCAL,kcal,103.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31013 const 328 (teneur '103')
+31013,"Sorbet, bâtonnet",25000,PROCNT,g,0.23,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31013 const 25000 (teneur '0,23')"
+31013,"Sorbet, bâtonnet",40000,FAT,g,0.28,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31013 const 40000 (teneur '0,28')"
+31013,"Sorbet, bâtonnet",31000,CHOAVL,g,24.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31013 const 31000 (teneur '24,8')"
+31013,"Sorbet, bâtonnet",400,WATER,g,77.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31013 const 400 (teneur '77,3')"
+31035,Barre glacée chocolatée,328,ENERC_KCAL,kcal,354.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31035 const 328 (teneur '354')
+31035,Barre glacée chocolatée,25000,PROCNT,g,4.79,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31035 const 25000 (teneur '4,79')"
+31035,Barre glacée chocolatée,40000,FAT,g,20.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31035 const 40000 (teneur '20,5')"
+31035,Barre glacée chocolatée,31000,CHOAVL,g,37.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31035 const 31000 (teneur '37')
+31035,Barre glacée chocolatée,400,WATER,g,35.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31035 const 400 (teneur '35,2')"
+39401,Pêche melba,328,ENERC_KCAL,kcal,119.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39401 const 328 (teneur '119')
+39401,Pêche melba,25000,PROCNT,g,2.06,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39401 const 25000 (teneur '2,06')"
+39401,Pêche melba,40000,FAT,g,3.62,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39401 const 40000 (teneur '3,62')"
+39401,Pêche melba,31000,CHOAVL,g,18.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39401 const 31000 (teneur '18,8')"
+39401,Pêche melba,400,WATER,g,73.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39401 const 400 (teneur '73,5')"
+39502,Dessert glacé type mystère ou vacherin,328,ENERC_KCAL,kcal,226.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39502 const 328 (teneur '226')
+39502,Dessert glacé type mystère ou vacherin,25000,PROCNT,g,2.86,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39502 const 25000 (teneur '2,86')"
+39502,Dessert glacé type mystère ou vacherin,40000,FAT,g,9.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39502 const 40000 (teneur '9')
+39502,Dessert glacé type mystère ou vacherin,31000,CHOAVL,g,32.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39502 const 31000 (teneur '32,9')"
+39502,Dessert glacé type mystère ou vacherin,400,WATER,g,56.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39502 const 400 (teneur '56,7')"
+39509,"Glace ou crème glacée, cône (taille standard)",328,ENERC_KCAL,kcal,290.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39509 const 328 (teneur '290')
+39509,"Glace ou crème glacée, cône (taille standard)",25000,PROCNT,g,3.51,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39509 const 25000 (teneur '3,51')"
+39509,"Glace ou crème glacée, cône (taille standard)",40000,FAT,g,13.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39509 const 40000 (teneur '13,5')"
+39509,"Glace ou crème glacée, cône (taille standard)",31000,CHOAVL,g,36.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39509 const 31000 (teneur '36,8')"
+39509,"Glace ou crème glacée, cône (taille standard)",400,WATER,g,42.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39509 const 400 (teneur '42,5')"
+39516,"Dessert glacé feuilleté, à partager",328,ENERC_KCAL,kcal,242.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39516 const 328 (teneur '242')
+39516,"Dessert glacé feuilleté, à partager",25000,PROCNT,g,2.36,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39516 const 25000 (teneur '2,36')"
+39516,"Dessert glacé feuilleté, à partager",40000,FAT,g,13.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39516 const 40000 (teneur '13,6')"
+39516,"Dessert glacé feuilleté, à partager",31000,CHOAVL,g,27.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39516 const 31000 (teneur '27,3')"
+39516,"Dessert glacé feuilleté, à partager",400,WATER,g,54.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39516 const 400 (teneur '54,2')"
+39517,Glace au yaourt,328,ENERC_KCAL,kcal,126.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39517 const 328 (teneur '126')
+39517,Glace au yaourt,25000,PROCNT,g,3.45,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39517 const 25000 (teneur '3,45')"
+39517,Glace au yaourt,40000,FAT,g,2.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39517 const 40000 (teneur '2,2')"
+39517,Glace au yaourt,31000,CHOAVL,g,22.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39517 const 31000 (teneur '22,7')"
+39517,Glace au yaourt,400,WATER,g,68.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39517 const 400 (teneur '68,8')"
+39518,Omelette norvégienne,328,ENERC_KCAL,kcal,212.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39518 const 328 (teneur '212')
+39518,Omelette norvégienne,25000,PROCNT,g,3.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39518 const 25000 (teneur '3,6')"
+39518,Omelette norvégienne,40000,FAT,g,6.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39518 const 40000 (teneur '6,5')"
+39518,Omelette norvégienne,31000,CHOAVL,g,34.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39518 const 31000 (teneur '34,8')"
+39518,Omelette norvégienne,400,WATER,g,54.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39518 const 400 (teneur '54,3')"
+39520,"Glace ou crème glacée, gourmande, en bac",328,ENERC_KCAL,kcal,231.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39520 const 328 (teneur '231')
+39520,"Glace ou crème glacée, gourmande, en bac",25000,PROCNT,g,3.32,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39520 const 25000 (teneur '3,32')"
+39520,"Glace ou crème glacée, gourmande, en bac",40000,FAT,g,11.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39520 const 40000 (teneur '11')
+39520,"Glace ou crème glacée, gourmande, en bac",31000,CHOAVL,g,29.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39520 const 31000 (teneur '29,4')"
+39521,"Glace ou crème glacée, gourmande, en pot",328,ENERC_KCAL,kcal,256.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39521 const 328 (teneur '256')
+39521,"Glace ou crème glacée, gourmande, en pot",25000,PROCNT,g,3.94,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39521 const 25000 (teneur '3,94')"
+39521,"Glace ou crème glacée, gourmande, en pot",40000,FAT,g,13.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39521 const 40000 (teneur '13,6')"
+39521,"Glace ou crème glacée, gourmande, en pot",31000,CHOAVL,g,29.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39521 const 31000 (teneur '29,2')"
+39521,"Glace ou crème glacée, gourmande, en pot",400,WATER,g,52.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39521 const 400 (teneur '52,8')"
+39522,"Glace ou crème glacée, mini cône",328,ENERC_KCAL,kcal,351.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39522 const 328 (teneur '351')
+39522,"Glace ou crème glacée, mini cône",25000,PROCNT,g,3.89,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39522 const 25000 (teneur '3,89')"
+39522,"Glace ou crème glacée, mini cône",40000,FAT,g,19.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39522 const 40000 (teneur '19')
+39522,"Glace ou crème glacée, mini cône",31000,CHOAVL,g,40.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39522 const 31000 (teneur '40,2')"
+39523,"Glace ou crème glacée, pot individuel",328,ENERC_KCAL,kcal,233.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39523 const 328 (teneur '233')
+39523,"Glace ou crème glacée, pot individuel",25000,PROCNT,g,3.64,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39523 const 25000 (teneur '3,64')"
+39523,"Glace ou crème glacée, pot individuel",40000,FAT,g,13.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39523 const 40000 (teneur '13,8')"
+39523,"Glace ou crème glacée, pot individuel",31000,CHOAVL,g,23.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39523 const 31000 (teneur '23,3')"
+39523,"Glace ou crème glacée, pot individuel",400,WATER,g,56.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39523 const 400 (teneur '56,6')"
+39525,"Sorbet, pot individuel",328,ENERC_KCAL,kcal,126.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39525 const 328 (teneur '126')
+39525,"Sorbet, pot individuel",25000,PROCNT,g,0.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39525 const 25000 (teneur '0,5')"
+39525,"Sorbet, pot individuel",40000,FAT,g,1.03,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39525 const 40000 (teneur '1,03')"
+39525,"Sorbet, pot individuel",31000,CHOAVL,g,28.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39525 const 31000 (teneur '28,4')"
+39527,"Glace ou crème glacée, bac ou pot (aliment moyen)",328,ENERC_KCAL,kcal,171.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39527 const 328 (teneur '171')
+39527,"Glace ou crème glacée, bac ou pot (aliment moyen)",25000,PROCNT,g,2.83,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39527 const 25000 (teneur '2,83')"
+39527,"Glace ou crème glacée, bac ou pot (aliment moyen)",40000,FAT,g,6.45,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39527 const 40000 (teneur '6,45')"
+39527,"Glace ou crème glacée, bac ou pot (aliment moyen)",31000,CHOAVL,g,25.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39527 const 31000 (teneur '25')
+39527,"Glace ou crème glacée, bac ou pot (aliment moyen)",400,WATER,g,63.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39527 const 400 (teneur '63,1')"
+39528,"Sorbet, cône",328,ENERC_KCAL,kcal,216.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39528 const 328 (teneur '216')
+39528,"Sorbet, cône",25000,PROCNT,g,1.82,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39528 const 25000 (teneur '1,82')"
+39528,"Sorbet, cône",40000,FAT,g,5.78,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39528 const 40000 (teneur '5,78')"
+39528,"Sorbet, cône",31000,CHOAVL,g,38.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39528 const 31000 (teneur '38,2')"
+39531,"Glace ou crème glacée, petit pot enfant",328,ENERC_KCAL,kcal,170.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39531 const 328 (teneur '170')
+39531,"Glace ou crème glacée, petit pot enfant",25000,PROCNT,g,2.32,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39531 const 25000 (teneur '2,32')"
+39531,"Glace ou crème glacée, petit pot enfant",40000,FAT,g,6.64,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39531 const 40000 (teneur '6,64')"
+39531,"Glace ou crème glacée, petit pot enfant",31000,CHOAVL,g,24.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39531 const 31000 (teneur '24,9')"
+39531,"Glace ou crème glacée, petit pot enfant",400,WATER,g,62.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39531 const 400 (teneur '62,5')"
+39533,Bûche glacée,328,ENERC_KCAL,kcal,219.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39533 const 328 (teneur '219')
+39533,Bûche glacée,25000,PROCNT,g,2.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39533 const 25000 (teneur '2,8')"
+39533,Bûche glacée,40000,FAT,g,9.61,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39533 const 40000 (teneur '9,61')"
+39533,Bûche glacée,31000,CHOAVL,g,29.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39533 const 31000 (teneur '29,8')"
+39535,"Glace ou crème glacée, bâtonnet enrobage fruits",328,ENERC_KCAL,kcal,160.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 39535 const 328 (teneur '160')
+39535,"Glace ou crème glacée, bâtonnet enrobage fruits",25000,PROCNT,g,1.52,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39535 const 25000 (teneur '1,52')"
+39535,"Glace ou crème glacée, bâtonnet enrobage fruits",40000,FAT,g,5.14,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39535 const 40000 (teneur '5,14')"
+39535,"Glace ou crème glacée, bâtonnet enrobage fruits",31000,CHOAVL,g,26.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 39535 const 31000 (teneur '26,8')"
+16080,Matière grasse ou graisse végétale solide (type margarine) pour friture ou graisse à frire,328,ENERC_KCAL,kcal,898.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16080 const 328 (teneur '898')
+16080,Matière grasse ou graisse végétale solide (type margarine) pour friture ou graisse à frire,25000,PROCNT,g,0.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16080 const 25000 (teneur '0,25')"
+16080,Matière grasse ou graisse végétale solide (type margarine) pour friture ou graisse à frire,40000,FAT,g,99.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16080 const 40000 (teneur '99,8')"
+16080,Matière grasse ou graisse végétale solide (type margarine) pour friture ou graisse à frire,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16080 const 31000 (teneur '0')
+16080,Matière grasse ou graisse végétale solide (type margarine) pour friture ou graisse à frire,400,WATER,g,0.17,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16080 const 400 (teneur '0,17')"
+16128,"Huile pour friture, sans précision",328,ENERC_KCAL,kcal,900.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16128 const 328 (teneur '900')
+16128,"Huile pour friture, sans précision",25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16128 const 25000 (teneur '0')
+16128,"Huile pour friture, sans précision",40000,FAT,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16128 const 40000 (teneur '100')
+16128,"Huile pour friture, sans précision",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16128 const 31000 (teneur '0')
+16401,Huile de beurre ou beurre concentré,328,ENERC_KCAL,kcal,900.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16401 const 328 (teneur '900')
+16401,Huile de beurre ou beurre concentré,25000,PROCNT,g,0.28,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16401 const 25000 (teneur '0,28')"
+16401,Huile de beurre ou beurre concentré,40000,FAT,g,99.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16401 const 40000 (teneur '99,9')"
+16401,Huile de beurre ou beurre concentré,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16401 const 31000 (teneur '0')
+16401,Huile de beurre ou beurre concentré,400,WATER,g,1.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16401 const 400 (teneur '1,5')"
+16403,"Beurre à 80% MG, salé",328,ENERC_KCAL,kcal,732.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16403 const 328 (teneur '732')
+16403,"Beurre à 80% MG, salé",25000,PROCNT,g,0.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16403 const 25000 (teneur '0,5')"
+16403,"Beurre à 80% MG, salé",40000,FAT,g,80.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16403 const 40000 (teneur '80,8')"
+16403,"Beurre à 80% MG, salé",31000,CHOAVL,g,0.68,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16403 const 31000 (teneur '0,68')"
+16403,"Beurre à 80% MG, salé",400,WATER,g,15.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16403 const 400 (teneur '15,7')"
+16416,"Beurre à 39-41% MG, léger, demi-sel",328,ENERC_KCAL,kcal,376.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16416 const 328 (teneur '376')
+16416,"Beurre à 39-41% MG, léger, demi-sel",40000,FAT,g,40.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16416 const 40000 (teneur '40')
+16416,"Beurre à 39-41% MG, léger, demi-sel",31000,CHOAVL,g,4.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16416 const 31000 (teneur '4')
+16416,"Beurre à 39-41% MG, léger, demi-sel",400,WATER,g,51.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16416 const 400 (teneur '51')
+16530,"Lard gras, cru",328,ENERC_KCAL,kcal,810.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16530 const 328 (teneur '810')
+16530,"Lard gras, cru",25000,PROCNT,g,2.92,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16530 const 25000 (teneur '2,92')"
+16530,"Lard gras, cru",40000,FAT,g,88.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16530 const 40000 (teneur '88,7')"
+16530,"Lard gras, cru",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16530 const 31000 (teneur '0')
+16530,"Lard gras, cru",400,WATER,g,7.69,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16530 const 400 (teneur '7,69')"
+16540,Graisse de poulet,328,ENERC_KCAL,kcal,898.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16540 const 328 (teneur '898')
+16540,Graisse de poulet,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16540 const 25000 (teneur '0')
+16540,Graisse de poulet,40000,FAT,g,99.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16540 const 40000 (teneur '99,8')"
+16540,Graisse de poulet,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16540 const 31000 (teneur '0')
+16540,Graisse de poulet,400,WATER,g,0.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16540 const 400 (teneur '0,2')"
+16593,"Matière grasse tartinable à teneur en MG > 62%, demi-sel, standard",328,ENERC_KCAL,kcal,630.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16593 const 328 (teneur '630')
+16593,"Matière grasse tartinable à teneur en MG > 62%, demi-sel, standard",25000,PROCNT,g,0.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16593 const 25000 (teneur '0,25')"
+16593,"Matière grasse tartinable à teneur en MG > 62%, demi-sel, standard",40000,FAT,g,70.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16593 const 40000 (teneur '70')
+16593,"Matière grasse tartinable à teneur en MG > 62%, demi-sel, standard",400,WATER,g,26.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16593 const 400 (teneur '26,5')"
+16595,"Matière grasse tartinable à teneur en MG > 41% et <= 62%, doux, aux stérols végétaux",328,ENERC_KCAL,kcal,547.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16595 const 328 (teneur '547')
+16595,"Matière grasse tartinable à teneur en MG > 41% et <= 62%, doux, aux stérols végétaux",25000,PROCNT,g,0.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16595 const 25000 (teneur '0,25')"
+16595,"Matière grasse tartinable à teneur en MG > 41% et <= 62%, doux, aux stérols végétaux",40000,FAT,g,60.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16595 const 40000 (teneur '60,8')"
+16595,"Matière grasse tartinable à teneur en MG > 41% et <= 62%, doux, aux stérols végétaux",31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16595 const 31000 (teneur '0')
+16595,"Matière grasse tartinable à teneur en MG > 41% et <= 62%, doux, aux stérols végétaux",400,WATER,g,39.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16595 const 400 (teneur '39,4')"
+16598,"Matière grasse tartinable à teneur en MG <= 41%, demi-sel, aux stérols végétaux",328,ENERC_KCAL,kcal,321.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16598 const 328 (teneur '321')
+16598,"Matière grasse tartinable à teneur en MG <= 41%, demi-sel, aux stérols végétaux",25000,PROCNT,g,0.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16598 const 25000 (teneur '0,25')"
+16598,"Matière grasse tartinable à teneur en MG <= 41%, demi-sel, aux stérols végétaux",40000,FAT,g,35.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16598 const 40000 (teneur '35')
+16598,"Matière grasse tartinable à teneur en MG <= 41%, demi-sel, aux stérols végétaux",31000,CHOAVL,g,1.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16598 const 31000 (teneur '1,4')"
+16713,"Matière grasse laitière à 15-25% MG, légère, ""à tartiner"", doux, enrichie en vitamine(s)",328,ENERC_KCAL,kcal,197.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 16713 const 328 (teneur '197')
+16713,"Matière grasse laitière à 15-25% MG, légère, ""à tartiner"", doux, enrichie en vitamine(s)",25000,PROCNT,g,0.25,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16713 const 25000 (teneur '0,25')"
+16713,"Matière grasse laitière à 15-25% MG, légère, ""à tartiner"", doux, enrichie en vitamine(s)",40000,FAT,g,19.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16713 const 40000 (teneur '19,1')"
+16713,"Matière grasse laitière à 15-25% MG, légère, ""à tartiner"", doux, enrichie en vitamine(s)",31000,CHOAVL,g,6.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16713 const 31000 (teneur '6,2')"
+16713,"Matière grasse laitière à 15-25% MG, légère, ""à tartiner"", doux, enrichie en vitamine(s)",400,WATER,g,73.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 16713 const 400 (teneur '73,6')"
+17020,Huile de noyaux d'abricot,328,ENERC_KCAL,kcal,900.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17020 const 328 (teneur '900')
+17020,Huile de noyaux d'abricot,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17020 const 25000 (teneur '0')
+17020,Huile de noyaux d'abricot,40000,FAT,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17020 const 40000 (teneur '100')
+17020,Huile de noyaux d'abricot,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17020 const 31000 (teneur '0')
+17020,Huile de noyaux d'abricot,400,WATER,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17020 const 400 (teneur '0')
+17220,Huile de noix,328,ENERC_KCAL,kcal,900.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17220 const 328 (teneur '900')
+17220,Huile de noix,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17220 const 25000 (teneur '0')
+17220,Huile de noix,40000,FAT,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17220 const 40000 (teneur '100')
+17220,Huile de noix,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17220 const 31000 (teneur '0')
+17220,Huile de noix,400,WATER,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17220 const 400 (teneur '0')
+17325,Huile de pavot,328,ENERC_KCAL,kcal,900.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17325 const 328 (teneur '900')
+17325,Huile de pavot,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17325 const 25000 (teneur '0')
+17325,Huile de pavot,40000,FAT,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17325 const 40000 (teneur '100')
+17325,Huile de pavot,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17325 const 31000 (teneur '0')
+17325,Huile de pavot,400,WATER,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17325 const 400 (teneur '0')
+17400,Huile de sésame,328,ENERC_KCAL,kcal,900.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17400 const 328 (teneur '900')
+17400,Huile de sésame,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17400 const 25000 (teneur '0')
+17400,Huile de sésame,40000,FAT,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17400 const 40000 (teneur '100')
+17400,Huile de sésame,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17400 const 31000 (teneur '0')
+17400,Huile de sésame,400,WATER,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17400 const 400 (teneur '0')
+17800,Huile de cameline,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17800 const 25000 (teneur '0')
+17800,Huile de cameline,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17800 const 31000 (teneur '0')
+17800,Huile de cameline,400,WATER,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17800 const 400 (teneur '0')
+17850,Huile de chanvre,328,ENERC_KCAL,kcal,900.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17850 const 328 (teneur '900')
+17850,Huile de chanvre,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17850 const 25000 (teneur '0')
+17850,Huile de chanvre,40000,FAT,g,100.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17850 const 40000 (teneur '100')
+17900,Huile d'argan ou d'argane,328,ENERC_KCAL,kcal,889.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17900 const 328 (teneur '889')
+17900,Huile d'argan ou d'argane,25000,PROCNT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17900 const 25000 (teneur '0')
+17900,Huile d'argan ou d'argane,40000,FAT,g,98.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 17900 const 40000 (teneur '98,7')"
+17900,Huile d'argan ou d'argane,31000,CHOAVL,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17900 const 31000 (teneur '0')
+17900,Huile d'argan ou d'argane,400,WATER,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 17900 const 400 (teneur '0')
+11026,"Coriandre, graine",328,ENERC_KCAL,kcal,345.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11026 const 328 (teneur '345')
+11026,"Coriandre, graine",25000,PROCNT,g,12.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11026 const 25000 (teneur '12,4')"
+11026,"Coriandre, graine",40000,FAT,g,17.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11026 const 40000 (teneur '17,8')"
+11026,"Coriandre, graine",31000,CHOAVL,g,13.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11026 const 31000 (teneur '13')
+11026,"Coriandre, graine",400,WATER,g,8.86,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11026 const 400 (teneur '8,86')"
+11027,"Menthe, fraîche",328,ENERC_KCAL,kcal,57.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11027 const 328 (teneur '57,6')"
+11027,"Menthe, fraîche",25000,PROCNT,g,3.52,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11027 const 25000 (teneur '3,52')"
+11027,"Menthe, fraîche",40000,FAT,g,0.84,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11027 const 40000 (teneur '0,84')"
+11027,"Menthe, fraîche",31000,CHOAVL,g,5.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11027 const 31000 (teneur '5,3')"
+11027,"Menthe, fraîche",400,WATER,g,82.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11027 const 400 (teneur '82,1')"
+11048,Noix de muscade,328,ENERC_KCAL,kcal,506.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11048 const 328 (teneur '506')
+11048,Noix de muscade,25000,PROCNT,g,5.84,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11048 const 25000 (teneur '5,84')"
+11048,Noix de muscade,40000,FAT,g,36.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11048 const 40000 (teneur '36,3')"
+11048,Noix de muscade,31000,CHOAVL,g,27.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11048 const 31000 (teneur '27,4')"
+11048,Noix de muscade,400,WATER,g,6.23,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11048 const 400 (teneur '6,23')"
+11069,"Sauge, fraîche",328,ENERC_KCAL,kcal,34.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11069 const 328 (teneur '34,9')"
+11069,"Sauge, fraîche",25000,PROCNT,g,4.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11069 const 25000 (teneur '4')
+11069,"Sauge, fraîche",31000,CHOAVL,g,0.97,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11069 const 31000 (teneur '0,97')"
+11069,"Sauge, fraîche",400,WATER,g,85.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11069 const 400 (teneur '85,6')"
+11115,"Sauce au poivre vert, préemballée",328,ENERC_KCAL,kcal,88.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11115 const 328 (teneur '88,9')"
+11115,"Sauce au poivre vert, préemballée",25000,PROCNT,g,1.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11115 const 25000 (teneur '1,3')"
+11115,"Sauce au poivre vert, préemballée",40000,FAT,g,6.65,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11115 const 40000 (teneur '6,65')"
+11115,"Sauce au poivre vert, préemballée",31000,CHOAVL,g,5.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11115 const 31000 (teneur '5,3')"
+11129,"Sauce chasseur, préemballée",328,ENERC_KCAL,kcal,38.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11129 const 328 (teneur '38,8')"
+11129,"Sauce chasseur, préemballée",25000,PROCNT,g,1.21,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11129 const 25000 (teneur '1,21')"
+11129,"Sauce chasseur, préemballée",40000,FAT,g,1.61,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11129 const 40000 (teneur '1,61')"
+11129,"Sauce chasseur, préemballée",31000,CHOAVL,g,4.66,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11129 const 31000 (teneur '4,66')"
+11129,"Sauce chasseur, préemballée",400,WATER,g,91.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11129 const 400 (teneur '91')
+11160,"Sauce aux champignons, préemballée",328,ENERC_KCAL,kcal,98.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11160 const 328 (teneur '98,8')"
+11160,"Sauce aux champignons, préemballée",25000,PROCNT,g,3.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11160 const 25000 (teneur '3,2')"
+11160,"Sauce aux champignons, préemballée",40000,FAT,g,6.26,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11160 const 40000 (teneur '6,26')"
+11160,"Sauce aux champignons, préemballée",31000,CHOAVL,g,6.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11160 const 31000 (teneur '6,3')"
+11160,"Sauce aux champignons, préemballée",400,WATER,g,83.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11160 const 400 (teneur '83,8')"
+11187,"Sauce crudités ou sauce salade, préemballée",328,ENERC_KCAL,kcal,303.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11187 const 328 (teneur '303')
+11187,"Sauce crudités ou sauce salade, préemballée",25000,PROCNT,g,0.61,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11187 const 25000 (teneur '0,61')"
+11187,"Sauce crudités ou sauce salade, préemballée",40000,FAT,g,30.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11187 const 40000 (teneur '30,5')"
+11187,"Sauce crudités ou sauce salade, préemballée",31000,CHOAVL,g,6.17,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11187 const 31000 (teneur '6,17')"
+11187,"Sauce crudités ou sauce salade, préemballée",400,WATER,g,61.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11187 const 400 (teneur '61,8')"
+11194,"Sauce nuoc mâm ou sauce au poisson, préemballée",328,ENERC_KCAL,kcal,81.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11194 const 328 (teneur '81,2')"
+11194,"Sauce nuoc mâm ou sauce au poisson, préemballée",25000,PROCNT,g,9.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11194 const 25000 (teneur '9,3')"
+11194,"Sauce nuoc mâm ou sauce au poisson, préemballée",40000,FAT,g,0.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11194 const 40000 (teneur '0')
+11194,"Sauce nuoc mâm ou sauce au poisson, préemballée",31000,CHOAVL,g,10.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11194 const 31000 (teneur '10,9')"
+11216,"Sauce soja sucrée, préemballée",328,ENERC_KCAL,kcal,171.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11216 const 328 (teneur '171')
+11216,"Sauce soja sucrée, préemballée",25000,PROCNT,g,2.88,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11216 const 25000 (teneur '2,88')"
+11216,"Sauce soja sucrée, préemballée",31000,CHOAVL,g,39.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11216 const 31000 (teneur '39,5')"
+11216,"Sauce soja sucrée, préemballée",400,WATER,g,42.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11216 const 400 (teneur '42,1')"
+11219,"Sauce végétale type bolognaise, aux protéines de soja, préemballée",328,ENERC_KCAL,kcal,68.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11219 const 328 (teneur '68')
+11219,"Sauce végétale type bolognaise, aux protéines de soja, préemballée",25000,PROCNT,g,3.56,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11219 const 25000 (teneur '3,56')"
+11219,"Sauce végétale type bolognaise, aux protéines de soja, préemballée",40000,FAT,g,3.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11219 const 40000 (teneur '3')
+11219,"Sauce végétale type bolognaise, aux protéines de soja, préemballée",31000,CHOAVL,g,5.05,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11219 const 31000 (teneur '5,05')"
+11219,"Sauce végétale type bolognaise, aux protéines de soja, préemballée",400,WATER,g,83.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11219 const 400 (teneur '83,7')"
+11303,"Fumet de poisson, prêt à consommer, préemballé",328,ENERC_KCAL,kcal,53.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11303 const 328 (teneur '53,6')"
+11303,"Fumet de poisson, prêt à consommer, préemballé",25000,PROCNT,g,5.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11303 const 25000 (teneur '5,1')"
+11303,"Fumet de poisson, prêt à consommer, préemballé",40000,FAT,g,2.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 11303 const 40000 (teneur '2')
+11303,"Fumet de poisson, prêt à consommer, préemballé",31000,CHOAVL,g,3.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 11303 const 31000 (teneur '3,8')"
+20903,Isolat de soja,328,ENERC_KCAL,kcal,402.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20903 const 328 (teneur '402')
+20903,Isolat de soja,25000,PROCNT,g,80.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20903 const 25000 (teneur '80,5')"
+20903,Isolat de soja,40000,FAT,g,3.39,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20903 const 40000 (teneur '3,39')"
+20903,Isolat de soja,31000,CHOAVL,g,1.76,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20903 const 31000 (teneur '1,76')"
+20903,Isolat de soja,400,WATER,g,4.98,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20903 const 400 (teneur '4,98')"
+20906,"Tofu soyeux, préemballé",328,ENERC_KCAL,kcal,54.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20906 const 328 (teneur '54,3')"
+20906,"Tofu soyeux, préemballé",25000,PROCNT,g,4.57,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20906 const 25000 (teneur '4,57')"
+20906,"Tofu soyeux, préemballé",40000,FAT,g,2.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20906 const 40000 (teneur '2,9')"
+20906,"Tofu soyeux, préemballé",31000,CHOAVL,g,1.53,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20906 const 31000 (teneur '1,53')"
+20906,"Tofu soyeux, préemballé",400,WATER,g,89.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20906 const 400 (teneur '89,4')"
+20987,"Nori (Porphyra sp., Pyropia), séchée ou déshydratée",328,ENERC_KCAL,kcal,257.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20987 const 328 (teneur '257')
+20987,"Nori (Porphyra sp., Pyropia), séchée ou déshydratée",25000,PROCNT,g,30.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20987 const 25000 (teneur '30,2')"
+20987,"Nori (Porphyra sp., Pyropia), séchée ou déshydratée",40000,FAT,g,1.77,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20987 const 40000 (teneur '1,77')"
+20987,"Nori (Porphyra sp., Pyropia), séchée ou déshydratée",31000,CHOAVL,g,11.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20987 const 31000 (teneur '11,7')"
+20987,"Nori (Porphyra sp., Pyropia), séchée ou déshydratée",400,WATER,g,6.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20987 const 400 (teneur '6,7')"
+20999,"Wakamé atlantique (Alaria esculenta), séché ou déshydraté",328,ENERC_KCAL,kcal,201.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20999 const 328 (teneur '201')
+20999,"Wakamé atlantique (Alaria esculenta), séché ou déshydraté",25000,PROCNT,g,12.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20999 const 25000 (teneur '12,2')"
+20999,"Wakamé atlantique (Alaria esculenta), séché ou déshydraté",40000,FAT,g,1.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20999 const 40000 (teneur '1,5')"
+20999,"Wakamé atlantique (Alaria esculenta), séché ou déshydraté",31000,CHOAVL,g,13.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20999 const 31000 (teneur '13,3')"
+20999,"Wakamé atlantique (Alaria esculenta), séché ou déshydraté",400,WATER,g,8.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20999 const 400 (teneur '8,7')"
+31109,"Pollen, partiellement séché",328,ENERC_KCAL,kcal,358.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 31109 const 328 (teneur '358')
+31109,"Pollen, partiellement séché",25000,PROCNT,g,21.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31109 const 25000 (teneur '21,9')"
+31109,"Pollen, partiellement séché",40000,FAT,g,4.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31109 const 40000 (teneur '4,2')"
+31109,"Pollen, partiellement séché",31000,CHOAVL,g,52.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31109 const 31000 (teneur '52,5')"
+31109,"Pollen, partiellement séché",400,WATER,g,7.58,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 31109 const 400 (teneur '7,58')"
+9643,Son de riz,328,ENERC_KCAL,kcal,398.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 9643 const 328 (teneur '398')
+9643,Son de riz,25000,PROCNT,g,14.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 9643 const 25000 (teneur '14')
+9643,Son de riz,40000,FAT,g,20.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9643 const 40000 (teneur '20,9')"
+9643,Son de riz,31000,CHOAVL,g,28.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 9643 const 31000 (teneur '28')
+9643,Son de riz,400,WATER,g,6.13,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 9643 const 400 (teneur '6,13')"
+13157,Petit pot fruit avec banane pour bébé,328,ENERC_KCAL,kcal,56.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13157 const 328 (teneur '56,6')"
+13157,Petit pot fruit avec banane pour bébé,25000,PROCNT,g,0.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13157 const 25000 (teneur '0,6')"
+13157,Petit pot fruit avec banane pour bébé,31000,CHOAVL,g,12.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13157 const 31000 (teneur '12,1')"
+13157,Petit pot fruit avec banane pour bébé,400,WATER,g,84.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 13157 const 400 (teneur '84')
+13158,Petit pot fruit sans banane pour bébé,328,ENERC_KCAL,kcal,49.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13158 const 328 (teneur '49,2')"
+13158,Petit pot fruit sans banane pour bébé,25000,PROCNT,g,0.29,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13158 const 25000 (teneur '0,29')"
+13158,Petit pot fruit sans banane pour bébé,31000,CHOAVL,g,10.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13158 const 31000 (teneur '10,9')"
+13158,Petit pot fruit sans banane pour bébé,400,WATER,g,85.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13158 const 400 (teneur '85,8')"
+13165,Dessert infantile lacté au riz ou à la semoule,328,ENERC_KCAL,kcal,90.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13165 const 328 (teneur '90,8')"
+13165,Dessert infantile lacté au riz ou à la semoule,25000,PROCNT,g,3.45,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13165 const 25000 (teneur '3,45')"
+13165,Dessert infantile lacté au riz ou à la semoule,40000,FAT,g,3.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13165 const 40000 (teneur '3,3')"
+13165,Dessert infantile lacté au riz ou à la semoule,31000,CHOAVL,g,11.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13165 const 31000 (teneur '11,7')"
+13165,Dessert infantile lacté au riz ou à la semoule,400,WATER,g,79.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13165 const 400 (teneur '79,1')"
+13167,"Céréales instantanées, poudre à reconstituer, dès 4/6 mois",328,ENERC_KCAL,kcal,393.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 13167 const 328 (teneur '393')
+13167,"Céréales instantanées, poudre à reconstituer, dès 4/6 mois",25000,PROCNT,g,5.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13167 const 25000 (teneur '5,1')"
+13167,"Céréales instantanées, poudre à reconstituer, dès 4/6 mois",40000,FAT,g,1.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13167 const 40000 (teneur '1,7')"
+13167,"Céréales instantanées, poudre à reconstituer, dès 4/6 mois",31000,CHOAVL,g,88.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13167 const 31000 (teneur '88,3')"
+13167,"Céréales instantanées, poudre à reconstituer, dès 4/6 mois",400,WATER,g,2.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13167 const 400 (teneur '2,2')"
+13170,Boisson infantile céréales lactées pour le petit déjeuner dès 12 mois,328,ENERC_KCAL,kcal,86.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13170 const 328 (teneur '86,3')"
+13170,Boisson infantile céréales lactées pour le petit déjeuner dès 12 mois,25000,PROCNT,g,2.23,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13170 const 25000 (teneur '2,23')"
+13170,Boisson infantile céréales lactées pour le petit déjeuner dès 12 mois,40000,FAT,g,2.78,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13170 const 40000 (teneur '2,78')"
+13170,Boisson infantile céréales lactées pour le petit déjeuner dès 12 mois,31000,CHOAVL,g,12.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 13170 const 31000 (teneur '12,6')"
+13170,Boisson infantile céréales lactées pour le petit déjeuner dès 12 mois,400,WATER,g,81.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 13170 const 400 (teneur '81')
+19012,"Lait de croissance infantile, liquide (aliment lacté destiné aux enfants en bas âge)",328,ENERC_KCAL,kcal,60.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19012 const 328 (teneur '60,9')"
+19012,"Lait de croissance infantile, liquide (aliment lacté destiné aux enfants en bas âge)",25000,PROCNT,g,1.28,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19012 const 25000 (teneur '1,28')"
+19012,"Lait de croissance infantile, liquide (aliment lacté destiné aux enfants en bas âge)",40000,FAT,g,2.71,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19012 const 40000 (teneur '2,71')"
+19012,"Lait de croissance infantile, liquide (aliment lacté destiné aux enfants en bas âge)",31000,CHOAVL,g,7.77,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19012 const 31000 (teneur '7,77')"
+19012,"Lait de croissance infantile, liquide (aliment lacté destiné aux enfants en bas âge)",400,WATER,g,87.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19012 const 400 (teneur '87,7')"
+19013,"Lait 1er âge, prêt à consommer (préparation pour nourrissons)",328,ENERC_KCAL,kcal,71.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19013 const 328 (teneur '71,3')"
+19013,"Lait 1er âge, prêt à consommer (préparation pour nourrissons)",25000,PROCNT,g,1.21,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19013 const 25000 (teneur '1,21')"
+19013,"Lait 1er âge, prêt à consommer (préparation pour nourrissons)",40000,FAT,g,3.79,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19013 const 40000 (teneur '3,79')"
+19013,"Lait 1er âge, prêt à consommer (préparation pour nourrissons)",31000,CHOAVL,g,8.04,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19013 const 31000 (teneur '8,04')"
+19013,"Lait 1er âge, prêt à consommer (préparation pour nourrissons)",400,WATER,g,86.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19013 const 400 (teneur '86,3')"
+19014,"Lait 2e âge, prêt à consommer (préparation de suite)",328,ENERC_KCAL,kcal,65.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19014 const 328 (teneur '65,1')"
+19014,"Lait 2e âge, prêt à consommer (préparation de suite)",25000,PROCNT,g,1.21,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19014 const 25000 (teneur '1,21')"
+19014,"Lait 2e âge, prêt à consommer (préparation de suite)",40000,FAT,g,2.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19014 const 40000 (teneur '2,9')"
+19014,"Lait 2e âge, prêt à consommer (préparation de suite)",31000,CHOAVL,g,8.23,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19014 const 31000 (teneur '8,23')"
+19014,"Lait 2e âge, prêt à consommer (préparation de suite)",400,WATER,g,86.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 19014 const 400 (teneur '86,7')"
+20246,"Petit pot légumes, dès 4-6 mois",328,ENERC_KCAL,kcal,24.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20246 const 328 (teneur '24')
+20246,"Petit pot légumes, dès 4-6 mois",25000,PROCNT,g,0.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20246 const 25000 (teneur '0,9')"
+20246,"Petit pot légumes, dès 4-6 mois",31000,CHOAVL,g,3.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20246 const 31000 (teneur '3,8')"
+20246,"Petit pot légumes, dès 4-6 mois",400,WATER,g,92.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20246 const 400 (teneur '92,2')"
+20248,"Plat légumes, avec féculent, dès 6-8 mois",328,ENERC_KCAL,kcal,42.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20248 const 328 (teneur '42,9')"
+20248,"Plat légumes, avec féculent, dès 6-8 mois",25000,PROCNT,g,1.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20248 const 25000 (teneur '1,2')"
+20248,"Plat légumes, avec féculent, dès 6-8 mois",40000,FAT,g,0.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20248 const 40000 (teneur '0,7')"
+20248,"Plat légumes, avec féculent, dès 6-8 mois",31000,CHOAVL,g,6.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20248 const 31000 (teneur '6,9')"
+20248,"Plat légumes, avec féculent, dès 6-8 mois",400,WATER,g,88.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20248 const 400 (teneur '88,6')"
+20249,"Plat légumes, avec féculent et lait/crème, dès 6/8 mois",328,ENERC_KCAL,kcal,70.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20249 const 328 (teneur '70,2')"
+20249,"Plat légumes, avec féculent et lait/crème, dès 6/8 mois",25000,PROCNT,g,2.38,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20249 const 25000 (teneur '2,38')"
+20249,"Plat légumes, avec féculent et lait/crème, dès 6/8 mois",40000,FAT,g,2.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20249 const 40000 (teneur '2,3')"
+20249,"Plat légumes, avec féculent et lait/crème, dès 6/8 mois",31000,CHOAVL,g,9.12,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20249 const 31000 (teneur '9,12')"
+20249,"Plat légumes, avec féculent et lait/crème, dès 6/8 mois",400,WATER,g,83.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20249 const 400 (teneur '83,9')"
+20250,"Plat légumes, avec féculent et lait/crème, dès 8/12 mois",328,ENERC_KCAL,kcal,77.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20250 const 328 (teneur '77,5')"
+20250,"Plat légumes, avec féculent et lait/crème, dès 8/12 mois",25000,PROCNT,g,2.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20250 const 25000 (teneur '2,1')"
+20250,"Plat légumes, avec féculent et lait/crème, dès 8/12 mois",40000,FAT,g,3.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20250 const 40000 (teneur '3,5')"
+20250,"Plat légumes, avec féculent et lait/crème, dès 8/12 mois",31000,CHOAVL,g,8.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20250 const 31000 (teneur '8,1')"
+20250,"Plat légumes, avec féculent et lait/crème, dès 8/12 mois",400,WATER,g,83.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20250 const 400 (teneur '83,6')"
+20251,"Plat légumes, avec féculent et lait/crème, dès 12 mois",328,ENERC_KCAL,kcal,71.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20251 const 328 (teneur '71,6')"
+20251,"Plat légumes, avec féculent et lait/crème, dès 12 mois",25000,PROCNT,g,2.88,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20251 const 25000 (teneur '2,88')"
+20251,"Plat légumes, avec féculent et lait/crème, dès 12 mois",40000,FAT,g,2.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20251 const 40000 (teneur '2,3')"
+20251,"Plat légumes, avec féculent et lait/crème, dès 12 mois",31000,CHOAVL,g,8.53,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20251 const 31000 (teneur '8,53')"
+20251,"Plat légumes, avec féculent et lait/crème, dès 12 mois",400,WATER,g,83.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20251 const 400 (teneur '83,1')"
+20252,Soupe pour bébé légumes et pomme de terre,328,ENERC_KCAL,kcal,38.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20252 const 328 (teneur '38,1')"
+20252,Soupe pour bébé légumes et pomme de terre,25000,PROCNT,g,1.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 20252 const 25000 (teneur '1')
+20252,Soupe pour bébé légumes et pomme de terre,40000,FAT,g,0.91,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20252 const 40000 (teneur '0,91')"
+20252,Soupe pour bébé légumes et pomme de terre,31000,CHOAVL,g,5.88,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20252 const 31000 (teneur '5,88')"
+20252,Soupe pour bébé légumes et pomme de terre,400,WATER,g,90.4,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 20252 const 400 (teneur '90,4')"
+24689,Biscuit pour bébé,328,ENERC_KCAL,kcal,439.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 24689 const 328 (teneur '439')
+24689,Biscuit pour bébé,25000,PROCNT,g,7.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24689 const 25000 (teneur '7,5')"
+24689,Biscuit pour bébé,40000,FAT,g,12.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24689 const 40000 (teneur '12,3')"
+24689,Biscuit pour bébé,31000,CHOAVL,g,73.3,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 24689 const 31000 (teneur '73,3')"
+24689,Biscuit pour bébé,400,WATER,g,3.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 24689 const 400 (teneur '3')
+42501,Poudre cacaotée pour bébé,328,ENERC_KCAL,kcal,396.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 42501 const 328 (teneur '396')
+42501,Poudre cacaotée pour bébé,25000,PROCNT,g,8.5,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42501 const 25000 (teneur '8,5')"
+42501,Poudre cacaotée pour bébé,40000,FAT,g,1.9,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42501 const 40000 (teneur '1,9')"
+42501,Poudre cacaotée pour bébé,31000,CHOAVL,g,85.0,,not_used_in_primary_xml_golden,compo_2025_11_03.xml alim 42501 const 31000 (teneur '85')
+42501,Poudre cacaotée pour bébé,400,WATER,g,1.2,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42501 const 400 (teneur '1,2')"
+42604,"Plat légumes, avec féculent et viande/poisson, dès 8/12 mois",328,ENERC_KCAL,kcal,54.6,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42604 const 328 (teneur '54,6')"
+42604,"Plat légumes, avec féculent et viande/poisson, dès 8/12 mois",25000,PROCNT,g,2.8,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42604 const 25000 (teneur '2,8')"
+42604,"Plat légumes, avec féculent et viande/poisson, dès 8/12 mois",40000,FAT,g,1.31,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42604 const 40000 (teneur '1,31')"
+42604,"Plat légumes, avec féculent et viande/poisson, dès 8/12 mois",31000,CHOAVL,g,6.77,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42604 const 31000 (teneur '6,77')"
+42604,"Plat légumes, avec féculent et viande/poisson, dès 8/12 mois",400,WATER,g,86.1,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42604 const 400 (teneur '86,1')"
+42606,"Plat légumes, avec féculent et viande/poisson, dès 18 mois",328,ENERC_KCAL,kcal,66.7,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42606 const 328 (teneur '66,7')"
+42606,"Plat légumes, avec féculent et viande/poisson, dès 18 mois",25000,PROCNT,g,2.76,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42606 const 25000 (teneur '2,76')"
+42606,"Plat légumes, avec féculent et viande/poisson, dès 18 mois",40000,FAT,g,1.82,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42606 const 40000 (teneur '1,82')"
+42606,"Plat légumes, avec féculent et viande/poisson, dès 18 mois",31000,CHOAVL,g,9.02,,not_used_in_primary_xml_golden,"compo_2025_11_03.xml alim 42606 const 31000 (teneur '9,02')"
