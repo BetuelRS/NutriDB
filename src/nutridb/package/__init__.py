@@ -233,6 +233,8 @@ def package(
         integrity = conn.execute("PRAGMA integrity_check").fetchone()[0]
     finally:
         conn.close()
+    if integrity != "ok":
+        raise PackageError(f"SQLite integrity_check failed: {integrity}")
 
     counts = {name: frame.height for name, frame in tables.items()}
     return {

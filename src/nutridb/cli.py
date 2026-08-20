@@ -601,7 +601,7 @@ def build(
         for source_id in sorted(registry.sources):
             extractor = _EXTRACTORS.get(source_id)
             if extractor is None:
-                continue  # registered sources without an extractor are not built
+                raise CacheError(f"registered source {source_id!r} has no extractor")
             source_intermediates = base["build"] / "intermediates" / source_id
             cached: dict[str, int] | None = None
             if not full:
