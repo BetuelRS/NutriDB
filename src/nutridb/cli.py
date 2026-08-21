@@ -670,7 +670,7 @@ def package(
     profile: str = typer.Option("core", "--profile", help="core | extended | lite"),
 ) -> None:
     """Package the canonical dataset into release artefacts (F7, §8)."""
-    if profile != "core":
+    if profile not in ("core", "lite"):
         _not_implemented("F7", f"package profile {profile}")
     from nutridb.package import PackageError
     from nutridb.package import package as run_package

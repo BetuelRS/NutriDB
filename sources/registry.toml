@@ -82,7 +82,7 @@ attribution_required = true
 attribution = "Instituto Nacional de Saúde Doutor Ricardo Jorge, I. P.- INSA. Tabela da Composição de Alimentos, v 7.1 [base de dados online]. Lisboa. 2026, [data de consulta]. Disponível em: https://portfir.insa.min-saude.pt/pt/"
 share_alike = false
 commercial_use = true
-artifacts = ["core"]
+artifacts = ["core", "lite"]
 notes = "Regime proprio nao-SPDX: livre utilizacao com referenciação obrigatoria (e-mail oficial 2026-07-28; ADR-0004). 1376 alimentos, 50 componentes, valores por 100 g de parte edivel (bebidas alcoólicas: 100 ml); FoodEx2 niveis 1-3; folha 'Componentes-Correspondencia' com codigos INFOODS/EuroFIR oficiais. Sem proveniencia por valor publicada (documentado ADR-0004/0005). Energia sem metodo publicado -> analytical_method NULL."
 
 [[sources.insa.files]]

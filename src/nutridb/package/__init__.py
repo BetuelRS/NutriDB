@@ -201,6 +201,16 @@ def package(
     tables["mv_food_value"] = pl.read_parquet(mv_path)
     _validate_profile_sources(tables["source"], root, profile)
     _validate_acquisition_types(tables["value"], tables["mv_food_value"], vocab_dir)
+    if profile == ArtifactProfile.LITE:
+        # Read model collapsed to one display locale; structural provenance
+        # lives on each mv row (source_id, source_record_id, acquisition).
+        tables["value"] = _filter_lite(tables["value"]).clear()
+        tables["mv_food_value"] = _filter_lite(tables["mv_food_value"]).filter(
+            pl.col("locale") == "en"
+        )
+        # SPEC §2 lite (<25 MB embeddable): verbatim payloads are omitted;
+        # full payload-level provenance remains in the core artifact.
+        tables["source_record"] = tables["source_record"].clear()
 
     out_dir.mkdir(parents=True, exist_ok=True)
     artifact = out_dir / f"nutridb-{profile}-{__version__}.sqlite"
@@ -216,10 +226,20 @@ def package(
             conn.execute(ddl)
         _load(conn, tables)
         _load_vocabulary(conn, vocab_dir)
-        _build_fts(conn, tables["label"])
+        _build_fts(conn, tables["label"], profile)
         for _name, ddl in _INDEXES.items():
             conn.execute(ddl)
         _write_build_metadata(conn, profile)
+        if profile == ArtifactProfile.LITE:
+            note = (
+                "value/source_record payloads omitted for embeddable size; "
+                "merged rows keep source_id+source_record_id; "
+                "full provenance in core artifact"
+            )
+            conn.execute(
+                "INSERT INTO build_metadata (key, value) VALUES ('provenance_note', ?)",
+                (note,),
+            )
         conn.commit()
         conn.execute("ANALYZE")
         conn.commit()
@@ -245,6 +265,47 @@ def package(
         "tables": counts,
         "page_size": PAGE_SIZE,
     }
+
+
+# SPEC §2 lite profile: essential macros + minerals + vitamins. Provenance
+# (source_record, coverage, tombstone) is never filtered — only the nutrient
+# breadth of value/mv_food_value is reduced to hit the <25 MB target.
+LITE_NUTRIENTS: tuple[str, ...] = (
+    "ENERC_KCAL",
+    "ENERC_KJ",
+    "WATER",
+    "PROCNT",
+    "FAT",
+    "SATURATED",
+    "CHOAVL",
+    "SUGAR",
+    "FIBTG",
+    "NA",
+    "K",
+    "CA",
+    "MG",
+    "P",
+    "FE",
+    "ZN",
+    "VITC",
+    "THIA",
+    "RIBF",
+    "NIA",
+    "VITB6A",
+    "FOL",
+    "VITB12",
+    "VITA_RAE",
+    "VITE",
+    "VITD",
+    "CHOLE",
+)
+
+
+def _filter_lite(frame: pl.DataFrame) -> pl.DataFrame:
+    if frame.height == 0:
+        return frame
+    column = "nutrient_id" if "nutrient_id" in frame.columns else "nutrient_code"
+    return frame.filter(pl.col(column).is_in(list(LITE_NUTRIENTS)))
 
 
 def _load(conn: sqlite3.Connection, tables: dict[str, pl.DataFrame]) -> None:
@@ -338,7 +399,9 @@ def _validate_profile_sources(source_table: pl.DataFrame, root: Path, profile: s
         raise PackageError(f"sources {incompatible!r} are incompatible with profile {profile!r}")
 
 
-def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:
+def _build_fts(
+    conn: sqlite3.Connection, labels: pl.DataFrame, profile: str = ArtifactProfile.CORE
+) -> None:
     locales = sorted(labels["locale"].unique().to_list())
     if not locales:
         raise PackageError("label table has no locales")
@@ -357,6 +420,8 @@ def _build_fts(conn: sqlite3.Connection, labels: pl.DataFrame) -> None:
             + "WHERE locale = ? ORDER BY rowid",
             (locale,),
         )
+        if profile == ArtifactProfile.LITE:
+            continue  # trigram substring search omitted from the embeddable profile
         conn.execute(
             "CREATE VIRTUAL TABLE "
             + name
