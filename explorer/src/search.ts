@@ -34,6 +34,12 @@ export interface FoodGroup {
   nameEn: string;
 }
 
+export interface NutrientInfo {
+  id: string;
+  name: string;
+  unit: string;
+}
+
 export interface NutrientRank {
   conceptId: string;
   label: string;
@@ -378,4 +384,13 @@ export function foodsForNutrient(
     }));
   }
   return [];
+}
+
+export function nutrientsCatalog(): NutrientInfo[] {
+  const rows = query("SELECT tagname, name_en, unit FROM nutrient ORDER BY tagname");
+  return rows.map((row) => ({
+    id: row.values[0]?.toString() ?? "",
+    name: row.values[1]?.toString() ?? "",
+    unit: row.values[2]?.toString() ?? "",
+  }));
 }
