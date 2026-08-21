@@ -67,7 +67,7 @@ ausências ou divergências. A direção está registada no
 - Explorer deriva locales de `i18n/locales.toml` no build; `pt-PT` é o padrão; locales disponíveis descobertas do artefacto.
 - Métricas de identidade honestas: `recall` (cobertura do matcher 0.954) separada de `recall_confirmed` (0.434, antes da adjudicação); 95 links adjudicados estão aplicados e 6 029 pares continuam em review.
 - Ledger de IDs (ADR-0014): `mappings/id_ledger.csv` com 4 860 atribuições; mudança de algoritmo falha alto, `identity_drift` sinaliza edições da fonte sem trocar o ID.
-- Suite atual: **230 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
+- Suite atual: **231 testes verdes**, ruff/mypy limpos; build real e QA passam com 0 erros.
 - `nutridb link review`: fila de adjudicação humana com contexto (nomes, similaridade, score), `--apply` determinístico em `mappings/links.csv` (P8); após a primeira vaga restam 6 029 pares, com a restrição 1:1 preservada.
 - Explorer: vista de cobertura global do dataset (por fonte e por grupo) e interface com locale `pt`/`en` (toggle).
 - ADR-0016 fecha P3 com evidência CIQUAL/INSA e mantém razões de ausência não publicadas fora do modelo.

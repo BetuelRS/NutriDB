@@ -5,7 +5,8 @@
 - `source_priority.csv` — prioridade por (locale, grupo, nutriente)
 - `overrides.csv` — correções manuais, cada uma com justificação obrigatória
 - `links.csv` — concept_id ↔ (fonte, id_fonte), adjudicado
-- `tombstones.csv`
+- `id_ledger.csv` — atribuições eternas de IDs (ADR-0014); lápides vivem na tabela
+  `tombstone` do artefacto (P4), não num CSV
 - `_unmapped/` — **gerado pelo build** (conteúdo gitignored); esvaziar é obrigatório
 
 Regra: se a decisão não está num CSV do git, não aconteceu.

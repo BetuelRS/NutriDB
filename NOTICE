@@ -23,7 +23,8 @@ The initial development dataset is built from:
 - CIQUAL 2025 (ANSES), etalab-2.0, attribution required;
 - TCA 7.1 (INSA), custom regime, attribution required.
 
-The exact attribution text, source version and permitted artefacts must be
-derived from sources/registry.toml before a production release. A release
-must not rely on this development notice as a substitute for the generated
-per-artefact attribution record.
+The exact attribution text, source version and permitted artefacts for each
+release are recorded in the generated release manifest
+(`nutridb-core-*.manifest.json`, shipped with every artefact and published
+with the GitHub release). A release must not rely on this development notice
+as a substitute for that manifest record.

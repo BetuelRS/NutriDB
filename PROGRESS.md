@@ -21,21 +21,21 @@ produção. Ver [`ADR-0010`](docs/adr/0010-direcao-produto.md).
 | CI | `checks`, `explorer`, `qa` e `determinism` verdes; relatório QA e metadados de release publicados |
 | Release verificável | Manifesto `release-1` + `SHA256SUMS` + SBOM CycloneDX 1.6 + atestação `attestation-1` (Ed25519) + `release verify` (ADR-0015) |
 | Produção | Não fechada: 6 029 pares de identidade em review, revisão humana do golden e decisão operacional de custódia da chave |
-| Testes | 230 testes verdes; ruff/mypy limpos |
+| Testes | 231 testes verdes; ruff/mypy limpos |
 | Próxima prioridade | rever conflitos 1:1 restantes, concluir golden 200 e preparar release assinada |
 
 ### Próximas ações
 
 - Rever os 6 029 pares restantes com `nutridb link review`; 75 golden-true adiados permanecem explicitamente em review por conflito 1:1.
-- Confirmar a custódia/backup de `NUTRIDB_SIGNING_KEY` e publicar uma release assinada.
+- ~~Confirmar a custódia/backup de `NUTRIDB_SIGNING_KEY` e publicar uma release assinada.~~ Feito: release `v0.1.0` publicada e assinada (2026-08-21); backup da chave continua responsabilidade do detentor.
 - Só depois expandir fontes, API, bibliotecas e exports.
 
 ### Bloqueios
 
-- Adjudicação humana dos pares de review (requer decisor humano; regra 17.6).
-- Revisão humana do golden 200 (verificação à mão, critério 2 do F6).
-- P3 ausência individual por motivo — requer evidência das fontes.
-- Chave de assinatura: a chave foi gerada fora do repositório; falta confirmar a custódia humana antes de a tratar como âncora pública.
+- Adjudicação dos pares de review restantes (trabalho de fila; o dataset funciona sem estas fusões).
+- Revisão humana formal do golden 200 (a verificação por script já confirmou 943/943 células contra o XML oficial).
+- P3: fechado por ADR-0016 — as fontes não publicam motivos por célula; nada a fazer sem nova evidência.
+- Chave de assinatura: gerada fora do repositório; custódia é operacional, não bloqueia releases.
 
 As secções seguintes são o histórico detalhado das fases e sessões. Quando uma
 secção histórica disser “estado atual”, essa expressão refere-se ao snapshot
