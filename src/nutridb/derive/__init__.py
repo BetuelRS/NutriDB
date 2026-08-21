@@ -152,7 +152,16 @@ def derive(canonical_dir: Path, root: Path) -> dict[str, Any]:
 
     group_of = {r["concept_id"]: r["food_group"] for r in concepts.rows(named=True)}
     known_groups = set(group_of.values())
-    known_nutrients = set(values["nutrient_id"].unique().to_list())
+    # Retention factors legitimately cover nutrients not yet measured by any
+    # integrated source (they serve future sources); validate against the
+    # frozen vocabulary, not the currently observed nutrient ids.
+    vocab_rows = _load_table(
+        root / "vocab" / "nutrients.csv",
+        ("tagname", "group", "name_en", "unit"),
+        ("tagname",),
+        (),
+    )
+    known_nutrients = {row["tagname"] for row in vocab_rows}
     for row in densities:
         if row["food_group"] not in known_groups:
             raise DeriveError(f"densities: unknown food_group {row['food_group']!r}")
