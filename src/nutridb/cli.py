@@ -637,6 +637,34 @@ def qa() -> None:
     typer.echo("qa OK")
 
 
+@app.command("export")
+def export(
+    table: str = typer.Option("all", "--table", help="canonical table name or 'all'"),
+) -> None:
+    """Export canonical tables to JSONL (SPEC §2 deliverable)."""
+    from nutridb.export import ExportError, export_all, export_jsonl
+    from nutridb.paths import paths
+
+    base = paths()
+    out_dir = base["build"] / "exports"
+    try:
+        if table == "all":
+            counts = export_all(base["build"] / "canonical", out_dir)
+        else:
+            path = export_jsonl(table, base["build"] / "canonical", out_dir)
+            counts = {table: sum(1 for _ in path.open(encoding="utf-8"))}
+    except ExportError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table_view = rich.table.Table(title="jsonl exports", title_justify="left")
+    table_view.add_column("table")
+    table_view.add_column("rows", justify="right")
+    for name, count in counts.items():
+        table_view.add_row(name, f"{count:,}")
+    rich.print(table_view)
+    typer.echo(f"exports dir: {out_dir}")
+
+
 @app.command("package")
 def package(
     profile: str = typer.Option("core", "--profile", help="core | extended | lite"),
