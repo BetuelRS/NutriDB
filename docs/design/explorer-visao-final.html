@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NUTRIDB Explorer — visão final (mockup)</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --card:#fff; --ink:#1f2328; --muted:#656d76; --line:#d8dee4;
+    --green:#1a7f37; --blue:#0969da; --red:#cf222e; --amber:#9a6700;
+    --chip:#ddf4ff; --chipInk:#0550ae; --mono:ui-monospace,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.45 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header.top{position:sticky;top:0;z-index:10;background:#0d1117;color:#f0f6fc;padding:10px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  header.top .brand{font-weight:700;letter-spacing:.5px}
+  header.top .brand span{color:#3fb950}
+  .searchbox{flex:1;min-width:260px;display:flex}
+  .searchbox input{flex:1;border:0;border-radius:6px 0 0 6px;padding:8px 12px;font-size:14px}
+  .searchbox button{border:0;background:#238636;color:#fff;padding:8px 14px;border-radius:0 6px 6px 0;cursor:pointer}
+  .locales{display:flex;gap:4px}
+  .locales button{background:transparent;border:1px solid #30363d;color:#c9d1d9;border-radius:6px;padding:4px 10px;cursor:pointer}
+  .locales button.on{background:#1f6feb;border-color:#1f6feb;color:#fff}
+  nav.tabs{display:flex;gap:2px;background:var(--card);border-bottom:1px solid var(--line);padding:0 20px;overflow-x:auto}
+  nav.tabs button{border:0;background:none;padding:12px 16px;font-size:14px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+  nav.tabs button.on{color:var(--ink);border-bottom-color:#1f6feb;font-weight:600}
+  main{max-width:1080px;margin:20px auto;padding:0 20px}
+  section.view{display:none}
+  section.view.on{display:block}
+  .banner{background:#fff8c5;border:1px solid #d4a72c66;color:#4d3800;border-radius:8px;padding:8px 14px;font-size:13px;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px}
+  h1{font-size:20px;margin:0 0 4px} h2{font-size:16px;margin:0 0 10px}
+  .sub{color:var(--muted);font-size:13px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+  .chip{background:var(--chip);color:var(--chipInk);border-radius:999px;padding:3px 10px;font-size:12px}
+  .chip.gray{background:#eff1f3;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{ text-align:left;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+  th.num{text-align:right}
+  .src{display:inline-block;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600}
+  .src.ciqual{background:#fbefff;color:#8250df} .src.insa{background:#dafbe1;color:#116329}
+  .acq{font-size:11px;color:var(--muted)}
+  .abs{display:inline-block;background:#fff1e5;color:#953800;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600}
+  .diverge{background:#ffebe9}
+  .badge-conf{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-radius:4px;padding:0 5px;color:var(--muted)}
+  details.prov{margin-top:4px}
+  details.prov pre{background:#0d1117;color:#c9d1d9;border-radius:8px;padding:12px;font-size:12px;overflow:auto}
+  .bar{height:8px;background:#eff1f3;border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:#1f6feb}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:800px){.grid2{grid-template-columns:1fr}}
+  .kpi{display:flex;gap:14px;flex-wrap:wrap}
+  .kpi div{background:#eff1f3;border-radius:8px;padding:8px 14px}
+  .kpi b{display:block;font-size:18px}
+  .kpi small{color:var(--muted)}
+  .calc-note{background:#f6f8fa;border-left:3px solid #0969da;padding:6px 10px;font-size:12px;color:var(--muted);margin-top:8px}
+  input.qty{width:70px;border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:var(--mono);text-align:right}
+  button.link{border:0;background:none;color:var(--blue);cursor:pointer;padding:0;font-size:13px}
+  footer{max-width:1080px;margin:30px auto;padding:14px 20px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
+  footer code{font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">NUTRI<span>DB</span></div>
+  <div class="searchbox">
+    <input id="q" placeholder="Pesquisar alimentos ou nutrientes… (ex.: frango, vitamina C)" oninput="doSearch()">
+    <button onclick="doSearch()">Pesquisar</button>
+  </div>
+  <div class="locales">
+    <button class="on">pt-PT</button><button>EN</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="on" data-v="busca">Pesquisa</button>
+  <button data-v="ficha">Ficha do alimento</button>
+  <button data-v="comp">Comparar fontes</button>
+  <button data-v="cob">Cobertura</button>
+  <button data-v="work">Workspace</button>
+</nav>
+
+<main>
+  <div class="banner">MOCKUP estático da visão final — valores meramente ilustrativos. A app real lê o artefacto SQLite assinado (v0.1.x) via WebAssembly.</div>
+
+  <!-- ============ PESQUISA ============ -->
+  <section class="view on" id="v-busca">
+    <div class="card">
+      <h1>Pesquisar</h1>
+      <p class="sub">Pesquisa full-text (FTS5 + trigram) em 8 locales, com deduplicação por conceito. Resultados fundidos de CIQUAL 2025 + INSA TCA 7.1.</p>
+      <table id="results">
+        <thead><tr><th>Alimento</th><th>Grupo</th><th>Fontes</th><th class="num">Energia (kcal)</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ FICHA ============ -->
+  <section class="view" id="v-ficha">
+    <div class="card">
+      <h1>Frango, peito, grelhado</h1>
+      <div class="chips">
+        <span class="chip">Carne e produtos cárneos</span>
+        <span class="chip gray">per 100 g edível</span>
+        <span class="chip gray">ID <code>nfx_01HBQZ…</code></span>
+      </div>
+      <p class="sub">Conceito fundido de 2 registos-fonte · fusão adjudicada · schema 4 · artefacto <code>nutridb-core-0.1.1.sqlite</code></p>
+      <table>
+        <thead><tr><th>Nutriente</th><th class="num">Valor</th><th>Fonte preferida</th><th>Aquisição</th><th class="num">Confiança</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Energia (kcal)</td><td class="num">165,0</td><td><span class="src insa">INSA</span></td><td class="acq">declared</td><td class="num"><span class="badge-conf">A</span></td><td><button class="link" onclick="toggleProv(this)">proveniência</button></td></tr>
+          <tr><td>Proteína</td><td class="num">31,0 g</td><td><span class="src ciqual">CIQUAL</span></td><td class="acq">declared</td><td class="num"><span class="badge-conf">A</span></td><td><button class="link" onclick="toggleProv(this)">proveniência</button></td></tr>
+          <tr><td>Lípidos totais</td><td class="num">3,6 g</td><td><span class="src ciqual">CIQUAL</span></td><td class="acq">declared</td><td class="num"><span class="badge-conf">B</span></td><td><button class="link" onclick="toggleProv(this)">proveniência</button></td></tr>
+          <tr class="diverge"><td>Sal</td><td class="num">0,28 g ⚠</td><td><span class="src insa">INSA</span> / <span class="src ciqual">CIQUAL</span> 0,40 g</td><td class="acq">declared</td><td class="num"><span class="badge-conf">C</span></td><td><button class="link" onclick="toggleProv(this)">proveniência</button></td></tr>
+          <tr><td>Vitamina D</td><td colspan="2"><span class="abs">não medido</span></td><td class="acq">—</td><td class="num">—</td><td></td></tr>
+          <tr><td>Colesterol</td><td class="num">&lt; 85 mg</td><td><span class="src ciqual">CIQUAL</span></td><td class="acq">below_loq</td><td class="num"><span class="badge-conf">C</span></td><td><button class="link" onclick="toggleProv(this)">proveniência</button></td></tr>
+          <tr><td>Fibra</td><td><span class="abs">traços</span></td><td><span class="src ciqual">CIQUAL</span></td><td class="acq">trace</td><td class="num">—</td><td></td></tr>
+        </tbody>
+      </table>
+      <details class="prov" id="provBox" hidden>
+<pre>{
+  "source": "ciqual",
+  "source_record_id": "ciqual:compo:15010:328",
+  "nutrient_code": "328 (ENERC_KCAL)",
+  "teneur_verbatim": "165,0",
+  "confidence_code": "A",
+  "acquisition_type": "declared",
+  "derivation_id": null,
+  "licence": "etalab-2.0"
+}</pre>
+      </details>
+      <div class="calc-note">Ausências são explícitas (<b>não medido</b>, <b>traços</b>, <b>&lt; LOQ</b>) — nunca zeros silenciosos. Linha sal em divergência ≥ 30% entre fontes: ambas mantidas.</div>
+    </div>
+  </section>
+
+  <!-- ============ COMPARAÇÃO ============ -->
+  <section class="view" id="v-comp">
+    <div class="card">
+      <h2>Comparação por fonte — Leite meio gordo, UHT</h2>
+      <table>
+        <thead><tr><th>Nutriente</th><th class="num">CIQUAL 2025</th><th class="num">INSA TCA 7.1</th><th class="num">Δ rel.</th><th>Preferida (regra pt/pt-PT)</th></tr></thead>
+        <tbody>
+          <tr><td>Energia kJ</td><td class="num">195</td><td class="num">197</td><td class="num">1,0%</td><td><span class="src insa">INSA</span></td></tr>
+          <tr><td>Proteína g</td><td class="num">3,2</td><td class="num">3,3</td><td class="num">3,1%</td><td><span class="src insa">INSA</span></td></tr>
+          <tr class="diverge"><td>Cálcio mg</td><td class="num">120</td><td class="num">178</td><td class="num">48,3% ⚠</td><td><span class="src insa">INSA</span> (CIQUAL como alternativa)</td></tr>
+          <tr><td>Vitamina B12 µg</td><td class="num">0,38</td><td><span class="abs">não medido</span></td><td class="num">—</td><td><span class="src ciqual">CIQUAL</span></td></tr>
+        </tbody>
+      </table>
+      <div class="calc-note">Regra de prioridade por (locale, grupo, nutriente) vive em <code>mappings/source_priority.csv</code>. Nunca se fazem médias entre fontes.</div>
+    </div>
+  </section>
+
+  <!-- ============ COBERTURA ============ -->
+  <section class="view" id="v-cob">
+    <div class="kpi card">
+      <div><b>4 860</b><small>conceitos</small></div>
+      <div><b>230 601</b><small>valores medidos</small></div>
+      <div><b>2</b><small>fontes activas</small></div>
+      <div><b>v0.1.1</b><small>artefacto assinado</small></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Cobertura por fonte (tagnames 161)</h2>
+        <p class="sub">CIQUAL 2025</p><div class="bar"><i style="width:44%"></i></div><p class="sub num">71 / 161</p>
+        <p class="sub">INSA TCA 7.1</p><div class="bar"><i style="width:30%"></i></div><p class="sub num">48 / 161</p>
+        <p class="sub">União das fontes</p><div class="bar"><i style="width:52%"></i></div><p class="sub num">84 / 161</p>
+      </div>
+      <div class="card">
+        <h2>Células por tipo</h2>
+        <table>
+          <tr><td>Medidas</td><td class="num">208 012</td></tr>
+          <tr><td>Traços (trace)</td><td class="num">2 514</td></tr>
+          <tr><td>&lt; LOQ (below_loq)</td><td class="num">20 075</td></tr>
+          <tr><td>Não medidas (cobertura implícita)</td><td class="num">93 263</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORKSPACE ============ -->
+  <section class="view" id="v-work">
+    <div class="card">
+      <h2>Composição neutra (workspace)</h2>
+      <p class="sub">Sem aconselhamento: só aritmética transparente sobre os valores escolhidos, com a cadeia de cálculo à vista.</p>
+      <table id="wk">
+        <thead><tr><th>Alimento</th><th>Quantidade (g)</th><th class="num">kcal</th><th class="num">Proteína (g)</th></tr></thead>
+        <tbody>
+          <tr><td>Frango, peito, grelhado</td><td><input class="qty" type="number" value="150" onchange="wkCalc()"></td><td class="num">247,5</td><td class="num">46,5</td></tr>
+          <tr><td>Arroz branco, cozido</td><td><input class="qty" type="number" value="200" onchange="wkCalc()"></td><td class="num">260,0</td><td class="num">5,4</td></tr>
+          <tr><td>Azeite virgem extra</td><td><input class="qty" type="number" value="10" onchange="wkCalc()"></td><td class="num">88,4</td><td class="num">0,0</td></tr>
+          <tr><th>Total</th><th></th><th class="num" id="tk">595,9</th><th class="num" id="tp">51,9</th></tr>
+        </tbody>
+      </table>
+      <div class="calc-note">Totais marcados como <b>calculated</b>: fórmula Σ(valor×peso/100), inputs = linhas acima, derivation_id registado no export. Energia usa o método declarado pela fonte; sem imputações para células ausentes.</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Mockup de design · NUTRIDB Explorer visão final · dados reais servidos pela app em <code>http://localhost:5173</code> (artefacto SQLite assinado, Ed25519) · código Apache-2.0 · dados por artefacto (etalab-2.0, insa-tca-7.1)
+</footer>
+
+<script>
+const FOODS=[
+ ["Frango, peito, grelhado","Carne","INSA+CIQUAL",165],
+ ["Arroz branco, cozido","Cereais","INSA+CIQUAL",130],
+ ["Leite meio gordo, UHT","Lacticínios","INSA+CIQUAL",47],
+ ["Ananás, polpa","Frutas","CIQUAL",50],
+ ["Courgette, cozida","Hortícolas","CIQUAL",17],
+ ["Azeite virgem extra","Gorduras","INSA",884],
+ ["Sardinha, conserva em azeite","Peixe","INSA+CIQUAL",208],
+ ["Pão de trigo integral","Cereais","INSA",247],
+];
+function $(s){return document.querySelector(s)}
+function render(q){
+  const tb=$("#results tbody");tb.innerHTML="";
+  const f=FOODS.filter(r=>r[0].toLowerCase().includes((q||"").toLowerCase()));
+  for(const r of f){
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${r[0]}</td><td>${r[1]}</td><td>${r[2].split("+").map(s=>`<span class="src ${s.toLowerCase()}">${s}</span>`).join(" ")}</td><td class="num">${r[3].toFixed(1)}</td><td><button class="link" onclick="show('ficha')">abrir ficha</button></td>`;
+    tb.appendChild(tr);
+  }
+  if(!f.length)tb.innerHTML='<tr><td colspan="5" class="sub">Sem resultados — pesquisa cross-locale: experimente “zucchini”, “abacaxi”.</td></tr>';
+}
+function doSearch(){render($("#q").value);if($("#q").value)show("busca")}
+function show(v){
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  document.querySelectorAll("section.view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
+  window.scrollTo({top:0});
+}
+function toggleProv(btn){const d=$("#provBox");d.hidden=!d.hidden;if(!d.hidden)d.open=true}
+function wkCalc(){
+  const bases=[[165,31],[130,2.7],[884,0]];
+  const inputs=[...document.querySelectorAll("#wk tbody input")];
+  let k=0,p=0;
+  inputs.forEach((inp,i)=>{
+    const q=parseFloat(inp.value)||0;
+    k+=bases[i][0]*q/100;
+    p+=bases[i][1]*q/100;
+  });
+  $("#tk").textContent=k.toFixed(1);
+  $("#tp").textContent=p.toFixed(1);
+}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+render("");
+</script>
+</body>
+</html>
