@@ -665,6 +665,39 @@ def export(
     typer.echo(f"exports dir: {out_dir}")
 
 
+@app.command("docs")
+def docs(
+    target: str = typer.Argument(..., help="dictionary | attributions"),
+) -> None:
+    """Generate data dictionary / attributions pages (SPEC §2 deliverables)."""
+    from nutridb.datadocs import DataDocsError, attributions, data_dictionary
+    from nutridb.paths import paths
+    from nutridb.sources.registry import load_registry
+
+    base = paths()
+    out_dir = base["root"] / "docs" / "generated"
+    try:
+        if target == "dictionary":
+            artifact = base["build"] / "artifacts" / f"nutridb-core-{__version__}.sqlite"
+            tables_documented = data_dictionary(artifact, out_dir / "data_dictionary.md")
+            typer.echo(f"data dictionary: {tables_documented} tables -> {out_dir}")
+        elif target == "attributions":
+            registry = load_registry()
+            payload = {
+                "sources": {
+                    source_id: entry.model_dump() if hasattr(entry, "model_dump") else entry
+                    for source_id, entry in registry.sources.items()
+                }
+            }
+            count = attributions(payload, out_dir / "ATTRIBUTIONS.md")
+            typer.echo(f"attributions: {count} sources -> {out_dir}")
+        else:
+            raise DataDocsError("unknown target (use dictionary | attributions)")
+    except DataDocsError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+
+
 @app.command("package")
 def package(
     profile: str = typer.Option("core", "--profile", help="core | extended | lite"),
