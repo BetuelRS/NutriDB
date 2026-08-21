@@ -41,14 +41,14 @@ async function idbPut(bytes: Uint8Array): Promise<void> {
   });
 }
 
-function capi(): SQLite3["capi"] {
+function requireModule(): SQLite3 {
   if (module === null) throw new Error("SQLite WASM not initialised");
-  return module.capi;
+  return module;
 }
 
 function ensureHandle(): number {
   if (dbHandle !== null) return dbHandle;
-  const m = capi();
+  const m = requireModule();
   const pp = m.wasm.allocPtr();
   const rc = m.capi.sqlite3_open_v2(
     ":memory:",
@@ -94,7 +94,7 @@ export interface QueryRow {
 }
 
 export function query(sql: string, params: Array<string | number | null> = []): QueryRow[] {
-  const m = capi();
+  const m = requireModule();
   const handle = ensureHandle();
   const ppStmt = m.wasm.allocPtr();
   const prc = m.capi.sqlite3_prepare_v2(handle, sql, -1, ppStmt, 0);
