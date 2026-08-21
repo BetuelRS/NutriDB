@@ -253,3 +253,11 @@ da data indicada, não ao estado oficial acima.
 - ADR-0016 fecha P3: CIQUAL publica `-`, `<N` e `traces`; INSA não publica motivos por célula; razões adicionais não são inferidas.
 - ADR-0017 documenta USDA Retention Factors Release 6 como proposta não integrada; falta pin do artefacto, SHA-256 e confirmação de licença na fonte oficial.
 - Análise autónoma dos restantes 6 029 pares não aplicou novas decisões: os 3 candidatos exclusivos colidem com links automáticos existentes.
+
+## Sessão 2026-08-21
+
+- Integração da F7: PR #2 (`f6/qualidade` → `f0/fundacoes`) criado, CI verde no PR (32427866111) e **merged** (`4a53ca3`); CI pós-merge verde (32427993203).
+- README atualizado para **release candidate** do perfil `core`; instruções de verificação de assinatura com a chave pública versionada.
+- CI: job `qa` ganhou o passo `release verify` — os metadados de release são validados em cada build.
+- Manutenção: `links.csv`/`id_ledger.csv` normalizados para LF (cosmético; `.gitattributes` já força LF em CSVs).
+- Primeira release etiquetada `v0.1.0` publicada no GitHub com artefacto SQLite assinado, manifesto, SBOM, atestação e SHA256SUMS.

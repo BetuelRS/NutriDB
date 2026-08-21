@@ -73,6 +73,8 @@ ausências ou divergências. A direção está registada no
 - ADR-0016 fecha P3 com evidência CIQUAL/INSA e mantém razões de ausência não publicadas fora do modelo.
 - ADR-0017 regista USDA Retention Factors Release 6 como proposta; integração bloqueada até descarregar artefacto oficial, fixar SHA-256 e confirmar licença na fonte.
 - Análise da fila restante não encontrou aceites seguros: os 3 candidatos exclusivos colidem com links automáticos existentes; permanecem em review.
+- PR #2 integrado em `f0/fundacoes` (`4a53ca3`) com CI verde no PR e pós-merge; README em release candidate; `release verify` é passo do CI.
+- Release `v0.1.0` etiquetada e publicada com artefacto assinado e metadados verificáveis.
 
 As secções seguintes preservam o histórico detalhado das fases já executadas.
 Não devem ser interpretadas como o estado oficial atual quando divergirem deste
