@@ -932,9 +932,34 @@ def release_verify(
 
 
 @app.command("diff")
-def diff(previous: str, current: str) -> None:
-    """Report value-level differences between two builds."""
-    _not_implemented("F8", f"diff {previous} {current}")
+def diff(
+    previous: str = typer.Argument(..., help="previous packaged artifact"),
+    current: str = typer.Argument(..., help="current packaged artifact"),
+    out: str = typer.Option("", "--out", help="write JSON report to file"),
+) -> None:
+    """Report value-level differences between two builds (F8)."""
+    from nutridb.diff import DiffError, diff_artifacts, write_report
+
+    try:
+        report = diff_artifacts(Path(previous), Path(current))
+    except DiffError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from exc
+    table = rich.table.Table(title="artifact diff", title_justify="left")
+    table.add_column("metric", justify="right")
+    table.add_column("count")
+    for metric in (
+        "rows_previous",
+        "rows_current",
+        "added_count",
+        "removed_count",
+        "changed_count",
+    ):
+        table.add_row(metric, f"{report[metric]:,}")
+    rich.print(table)
+    if out:
+        write_report(report, Path(out))
+        typer.echo(f"report: {out}")
 
 
 @app.command("serve")
