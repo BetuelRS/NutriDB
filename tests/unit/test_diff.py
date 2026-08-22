@@ -27,7 +27,7 @@ SCHEMA = (
 )
 
 
-def _build(path: Path, rows: list[tuple]) -> None:
+def _build(path: Path, rows: list[tuple[str, str, str, float, str, str]]) -> None:
     conn = sqlite3.connect(path)
     conn.executescript(SCHEMA)
     conn.executemany(

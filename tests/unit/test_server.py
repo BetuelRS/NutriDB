@@ -5,15 +5,17 @@ from __future__ import annotations
 import json
 import sqlite3
 import threading
+import urllib.error
 import urllib.request
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
-from nutridb.package.__init__ import _SCHEMA
+from nutridb.package import _SCHEMA
 from nutridb.server import make_server
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
     from pathlib import Path
 
 
@@ -68,7 +70,7 @@ def _artifact(tmp_path: Path) -> Path:
 
 
 @pytest.fixture()
-def server(tmp_path: Path):
+def server(tmp_path: Path) -> Iterator[str]:
     httpd = make_server(_artifact(tmp_path), "127.0.0.1", 0)
     thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     thread.start()
@@ -76,7 +78,7 @@ def server(tmp_path: Path):
     httpd.shutdown()
 
 
-def _get(url: str) -> tuple[int, dict]:
+def _get(url: str) -> tuple[int, dict[str, Any]]:
     with urllib.request.urlopen(url, timeout=10) as response:
         return response.status, json.loads(response.read())
 
@@ -111,7 +113,7 @@ def test_unknown_path_is_json_404(server: str) -> None:
     try:
         _get(f"{server}/nope")
         raised = False
-    except urllib.error.HTTPError as exc:  # type: ignore[attr-defined]
+    except urllib.error.HTTPError as exc:
         raised = True
         assert exc.code == 404
     assert raised
