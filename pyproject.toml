@@ -21,6 +21,13 @@ dependencies = [
 [project.scripts]
 nutridb = "nutridb.cli:app"
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nutridb"]
+
 [dependency-groups]
 dev = [
     "hypothesis>=6.151.9",
