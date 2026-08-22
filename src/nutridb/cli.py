@@ -6,7 +6,7 @@ import csv
 import os
 import shutil
 import subprocess
-from pathlib import Path  # noqa: TC003  (typer evaluates annotations at runtime)
+from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, NoReturn
 
 import rich.table
@@ -938,9 +938,24 @@ def diff(previous: str, current: str) -> None:
 
 
 @app.command("serve")
-def serve() -> None:
-    """Serve the local API (F9)."""
-    _not_implemented("F9", "local API server")
+def serve(
+    artifact: str = typer.Option("", "--artifact", help="packaged SQLite path"),
+    host: str = typer.Option("127.0.0.1", "--host"),
+    port: int = typer.Option(8600, "--port"),
+) -> None:
+    """Serve the read-only REST API over a packaged artifact (F9)."""
+    from nutridb.paths import paths
+    from nutridb.server import serve as run_server
+
+    db_path = (
+        Path(artifact)
+        if artifact
+        else (paths()["build"] / "artifacts" / f"nutridb-core-{__version__}.sqlite")
+    )
+    if not db_path.is_file():
+        typer.secho(f"artifact not found: {db_path}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1)
+    run_server(db_path, host, port)
 
 
 explorer_app = typer.Typer(name="explorer", help="NUTRIDB Explorer (SPEC §12).")
