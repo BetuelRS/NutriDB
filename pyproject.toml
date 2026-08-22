@@ -55,6 +55,8 @@ quote-style = "double"
 strict = true
 python_version = "3.12"
 mypy_path = "src"
+explicit_package_bases = true
+namespace_packages = true
 check_untyped_defs = true
 
 [tool.pytest.ini_options]
